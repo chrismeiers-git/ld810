@@ -1,4 +1,4 @@
 {
-  "endpoint": "PASTE_THE_EXEC_URL_HERE",
-  "_note": "Apps Script Web app URL. Must end in /exec, never /dev. Get it from Deploy > Manage deployments in the Apps Script editor. This is the only file you edit when the URL changes."
+  "endpoint": "https://script.google.com/macros/s/AKfycby5G5LyMEBoN5A-DoiO6yI88NGYgiVj-nebuybWZClEfdnprPQrwwUdFQ1pRipotODt/exec",
+  "_note": "Apps Script Web app URL. Must end in /exec, never /dev. Get it from Deploy > Manage deployments. This is the only file to edit when the URL changes."
 }
