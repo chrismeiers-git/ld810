@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LD 810 — Quiz Console (instructor)</title>
+<meta name="description" content="Instructor console for LD 810.">
+<meta name="robots" content="noindex">
+<style>
+  html,body{margin:0;padding:0;background:#fff;-webkit-text-size-adjust:100%}
+  *{box-sizing:border-box}
+  button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{
+    outline:2px solid #BA0C2F;outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin></script>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const {
+  useState,
+  useEffect,
+  useMemo,
+  useRef
+} = React;
+
+/* ============================================================
+   CONFIG — paste your Apps Script /exec URL between the quotes.
+   Leave it as-is and the app still works; results just aren't saved.
+   ============================================================ */
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbyyOIlEcGXRkL-QEpeHKUu1ZA0dfsUr2etjJ26LERA/dev";
+const BANK_URL = "bank.json";
+let BANK = {
+  m: {},
+  x: {},
+  items: []
+};
+let TOPICS = [];
+let SESSIONS = [];
+function initBank(b) {
+  BANK = b;
+  TOPICS = Array.from(new Set(b.items.map(i => i.t))).sort();
+  SESSIONS = Object.keys(b.m).map(Number).sort((x, y) => x - y);
+}
+const live = () => /^https:\/\//.test(ENDPOINT);
+const C = {
+  red: "#BA0C2F",
+  redDark: "#8A0922",
+  redLight: "#FCEEF1",
+  ink: "#16181C",
+  ink2: "#4B5058",
+  ink3: "#8A9099",
+  wash: "#F7F5F3",
+  line: "#E3E0DC",
+  teal: "#0F6E63",
+  gold: "#B8860B"
+};
+const FONT = "'Aptos','Calibri','Segoe UI',system-ui,-apple-system,sans-serif";
+const LETTERS = ["a", "b", "c", "d", "e", "f", "g", "h"];
+const rid = () => Math.random().toString(36).slice(2, 10);
+
+/* ---------- shared primitives ---------- */
+
+function Btn({
+  children,
+  onClick,
+  kind = "primary",
+  size = "md",
+  disabled,
+  style
+}) {
+  const base = {
+    fontFamily: FONT,
+    cursor: disabled ? "not-allowed" : "pointer",
+    border: "1px solid transparent",
+    borderRadius: 2,
+    fontWeight: 600,
+    padding: size === "sm" ? "6px 12px" : "10px 20px",
+    fontSize: size === "sm" ? 14 : 16,
+    opacity: disabled ? 0.4 : 1,
+    transition: "background 120ms ease",
+    lineHeight: 1.3
+  };
+  const kinds = {
+    primary: {
+      background: C.red,
+      color: "#fff"
+    },
+    ghost: {
+      background: "transparent",
+      color: C.ink2,
+      borderColor: C.line
+    },
+    quiet: {
+      background: "transparent",
+      color: C.red,
+      border: "none",
+      padding: size === "sm" ? "6px 6px" : "10px 6px"
+    }
+  };
+  return /*#__PURE__*/React.createElement("button", {
+    onClick: disabled ? undefined : onClick,
+    disabled: disabled,
+    style: {
+      ...base,
+      ...kinds[kind],
+      ...style
+    }
+  }, children);
+}
+function Pill({
+  children,
+  tone = "red"
+}) {
+  const tones = {
+    red: {
+      background: C.redLight,
+      color: C.redDark
+    },
+    grey: {
+      background: C.wash,
+      color: C.ink2
+    },
+    teal: {
+      background: "#E6F2F0",
+      color: C.teal
+    },
+    gold: {
+      background: "#FBF3E0",
+      color: C.gold
+    }
+  };
+  return /*#__PURE__*/React.createElement("span", {
+    style: {
+      ...tones[tone],
+      padding: "3px 9px",
+      borderRadius: 2,
+      fontSize: 12,
+      fontWeight: 700,
+      letterSpacing: 0.2,
+      whiteSpace: "nowrap",
+      display: "inline-block"
+    }
+  }, children);
+}
+function Rule() {
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 3,
+      width: 48,
+      background: C.red,
+      margin: "14px 0 20px"
+    }
+  });
+}
+function Select({
+  value,
+  onChange,
+  children,
+  style
+}) {
+  return /*#__PURE__*/React.createElement("select", {
+    value: value,
+    onChange: e => onChange(e.target.value),
+    style: {
+      fontFamily: FONT,
+      fontSize: 15,
+      padding: "9px 10px",
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      background: "#fff",
+      color: C.ink,
+      minWidth: 160,
+      ...style
+    }
+  }, children);
+}
+function CopyBox({
+  text,
+  label
+}) {
+  const [done, setDone] = useState(false);
+  const ref = useRef(null);
+  const copy = () => {
+    const el = ref.current;
+    if (el) {
+      el.select();
+    }
+    try {
+      if (navigator.clipboard) navigator.clipboard.writeText(text);else document.execCommand("copy");
+      setDone(true);
+      setTimeout(() => setDone(false), 1800);
+    } catch (e) {
+      setDone(false);
+    }
+  };
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13,
+      color: C.ink3
+    }
+  }, label), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    size: "sm",
+    onClick: copy
+  }, done ? "Copied" : "Copy")), /*#__PURE__*/React.createElement("textarea", {
+    ref: ref,
+    readOnly: true,
+    value: text,
+    style: {
+      width: "100%",
+      height: 300,
+      fontFamily: "Consolas,Menlo,monospace",
+      fontSize: 13,
+      lineHeight: 1.55,
+      padding: 14,
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      background: C.wash,
+      color: C.ink,
+      resize: "vertical",
+      boxSizing: "border-box"
+    }
+  }));
+}
+
+/* ---------- results endpoint ---------- */
+
+/* text/plain keeps this a "simple" CORS request, which Apps Script
+   answers directly — an application/json body would trigger a
+   preflight that Apps Script does not handle. */
+async function saveRun(payload) {
+  if (!live()) return false;
+  try {
+    const r = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(payload)
+    });
+    return r.ok;
+  } catch (e) {
+    return false;
+  }
+}
+async function api(payload) {
+  if (!live()) return {
+    ok: false,
+    error: "No endpoint configured."
+  };
+  try {
+    const r = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(payload)
+    });
+    return await r.json();
+  } catch (e) {
+    return {
+      ok: false,
+      error: "Could not reach the endpoint."
+    };
+  }
+}
+async function getLive(extra) {
+  if (!live()) return {
+    offline: true
+  };
+  try {
+    const r = await fetch(`${ENDPOINT}?mode=live${extra || ""}&t=${Date.now()}`);
+    return await r.json();
+  } catch (e) {
+    return {
+      error: true
+    };
+  }
+}
+
+/* Poll on an interval, but skip a tick if the previous request is still in
+   flight — Apps Script responses can run past the interval on a slow network. */
+function usePoll(fn, ms, on) {
+  const busy = useRef(false);
+  useEffect(() => {
+    if (!on) return;
+    let stop = false;
+    const tick = async () => {
+      if (busy.current) return;
+      busy.current = true;
+      try {
+        await fn();
+      } finally {
+        busy.current = false;
+      }
+    };
+    tick();
+    const id = setInterval(() => {
+      if (!stop) tick();
+    }, ms);
+    return () => {
+      stop = true;
+      clearInterval(id);
+    };
+  }, [on, ms]);
+}
+async function loadSummary() {
+  if (!live()) return {
+    offline: true
+  };
+  try {
+    const r = await fetch(`${ENDPOINT}?mode=summary&t=${Date.now()}`);
+    if (!r.ok) return {
+      error: `The results endpoint returned ${r.status}.`
+    };
+    return await r.json();
+  } catch (e) {
+    return {
+      error: "Could not reach the results endpoint."
+    };
+  }
+}
+
+/* ---------- filtering ---------- */
+
+const PRESETS = [["quiz1", "Quiz 1"], ["exam1", "Exam 1"], ["quiz2", "Quiz 2"], ["exam2", "Exam 2"]];
+const emptyFilter = {
+  sessions: [],
+  topics: [],
+  search: ""
+};
+function filterItems(f) {
+  let list = BANK.items;
+  if (f.sessions.length) list = list.filter(i => i.s.some(n => f.sessions.includes(n)));
+  if (f.topics.length) list = list.filter(i => f.topics.includes(i.t));
+  if (f.search && f.search.trim()) {
+    const q = f.search.toLowerCase();
+    list = list.filter(i => i.q.toLowerCase().includes(q) || i.o.some(o => o.toLowerCase().includes(q)));
+  }
+  return list;
+}
+function Chip({
+  on,
+  onClick,
+  children,
+  title
+}) {
+  return /*#__PURE__*/React.createElement("button", {
+    onClick: onClick,
+    title: title,
+    style: {
+      fontFamily: FONT,
+      fontSize: 13.5,
+      padding: "6px 11px",
+      borderRadius: 2,
+      cursor: "pointer",
+      border: `1px solid ${on ? C.red : C.line}`,
+      background: on ? C.red : "#fff",
+      color: on ? "#fff" : C.ink2,
+      fontWeight: on ? 600 : 400,
+      lineHeight: 1.3
+    }
+  }, children);
+}
+function Facets({
+  f,
+  setF,
+  showSearch,
+  count
+}) {
+  const [openTopics, setOpenTopics] = useState(false);
+  const tog = (key, v) => setF({
+    ...f,
+    [key]: f[key].includes(v) ? f[key].filter(x => x !== v) : [...f[key], v]
+  });
+  const usedTopics = useMemo(() => {
+    const pool = f.sessions.length ? BANK.items.filter(i => i.s.some(n => f.sessions.includes(n))) : BANK.items;
+    return Array.from(new Set(pool.map(i => i.t))).sort();
+  }, [f.sessions]);
+  const shownTopics = openTopics ? usedTopics : usedTopics.slice(0, 8);
+  const any = f.sessions.length || f.topics.length || f.search;
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8,
+      flexWrap: "wrap",
+      marginBottom: 20
+    }
+  }, PRESETS.map(([k, label]) => /*#__PURE__*/React.createElement(Btn, {
+    key: k,
+    kind: "ghost",
+    size: "sm",
+    onClick: () => setF({
+      ...emptyFilter,
+      sessions: BANK.x[k] || []
+    })
+  }, label)), any ? /*#__PURE__*/React.createElement(Btn, {
+    kind: "quiet",
+    size: "sm",
+    onClick: () => setF({
+      ...emptyFilter
+    })
+  }, "Clear all") : null), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      fontWeight: 700,
+      color: C.ink,
+      marginBottom: 9
+    }
+  }, "Sessions ", f.sessions.length ? `· ${f.sessions.length} selected` : ""), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6,
+      flexWrap: "wrap",
+      marginBottom: 22
+    }
+  }, SESSIONS.map(n => /*#__PURE__*/React.createElement(Chip, {
+    key: n,
+    on: f.sessions.includes(n),
+    onClick: () => tog("sessions", n),
+    title: BANK.m[n]
+  }, n, ". ", BANK.m[n]))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      fontWeight: 700,
+      color: C.ink,
+      marginBottom: 9
+    }
+  }, "Topics ", f.topics.length ? `· ${f.topics.length} selected` : ""), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6,
+      flexWrap: "wrap",
+      marginBottom: 8
+    }
+  }, shownTopics.map(t => /*#__PURE__*/React.createElement(Chip, {
+    key: t,
+    on: f.topics.includes(t),
+    onClick: () => tog("topics", t)
+  }, t)), usedTopics.length > 8 && /*#__PURE__*/React.createElement(Btn, {
+    kind: "quiet",
+    size: "sm",
+    onClick: () => setOpenTopics(!openTopics)
+  }, openTopics ? "Fewer topics" : `${usedTopics.length - 8} more topics`)), showSearch && /*#__PURE__*/React.createElement("input", {
+    value: f.search,
+    onChange: e => setF({
+      ...f,
+      search: e.target.value
+    }),
+    placeholder: "Search question text",
+    style: {
+      fontFamily: FONT,
+      fontSize: 15,
+      padding: "9px 10px",
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      width: "100%",
+      maxWidth: 380,
+      marginTop: 14,
+      color: C.ink,
+      boxSizing: "border-box"
+    }
+  }), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 14,
+      color: C.ink3,
+      marginTop: 18,
+      marginBottom: 0
+    }
+  }, count, " questions match", f.sessions.length && f.topics.length ? " — a topic inside the sessions you picked" : ""));
+}
+
+/* ---------- timer ---------- */
+
+function fmt(s) {
+  const m = Math.floor(s / 60),
+    r = s % 60;
+  return `${m}:${String(r).padStart(2, "0")}`;
+}
+function Clock({
+  left,
+  total,
+  urgent
+}) {
+  const pct = total ? Math.max(0, left / total * 100) : 0;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontFamily: "Consolas,Menlo,monospace",
+      fontSize: 17,
+      fontWeight: 700,
+      color: urgent ? C.red : C.ink2,
+      minWidth: 46,
+      textAlign: "right"
+    }
+  }, fmt(left)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 74,
+      height: 3,
+      background: C.line
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 3,
+      width: `${pct}%`,
+      background: urgent ? C.red : C.ink3
+    }
+  })));
+}
+
+/* ---------- bank loader ---------- */
+
+function Loader({
+  children
+}) {
+  const [state, setState] = useState("loading");
+  useEffect(() => {
+    fetch(BANK_URL + "?t=" + Date.now()).then(r => {
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    }).then(b => {
+      if (!b || !Array.isArray(b.items) || !b.items.length) throw new Error("empty");
+      initBank(b);
+      setState("ready");
+    }).catch(() => setState("failed"));
+  }, []);
+  if (state === "loading") {
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: FONT,
+        padding: "60px 28px",
+        color: C.ink3,
+        fontSize: 16
+      }
+    }, "Loading the question bank…");
+  }
+  if (state === "failed") {
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: FONT,
+        padding: "60px 28px",
+        maxWidth: 620
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        borderLeft: "3px solid " + C.red,
+        paddingLeft: 18
+      }
+    }, /*#__PURE__*/React.createElement("h1", {
+      style: {
+        fontSize: 22,
+        fontWeight: 700,
+        color: C.ink,
+        margin: "0 0 10px"
+      }
+    }, "The question bank didn't load"), /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: C.ink2,
+        fontSize: 16,
+        lineHeight: 1.6,
+        margin: 0
+      }
+    }, "bank.json has to sit in the same folder as this page. If you just uploaded it, give the site a minute and reload.")));
+  }
+  return children;
+}
+/* ---------- quiz builder ---------- */
+
+function Builder({
+  onExit,
+  onGoLive
+}) {
+  const [f, setF] = useState({
+    ...emptyFilter
+  });
+  const [sel, setSel] = useState([]);
+  const [tab, setTab] = useState("zoom");
+  const [draft, setDraft] = useState(null);
+  const [pollSecs, setPollSecs] = useState(45);
+  const [pick, setPick] = useState(6);
+  const pool = useMemo(() => filterItems(f), [f]);
+  const inSel = id => sel.some(s => s.i === id);
+  const toggle = it => setSel(inSel(it.i) ? sel.filter(s => s.i !== it.i) : [...sel, {
+    ...it
+  }]);
+  const shuffle = () => {
+    const s = [...pool].sort(() => Math.random() - 0.5).slice(0, Number(pick));
+    setSel(s.map(x => ({
+      ...x
+    })));
+  };
+  const editStem = (id, text) => setSel(sel.map(s => s.i === id ? {
+    ...s,
+    q: text
+  } : s));
+  const title = f.sessions.length ? `LD 810 Session ${[...f.sessions].sort((a, b) => a - b).join(", ")}` : f.topics.length ? `LD 810 ${f.topics.join(" / ")}` : "LD 810 live quiz";
+  const zoomText = [`${title}`, `${sel.length} questions · allow about ${pollSecs}s each · ${Math.ceil(sel.length * pollSecs / 60)} min total`, ""].concat(sel.map((s, n) => `QUESTION ${n + 1}\n${s.q}\n${s.o.map((o, i) => `  ${LETTERS[i]}) ${o}`).join("\n")}\n  → correct: ${s.a.map(i => LETTERS[i]).join(", ")}`)).join("\n\n");
+  const csvText = ["Title,Questions Name,Questions Type,Answers"].concat(sel.flatMap((s, n) => {
+    const esc = t => `"${String(t).replace(/"/g, '""')}"`;
+    return s.o.map((o, i) => i === 0 ? `${esc(title)},${esc(s.q)},single,${esc(o)}` : `,,,${esc(o)}`);
+  })).join("\n");
+  const keyText = `${title} — answer key\n${new Date().toLocaleDateString()} · ${pollSecs}s per question · ~${Math.ceil(sel.length * pollSecs / 60)} min\n\n` + sel.map((s, n) => `${n + 1}. ${s.q}\n   ANSWER: ${s.a.map(i => `${LETTERS[i]}) ${s.o[i]}`).join(" / ")}\n   [${s.i}]`).join("\n\n");
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "flex-start",
+      flexWrap: "wrap",
+      gap: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+    style: {
+      fontSize: 30,
+      fontWeight: 700,
+      margin: 0,
+      color: C.ink
+    }
+  }, "Build a Zoom quiz"), /*#__PURE__*/React.createElement(Rule, null)), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    onClick: onExit
+  }, "Back")), /*#__PURE__*/React.createElement(Facets, {
+    f: f,
+    setF: setF,
+    showSearch: true,
+    count: pool.length
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12,
+      alignItems: "center",
+      margin: "22px 0",
+      flexWrap: "wrap",
+      borderTop: `1px solid ${C.line}`,
+      paddingTop: 22
+    }
+  }, /*#__PURE__*/React.createElement(Btn, {
+    size: "sm",
+    onClick: shuffle,
+    disabled: pool.length === 0
+  }, "Pick at random"), /*#__PURE__*/React.createElement(Select, {
+    value: pick,
+    onChange: setPick,
+    style: {
+      minWidth: 96
+    }
+  }, [4, 5, 6, 8, 10].map(n => /*#__PURE__*/React.createElement("option", {
+    key: n,
+    value: n
+  }, n))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    min: "10",
+    max: "600",
+    value: pollSecs,
+    onChange: e => setPollSecs(e.target.value),
+    style: {
+      fontFamily: FONT,
+      fontSize: 15,
+      padding: "9px 10px",
+      width: 74,
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      color: C.ink,
+      boxSizing: "border-box"
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.ink2,
+      fontSize: 15
+    }
+  }, "seconds per question")), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    size: "sm",
+    onClick: () => setDraft({
+      q: "",
+      o: ["", "", "", ""],
+      a: 0
+    })
+  }, "Write a new question"), sel.length > 0 ? /*#__PURE__*/React.createElement(Btn, {
+    kind: "quiet",
+    size: "sm",
+    onClick: () => setSel([])
+  }, "Clear selection") : null), draft && /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: `1px solid ${C.gold}`,
+      borderRadius: 2,
+      padding: 18,
+      marginBottom: 24,
+      background: "#FDFBF6"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement(Pill, {
+    tone: "gold"
+  }, "New question")), /*#__PURE__*/React.createElement("input", {
+    value: draft.q,
+    onChange: e => setDraft({
+      ...draft,
+      q: e.target.value
+    }),
+    placeholder: "Question text",
+    style: {
+      width: "100%",
+      fontFamily: FONT,
+      fontSize: 16,
+      padding: 10,
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      marginBottom: 10,
+      boxSizing: "border-box"
+    }
+  }), draft.o.map((o, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      display: "flex",
+      gap: 10,
+      alignItems: "center",
+      marginBottom: 7
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "radio",
+    checked: draft.a === i,
+    onChange: () => setDraft({
+      ...draft,
+      a: i
+    }),
+    style: {
+      accentColor: C.teal,
+      width: 17,
+      height: 17
+    }
+  }), /*#__PURE__*/React.createElement("input", {
+    value: o,
+    onChange: e => {
+      const o2 = [...draft.o];
+      o2[i] = e.target.value;
+      setDraft({
+        ...draft,
+        o: o2
+      });
+    },
+    placeholder: `Option ${LETTERS[i]}`,
+    style: {
+      flex: 1,
+      fontFamily: FONT,
+      fontSize: 15,
+      padding: 9,
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      boxSizing: "border-box"
+    }
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 12,
+      display: "flex",
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement(Btn, {
+    size: "sm",
+    disabled: !draft.q.trim() || draft.o.some(x => !x.trim()),
+    onClick: () => {
+      setSel([...sel, {
+        i: `NEW-${rid()}`,
+        t: "Written in class",
+        q: draft.q,
+        o: draft.o,
+        a: [draft.a]
+      }]);
+      setDraft(null);
+    }
+  }, "Add to quiz"), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    size: "sm",
+    onClick: () => setDraft(null)
+  }, "Cancel")), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13,
+      color: C.ink3,
+      marginTop: 12,
+      marginBottom: 0
+    }
+  }, "This question lives in this quiz only. It isn't added to the Moodle bank.")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "minmax(0,1fr)",
+      gap: 0,
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      maxHeight: 420,
+      overflowY: "auto",
+      marginBottom: 30
+    }
+  }, pool.length === 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: 26,
+      color: C.ink3,
+      fontSize: 15
+    }
+  }, "No questions match. Widen the filter or clear the search."), pool.map((it, n) => {
+    const on = inSel(it.i);
+    return /*#__PURE__*/React.createElement("div", {
+      key: it.i,
+      onClick: () => toggle(it),
+      style: {
+        padding: "13px 16px",
+        borderBottom: n < pool.length - 1 ? `1px solid ${C.line}` : "none",
+        cursor: "pointer",
+        background: on ? C.redLight : "#fff",
+        display: "flex",
+        gap: 13,
+        alignItems: "flex-start"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 16,
+        height: 16,
+        flexShrink: 0,
+        marginTop: 3,
+        borderRadius: 1,
+        border: `1.5px solid ${on ? C.red : C.ink3}`,
+        background: on ? C.red : "#fff",
+        color: "#fff",
+        fontSize: 11,
+        lineHeight: "14px",
+        textAlign: "center",
+        fontWeight: 700
+      }
+    }, on ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
+      style: {
+        minWidth: 0
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 15.5,
+        color: C.ink,
+        lineHeight: 1.45
+      }
+    }, it.q), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13.5,
+        color: C.teal,
+        marginTop: 4,
+        fontWeight: 600
+      }
+    }, it.a.map(ai => it.o[ai]).join(" · "))));
+  })), sel.length > 0 && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 21,
+      fontWeight: 700,
+      color: C.ink,
+      margin: "0 0 4px"
+    }
+  }, "Your quiz — ", sel.length, " questions, about ", Math.ceil(sel.length * pollSecs / 60), " min"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.ink3,
+      fontSize: 14,
+      marginTop: 0,
+      marginBottom: 16
+    }
+  }, "Edit any question below to shorten it for reading aloud. The Moodle bank version stays untouched."), sel.map((s, n) => /*#__PURE__*/React.createElement("div", {
+    key: s.i,
+    style: {
+      display: "flex",
+      gap: 11,
+      alignItems: "flex-start",
+      marginBottom: 9
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.red,
+      fontWeight: 700,
+      fontSize: 15,
+      marginTop: 10,
+      width: 18,
+      flexShrink: 0
+    }
+  }, n + 1), /*#__PURE__*/React.createElement("input", {
+    value: s.q,
+    onChange: e => editStem(s.i, e.target.value),
+    style: {
+      flex: 1,
+      fontFamily: FONT,
+      fontSize: 15,
+      padding: 9,
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      color: C.ink,
+      boxSizing: "border-box",
+      minWidth: 0
+    }
+  }), /*#__PURE__*/React.createElement(Btn, {
+    kind: "quiet",
+    size: "sm",
+    onClick: () => setSel(sel.filter(x => x.i !== s.i)),
+    style: {
+      color: C.ink3
+    }
+  }, "Remove"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.wash,
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      padding: 18,
+      margin: "26px 0 4px",
+      display: "flex",
+      gap: 16,
+      alignItems: "center",
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement(Btn, {
+    onClick: () => onGoLive(sel),
+    disabled: sel.length === 0
+  }, "Run this live in class"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14.5,
+      color: C.ink2,
+      lineHeight: 1.5,
+      maxWidth: "44ch"
+    }
+  }, "You control the pace, students answer on their own devices, and the bars update as answers land. Use the tabs below instead if you want to load it into Zoom.")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 4,
+      margin: "28px 0 16px",
+      borderBottom: `1px solid ${C.line}`
+    }
+  }, [["zoom", "Paste into Zoom"], ["csv", "CSV file"], ["key", "Answer key"]].map(([k, label]) => /*#__PURE__*/React.createElement("button", {
+    key: k,
+    onClick: () => setTab(k),
+    style: {
+      fontFamily: FONT,
+      fontSize: 15,
+      fontWeight: tab === k ? 700 : 500,
+      padding: "9px 15px",
+      background: "transparent",
+      border: "none",
+      borderBottom: `3px solid ${tab === k ? C.red : "transparent"}`,
+      color: tab === k ? C.ink : C.ink3,
+      cursor: "pointer",
+      marginBottom: -1
+    }
+  }, label))), tab === "zoom" && /*#__PURE__*/React.createElement(CopyBox, {
+    text: zoomText,
+    label: "Open the Zoom meeting's Polls/Quizzes tab, create an Advanced Poll, and paste each question and its options."
+  }), tab === "csv" && /*#__PURE__*/React.createElement(CopyBox, {
+    text: csvText,
+    label: "Save as .csv for Zoom's Import CSV button, if your Moodle ever exposes the Zoom LTI activity."
+  }), tab === "key" && /*#__PURE__*/React.createElement(CopyBox, {
+    text: keyText,
+    label: "Your copy. Keep this off the shared screen."
+  })));
+}
+
+/* ---------- analytics ---------- */
+
+function Stats({
+  onExit
+}) {
+  const [sum, setSum] = useState(null);
+  const load = () => {
+    setSum(null);
+    loadSummary().then(setSum);
+  };
+  useEffect(() => {
+    load();
+  }, []);
+  const view = useMemo(() => {
+    if (!sum || !Array.isArray(sum.items)) return null;
+    const byId = Object.fromEntries(BANK.items.map(i => [i.i, i]));
+    const rows = sum.items.map(r => ({
+      ...r,
+      pct: r.n ? Math.round(r.right / r.n * 100) : 0,
+      item: byId[r.id]
+    })).filter(r => r.item);
+    return {
+      rows,
+      unknown: sum.items.length - rows.length,
+      hardest: [...rows].filter(r => r.n >= 2).sort((a, b) => a.pct - b.pct).slice(0, 15)
+    };
+  }, [sum]);
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "flex-start",
+      flexWrap: "wrap",
+      gap: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+    style: {
+      fontSize: 30,
+      fontWeight: 700,
+      margin: 0,
+      color: C.ink
+    }
+  }, "What the class is finding hard"), /*#__PURE__*/React.createElement(Rule, null)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    size: "sm",
+    onClick: load
+  }, "Refresh"), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    size: "sm",
+    onClick: onExit
+  }, "Back"))), !sum && /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.ink3,
+      fontSize: 16
+    }
+  }, "Reading the results sheet…"), sum && sum.offline && /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderLeft: `3px solid ${C.gold}`,
+      paddingLeft: 18,
+      maxWidth: "62ch"
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.ink2,
+      fontSize: 16.5,
+      lineHeight: 1.6,
+      marginTop: 0
+    }
+  }, "No results endpoint is configured. Open this file, put your Apps Script URL in the ENDPOINT line near the top, and re-upload it.")), sum && sum.error && /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderLeft: `3px solid ${C.red}`,
+      paddingLeft: 18,
+      maxWidth: "62ch"
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.ink2,
+      fontSize: 16.5,
+      lineHeight: 1.6,
+      marginTop: 0
+    }
+  }, sum.error, " Check that the Apps Script deployment runs as you, with access set to anyone, and that the URL ends in /exec.")), view && view.rows.length === 0 && !sum.error && /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderLeft: `3px solid ${C.gold}`,
+      paddingLeft: 18,
+      maxWidth: "62ch"
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.ink2,
+      fontSize: 16.5,
+      lineHeight: 1.6,
+      marginTop: 0
+    }
+  }, "Connected, but nothing recorded yet. Once students run a few practice sets this fills with the items they're missing most, which is the list worth spending class time on.")), view && view.rows.length > 0 && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 48,
+      marginBottom: 38,
+      flexWrap: "wrap"
+    }
+  }, [[sum.runs || 0, "practice sets"], [sum.answers || 0, "answers"], [view.rows.length, "items attempted"]].map(([v, l], k) => /*#__PURE__*/React.createElement("div", {
+    key: k
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 42,
+      fontWeight: 700,
+      color: C.red,
+      lineHeight: 1
+    }
+  }, v), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      color: C.ink3,
+      marginTop: 5
+    }
+  }, l)))), /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 19,
+      fontWeight: 700,
+      color: C.ink,
+      marginBottom: 14
+    }
+  }, "By session"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 38
+    }
+  }, SESSIONS.map(n => {
+    const rs = view.rows.filter(r => r.item.s.includes(n));
+    if (!rs.length) return null;
+    const tries = rs.reduce((a, b) => a + b.n, 0);
+    const pct = Math.round(rs.reduce((a, b) => a + b.right, 0) / tries * 100);
+    return /*#__PURE__*/React.createElement("div", {
+      key: n,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 14,
+        marginBottom: 7
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 14,
+        color: C.ink2,
+        width: 215,
+        flexShrink: 0,
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap"
+      }
+    }, n, ". ", BANK.m[n]), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1,
+        height: 14,
+        background: C.wash,
+        minWidth: 60
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: 14,
+        width: `${pct}%`,
+        background: pct < 50 ? C.red : pct < 75 ? C.gold : C.teal
+      }
+    })), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 13.5,
+        color: C.ink2,
+        width: 90,
+        flexShrink: 0,
+        textAlign: "right"
+      }
+    }, pct, "% · ", tries));
+  })), /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 19,
+      fontWeight: 700,
+      color: C.ink,
+      marginBottom: 16
+    }
+  }, "Lowest scoring items"), view.hardest.map(r => /*#__PURE__*/React.createElement("div", {
+    key: r.id,
+    style: {
+      display: "flex",
+      gap: 16,
+      alignItems: "flex-start",
+      marginBottom: 15,
+      paddingBottom: 15,
+      borderBottom: `1px solid ${C.line}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 52,
+      flexShrink: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 21,
+      fontWeight: 700,
+      lineHeight: 1,
+      color: r.pct < 50 ? C.red : r.pct < 75 ? C.gold : C.teal
+    }
+  }, r.pct, "%"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: C.ink3,
+      marginTop: 3
+    }
+  }, r.n, " tries")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      minWidth: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15.5,
+      color: C.ink,
+      lineHeight: 1.45
+    }
+  }, r.item.q), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: C.ink3,
+      marginTop: 4
+    }
+  }, r.item.t)))), view.unknown > 0 && /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13.5,
+      color: C.ink3,
+      marginTop: 20
+    }
+  }, view.unknown, " recorded item", view.unknown === 1 ? "" : "s", " is no longer in bank.json, so it was retired or renamed after those answers were given.")));
+}
+
+/* ---------- live session: instructor ---------- */
+
+function LiveConsole({
+  items,
+  onExit
+}) {
+  const [st, setSt] = useState(null);
+  const [tally, setTally] = useState({
+    counts: {},
+    total: 0
+  });
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState(null);
+
+  /* start the session on mount, end it on unmount */
+  useEffect(() => {
+    let gone = false;
+    (async () => {
+      const r = await api({
+        op: "live_start",
+        items: items.map(i => i.i),
+        label: "LD 810"
+      });
+      if (gone) return;
+      if (r.ok) setSt(r.state);else setErr(r.error || "Could not start the session.");
+    })();
+    return () => {
+      gone = true;
+      api({
+        op: "live_end"
+      });
+    };
+  }, []);
+  usePoll(async () => {
+    if (!st) return;
+    const r = await getLive(`_tally&idx=${st.idx}`);
+    if (r && !r.error) {
+      setTally({
+        counts: r.counts || {},
+        total: r.total || 0
+      });
+      if (r.state) setSt(prev => ({
+        ...prev,
+        ...r.state
+      }));
+    }
+  }, 2000, !!st && st.idx >= 0);
+  const push = async patch => {
+    setBusy(true);
+    const r = await api({
+      op: "live_state",
+      ...patch
+    });
+    if (r.ok) {
+      setSt(r.state);
+      setTally({
+        counts: {},
+        total: 0
+      });
+    } else setErr(r.error || "That didn't go through.");
+    setBusy(false);
+  };
+  const item = st && st.idx >= 0 ? items[st.idx] : null;
+  const last = st && st.idx >= items.length - 1;
+  if (err) {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        borderLeft: `3px solid ${C.red}`,
+        paddingLeft: 18,
+        maxWidth: "62ch"
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 16.5,
+        color: C.ink2,
+        lineHeight: 1.6,
+        marginTop: 0
+      }
+    }, err)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 22
+      }
+    }, /*#__PURE__*/React.createElement(Btn, {
+      kind: "ghost",
+      onClick: onExit
+    }, "Back")));
+  }
+  if (!st) return /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.ink3,
+      fontSize: 16
+    }
+  }, "Starting the session…");
+
+  /* lobby */
+  if (st.idx < 0) {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Pill, null, "Live · lobby"), /*#__PURE__*/React.createElement("h2", {
+      style: {
+        fontSize: 32,
+        fontWeight: 700,
+        margin: "14px 0 0",
+        color: C.ink
+      }
+    }, "Session is open"), /*#__PURE__*/React.createElement(Rule, null), /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 17.5,
+        color: C.ink2,
+        lineHeight: 1.6,
+        maxWidth: "58ch",
+        marginTop: 0
+      }
+    }, "Students who have the practice page open will see a join banner within a few seconds. Tell them to open it now, then start when the room has settled."), /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 16,
+        color: C.ink3,
+        marginTop: 18
+      }
+    }, items.length, " questions queued."), /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 28,
+        display: "flex",
+        gap: 12
+      }
+    }, /*#__PURE__*/React.createElement(Btn, {
+      onClick: () => push({
+        idx: 0,
+        revealed: false
+      }),
+      disabled: busy
+    }, "Show first question"), /*#__PURE__*/React.createElement(Btn, {
+      kind: "ghost",
+      onClick: onExit
+    }, "Cancel session")));
+  }
+  const max = Math.max(1, ...Object.values(tally.counts || {}).map(Number));
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      flexWrap: "wrap",
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement(Pill, null, "Question ", st.idx + 1, " of ", items.length), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 15,
+      color: C.ink2,
+      fontWeight: 600
+    }
+  }, tally.total, " response", tally.total === 1 ? "" : "s", " in")), /*#__PURE__*/React.createElement("h2", {
+    style: {
+      fontSize: 27,
+      fontWeight: 700,
+      color: C.ink,
+      lineHeight: 1.3,
+      margin: "18px 0 26px"
+    }
+  }, item.q), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gap: 8,
+      marginBottom: 30
+    }
+  }, item.o.map((opt, i) => {
+    const n = Number((tally.counts || {})[i] || 0);
+    const pctOfMax = n / max * 100;
+    const pct = tally.total ? Math.round(n / tally.total * 100) : 0;
+    const isRight = item.a.includes(i);
+    const paint = st.revealed ? isRight ? C.teal : C.ink3 : C.red;
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 12
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        width: 16,
+        flexShrink: 0,
+        fontWeight: 700,
+        color: st.revealed && isRight ? C.teal : C.ink3,
+        fontSize: 15
+      }
+    }, LETTERS[i]), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1,
+        minWidth: 0
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 15.5,
+        color: st.revealed && isRight ? C.teal : C.ink,
+        fontWeight: st.revealed && isRight ? 700 : 400,
+        marginBottom: 4,
+        lineHeight: 1.4
+      }
+    }, opt), /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: 22,
+        background: C.wash,
+        position: "relative"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: 22,
+        width: `${pctOfMax}%`,
+        background: paint,
+        transition: "width 400ms ease"
+      }
+    }))), /*#__PURE__*/React.createElement("span", {
+      style: {
+        width: 74,
+        flexShrink: 0,
+        textAlign: "right",
+        fontSize: 15,
+        color: C.ink2,
+        fontWeight: 600
+      }
+    }, n, " · ", pct, "%"));
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10,
+      flexWrap: "wrap",
+      borderTop: `1px solid ${C.line}`,
+      paddingTop: 22
+    }
+  }, !st.revealed ? /*#__PURE__*/React.createElement(Btn, {
+    onClick: () => push({
+      revealed: true
+    }),
+    disabled: busy
+  }, "Reveal the answer") : !last ? /*#__PURE__*/React.createElement(Btn, {
+    onClick: () => push({
+      idx: st.idx + 1,
+      revealed: false
+    }),
+    disabled: busy
+  }, "Next question") : null, st.revealed && last && /*#__PURE__*/React.createElement(Btn, {
+    onClick: onExit,
+    disabled: busy
+  }, "Finish and close"), !st.revealed && !last && /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    onClick: () => push({
+      idx: st.idx + 1,
+      revealed: false
+    }),
+    disabled: busy
+  }, "Skip ahead"), /*#__PURE__*/React.createElement(Btn, {
+    kind: "quiet",
+    size: "sm",
+    onClick: onExit
+  }, "End session")), st.revealed && /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 14.5,
+      color: C.ink3,
+      marginTop: 18,
+      maxWidth: "62ch"
+    }
+  }, "Correct answer is highlighted for students too. This is the moment to ask why the popular wrong answer was tempting."));
+}
+/* ---------- shell ---------- */
+
+function App() {
+  const [view, setView] = useState("home");
+  const [liveSet, setLiveSet] = useState([]);
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: FONT,
+      background: "#fff",
+      minHeight: "100vh",
+      color: C.ink,
+      display: "flex"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 8,
+      background: C.ink,
+      flexShrink: 0
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      minWidth: 0,
+      display: "flex",
+      flexDirection: "column"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 880,
+      width: "100%",
+      margin: "0 auto",
+      padding: "36px 28px 60px",
+      boxSizing: "border-box",
+      flex: 1
+    }
+  }, view === "home" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement(Pill, {
+    tone: "grey"
+  }, "Instructor · not for students")), /*#__PURE__*/React.createElement("h1", {
+    style: {
+      fontSize: 44,
+      fontWeight: 700,
+      lineHeight: 1.1,
+      margin: "0 0 16px",
+      maxWidth: "18ch",
+      color: C.ink
+    }
+  }, "LD 810 quiz console"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 18,
+      color: C.ink2,
+      lineHeight: 1.6,
+      maxWidth: "58ch",
+      margin: "0 0 44px"
+    }
+  }, BANK.items.length, " keyed questions from the Moodle bank. Pull a set for a live Zoom poll, or read what the class has been missing in practice."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gap: 2,
+      background: C.line,
+      border: `1px solid ${C.line}`
+    }
+  }, [["build", "Build a quiz", "Filter by any mix of sessions and topics, then either run it live in class or format it for a Zoom poll."], ["stats", "Class results", "Which items and which sessions the class is scoring worst on. Anonymous and pooled."]].map(([k, title, desc]) => /*#__PURE__*/React.createElement("button", {
+    key: k,
+    onClick: () => setView(k),
+    style: {
+      textAlign: "left",
+      fontFamily: FONT,
+      background: "#fff",
+      border: "none",
+      padding: "24px 26px",
+      cursor: "pointer",
+      display: "block",
+      width: "100%"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 21,
+      fontWeight: 700,
+      color: C.red
+    }
+  }, title), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15.5,
+      color: C.ink2,
+      marginTop: 6,
+      lineHeight: 1.5,
+      maxWidth: "60ch"
+    }
+  }, desc)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderLeft: `3px solid ${C.gold}`,
+      paddingLeft: 16,
+      marginTop: 40,
+      maxWidth: "64ch"
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 15,
+      color: C.ink2,
+      lineHeight: 1.6,
+      margin: 0
+    }
+  }, "Class results reads the same Google Sheet the student app writes to. Add questions by replacing bank.json — nothing here needs rebuilding."))), view === "build" && /*#__PURE__*/React.createElement(Builder, {
+    onExit: () => setView("home"),
+    onGoLive: sel => {
+      setLiveSet(sel);
+      setView("live");
+    }
+  }), view === "live" && /*#__PURE__*/React.createElement(LiveConsole, {
+    items: liveSet,
+    onExit: () => setView("build")
+  }), view === "stats" && /*#__PURE__*/React.createElement(Stats, {
+    onExit: () => setView("home")
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: `1px solid ${C.line}`,
+      padding: "14px 28px",
+      maxWidth: 880,
+      width: "100%",
+      margin: "0 auto",
+      boxSizing: "border-box",
+      display: "flex",
+      justifyContent: "space-between",
+      fontSize: 12.5,
+      color: C.ink3,
+      flexWrap: "wrap",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("span", null, "LD 810 · Fall 2026 · instructor console"), /*#__PURE__*/React.createElement("span", null, BANK.items.length, " keyed items · 27 awaiting keys"))));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(Loader, null, /*#__PURE__*/React.createElement(App, null)));
+</script>
+</body>
+</html>

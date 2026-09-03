@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LD 810 — Applied Statistics Practice</title>
+<meta name="description" content="Self-paced practice questions for LD 810.">
+<meta name="robots" content="noindex">
+<style>
+  html,body{margin:0;padding:0;background:#fff;-webkit-text-size-adjust:100%}
+  *{box-sizing:border-box}
+  button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{
+    outline:2px solid #BA0C2F;outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin></script>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const {
+  useState,
+  useEffect,
+  useMemo,
+  useRef
+} = React;
+
+/* ============================================================
+   CONFIG — paste your Apps Script /exec URL between the quotes.
+   Leave it as-is and the app still works; results just aren't saved.
+   ============================================================ */
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbyyOIlEcGXRkL-QEpeHKUu1ZA0dfsUr2etjJ26LERA/dev";
+const BANK_URL = "bank.json";
+let BANK = {
+  m: {},
+  x: {},
+  items: []
+};
+let TOPICS = [];
+let SESSIONS = [];
+function initBank(b) {
+  BANK = b;
+  TOPICS = Array.from(new Set(b.items.map(i => i.t))).sort();
+  SESSIONS = Object.keys(b.m).map(Number).sort((x, y) => x - y);
+}
+const live = () => /^https:\/\//.test(ENDPOINT);
+const C = {
+  red: "#BA0C2F",
+  redDark: "#8A0922",
+  redLight: "#FCEEF1",
+  ink: "#16181C",
+  ink2: "#4B5058",
+  ink3: "#8A9099",
+  wash: "#F7F5F3",
+  line: "#E3E0DC",
+  teal: "#0F6E63",
+  gold: "#B8860B"
+};
+const FONT = "'Aptos','Calibri','Segoe UI',system-ui,-apple-system,sans-serif";
+const LETTERS = ["a", "b", "c", "d", "e", "f", "g", "h"];
+const rid = () => Math.random().toString(36).slice(2, 10);
+
+/* ---------- shared primitives ---------- */
+
+function Btn({
+  children,
+  onClick,
+  kind = "primary",
+  size = "md",
+  disabled,
+  style
+}) {
+  const base = {
+    fontFamily: FONT,
+    cursor: disabled ? "not-allowed" : "pointer",
+    border: "1px solid transparent",
+    borderRadius: 2,
+    fontWeight: 600,
+    padding: size === "sm" ? "6px 12px" : "10px 20px",
+    fontSize: size === "sm" ? 14 : 16,
+    opacity: disabled ? 0.4 : 1,
+    transition: "background 120ms ease",
+    lineHeight: 1.3
+  };
+  const kinds = {
+    primary: {
+      background: C.red,
+      color: "#fff"
+    },
+    ghost: {
+      background: "transparent",
+      color: C.ink2,
+      borderColor: C.line
+    },
+    quiet: {
+      background: "transparent",
+      color: C.red,
+      border: "none",
+      padding: size === "sm" ? "6px 6px" : "10px 6px"
+    }
+  };
+  return /*#__PURE__*/React.createElement("button", {
+    onClick: disabled ? undefined : onClick,
+    disabled: disabled,
+    style: {
+      ...base,
+      ...kinds[kind],
+      ...style
+    }
+  }, children);
+}
+function Pill({
+  children,
+  tone = "red"
+}) {
+  const tones = {
+    red: {
+      background: C.redLight,
+      color: C.redDark
+    },
+    grey: {
+      background: C.wash,
+      color: C.ink2
+    },
+    teal: {
+      background: "#E6F2F0",
+      color: C.teal
+    },
+    gold: {
+      background: "#FBF3E0",
+      color: C.gold
+    }
+  };
+  return /*#__PURE__*/React.createElement("span", {
+    style: {
+      ...tones[tone],
+      padding: "3px 9px",
+      borderRadius: 2,
+      fontSize: 12,
+      fontWeight: 700,
+      letterSpacing: 0.2,
+      whiteSpace: "nowrap",
+      display: "inline-block"
+    }
+  }, children);
+}
+function Rule() {
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 3,
+      width: 48,
+      background: C.red,
+      margin: "14px 0 20px"
+    }
+  });
+}
+function Select({
+  value,
+  onChange,
+  children,
+  style
+}) {
+  return /*#__PURE__*/React.createElement("select", {
+    value: value,
+    onChange: e => onChange(e.target.value),
+    style: {
+      fontFamily: FONT,
+      fontSize: 15,
+      padding: "9px 10px",
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      background: "#fff",
+      color: C.ink,
+      minWidth: 160,
+      ...style
+    }
+  }, children);
+}
+function CopyBox({
+  text,
+  label
+}) {
+  const [done, setDone] = useState(false);
+  const ref = useRef(null);
+  const copy = () => {
+    const el = ref.current;
+    if (el) {
+      el.select();
+    }
+    try {
+      if (navigator.clipboard) navigator.clipboard.writeText(text);else document.execCommand("copy");
+      setDone(true);
+      setTimeout(() => setDone(false), 1800);
+    } catch (e) {
+      setDone(false);
+    }
+  };
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13,
+      color: C.ink3
+    }
+  }, label), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    size: "sm",
+    onClick: copy
+  }, done ? "Copied" : "Copy")), /*#__PURE__*/React.createElement("textarea", {
+    ref: ref,
+    readOnly: true,
+    value: text,
+    style: {
+      width: "100%",
+      height: 300,
+      fontFamily: "Consolas,Menlo,monospace",
+      fontSize: 13,
+      lineHeight: 1.55,
+      padding: 14,
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      background: C.wash,
+      color: C.ink,
+      resize: "vertical",
+      boxSizing: "border-box"
+    }
+  }));
+}
+
+/* ---------- results endpoint ---------- */
+
+/* text/plain keeps this a "simple" CORS request, which Apps Script
+   answers directly — an application/json body would trigger a
+   preflight that Apps Script does not handle. */
+async function saveRun(payload) {
+  if (!live()) return false;
+  try {
+    const r = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(payload)
+    });
+    return r.ok;
+  } catch (e) {
+    return false;
+  }
+}
+async function api(payload) {
+  if (!live()) return {
+    ok: false,
+    error: "No endpoint configured."
+  };
+  try {
+    const r = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(payload)
+    });
+    return await r.json();
+  } catch (e) {
+    return {
+      ok: false,
+      error: "Could not reach the endpoint."
+    };
+  }
+}
+async function getLive(extra) {
+  if (!live()) return {
+    offline: true
+  };
+  try {
+    const r = await fetch(`${ENDPOINT}?mode=live${extra || ""}&t=${Date.now()}`);
+    return await r.json();
+  } catch (e) {
+    return {
+      error: true
+    };
+  }
+}
+
+/* Poll on an interval, but skip a tick if the previous request is still in
+   flight — Apps Script responses can run past the interval on a slow network. */
+function usePoll(fn, ms, on) {
+  const busy = useRef(false);
+  useEffect(() => {
+    if (!on) return;
+    let stop = false;
+    const tick = async () => {
+      if (busy.current) return;
+      busy.current = true;
+      try {
+        await fn();
+      } finally {
+        busy.current = false;
+      }
+    };
+    tick();
+    const id = setInterval(() => {
+      if (!stop) tick();
+    }, ms);
+    return () => {
+      stop = true;
+      clearInterval(id);
+    };
+  }, [on, ms]);
+}
+async function loadSummary() {
+  if (!live()) return {
+    offline: true
+  };
+  try {
+    const r = await fetch(`${ENDPOINT}?mode=summary&t=${Date.now()}`);
+    if (!r.ok) return {
+      error: `The results endpoint returned ${r.status}.`
+    };
+    return await r.json();
+  } catch (e) {
+    return {
+      error: "Could not reach the results endpoint."
+    };
+  }
+}
+
+/* ---------- filtering ---------- */
+
+const PRESETS = [["quiz1", "Quiz 1"], ["exam1", "Exam 1"], ["quiz2", "Quiz 2"], ["exam2", "Exam 2"]];
+const emptyFilter = {
+  sessions: [],
+  topics: [],
+  search: ""
+};
+function filterItems(f) {
+  let list = BANK.items;
+  if (f.sessions.length) list = list.filter(i => i.s.some(n => f.sessions.includes(n)));
+  if (f.topics.length) list = list.filter(i => f.topics.includes(i.t));
+  if (f.search && f.search.trim()) {
+    const q = f.search.toLowerCase();
+    list = list.filter(i => i.q.toLowerCase().includes(q) || i.o.some(o => o.toLowerCase().includes(q)));
+  }
+  return list;
+}
+function Chip({
+  on,
+  onClick,
+  children,
+  title
+}) {
+  return /*#__PURE__*/React.createElement("button", {
+    onClick: onClick,
+    title: title,
+    style: {
+      fontFamily: FONT,
+      fontSize: 13.5,
+      padding: "6px 11px",
+      borderRadius: 2,
+      cursor: "pointer",
+      border: `1px solid ${on ? C.red : C.line}`,
+      background: on ? C.red : "#fff",
+      color: on ? "#fff" : C.ink2,
+      fontWeight: on ? 600 : 400,
+      lineHeight: 1.3
+    }
+  }, children);
+}
+function Facets({
+  f,
+  setF,
+  showSearch,
+  count
+}) {
+  const [openTopics, setOpenTopics] = useState(false);
+  const tog = (key, v) => setF({
+    ...f,
+    [key]: f[key].includes(v) ? f[key].filter(x => x !== v) : [...f[key], v]
+  });
+  const usedTopics = useMemo(() => {
+    const pool = f.sessions.length ? BANK.items.filter(i => i.s.some(n => f.sessions.includes(n))) : BANK.items;
+    return Array.from(new Set(pool.map(i => i.t))).sort();
+  }, [f.sessions]);
+  const shownTopics = openTopics ? usedTopics : usedTopics.slice(0, 8);
+  const any = f.sessions.length || f.topics.length || f.search;
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8,
+      flexWrap: "wrap",
+      marginBottom: 20
+    }
+  }, PRESETS.map(([k, label]) => /*#__PURE__*/React.createElement(Btn, {
+    key: k,
+    kind: "ghost",
+    size: "sm",
+    onClick: () => setF({
+      ...emptyFilter,
+      sessions: BANK.x[k] || []
+    })
+  }, label)), any ? /*#__PURE__*/React.createElement(Btn, {
+    kind: "quiet",
+    size: "sm",
+    onClick: () => setF({
+      ...emptyFilter
+    })
+  }, "Clear all") : null), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      fontWeight: 700,
+      color: C.ink,
+      marginBottom: 9
+    }
+  }, "Sessions ", f.sessions.length ? `· ${f.sessions.length} selected` : ""), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6,
+      flexWrap: "wrap",
+      marginBottom: 22
+    }
+  }, SESSIONS.map(n => /*#__PURE__*/React.createElement(Chip, {
+    key: n,
+    on: f.sessions.includes(n),
+    onClick: () => tog("sessions", n),
+    title: BANK.m[n]
+  }, n, ". ", BANK.m[n]))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      fontWeight: 700,
+      color: C.ink,
+      marginBottom: 9
+    }
+  }, "Topics ", f.topics.length ? `· ${f.topics.length} selected` : ""), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6,
+      flexWrap: "wrap",
+      marginBottom: 8
+    }
+  }, shownTopics.map(t => /*#__PURE__*/React.createElement(Chip, {
+    key: t,
+    on: f.topics.includes(t),
+    onClick: () => tog("topics", t)
+  }, t)), usedTopics.length > 8 && /*#__PURE__*/React.createElement(Btn, {
+    kind: "quiet",
+    size: "sm",
+    onClick: () => setOpenTopics(!openTopics)
+  }, openTopics ? "Fewer topics" : `${usedTopics.length - 8} more topics`)), showSearch && /*#__PURE__*/React.createElement("input", {
+    value: f.search,
+    onChange: e => setF({
+      ...f,
+      search: e.target.value
+    }),
+    placeholder: "Search question text",
+    style: {
+      fontFamily: FONT,
+      fontSize: 15,
+      padding: "9px 10px",
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      width: "100%",
+      maxWidth: 380,
+      marginTop: 14,
+      color: C.ink,
+      boxSizing: "border-box"
+    }
+  }), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 14,
+      color: C.ink3,
+      marginTop: 18,
+      marginBottom: 0
+    }
+  }, count, " questions match", f.sessions.length && f.topics.length ? " — a topic inside the sessions you picked" : ""));
+}
+
+/* ---------- timer ---------- */
+
+function fmt(s) {
+  const m = Math.floor(s / 60),
+    r = s % 60;
+  return `${m}:${String(r).padStart(2, "0")}`;
+}
+function Clock({
+  left,
+  total,
+  urgent
+}) {
+  const pct = total ? Math.max(0, left / total * 100) : 0;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontFamily: "Consolas,Menlo,monospace",
+      fontSize: 17,
+      fontWeight: 700,
+      color: urgent ? C.red : C.ink2,
+      minWidth: 46,
+      textAlign: "right"
+    }
+  }, fmt(left)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 74,
+      height: 3,
+      background: C.line
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 3,
+      width: `${pct}%`,
+      background: urgent ? C.red : C.ink3
+    }
+  })));
+}
+
+/* ---------- bank loader ---------- */
+
+function Loader({
+  children
+}) {
+  const [state, setState] = useState("loading");
+  useEffect(() => {
+    fetch(BANK_URL + "?t=" + Date.now()).then(r => {
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    }).then(b => {
+      if (!b || !Array.isArray(b.items) || !b.items.length) throw new Error("empty");
+      initBank(b);
+      setState("ready");
+    }).catch(() => setState("failed"));
+  }, []);
+  if (state === "loading") {
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: FONT,
+        padding: "60px 28px",
+        color: C.ink3,
+        fontSize: 16
+      }
+    }, "Loading the question bank…");
+  }
+  if (state === "failed") {
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: FONT,
+        padding: "60px 28px",
+        maxWidth: 620
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        borderLeft: "3px solid " + C.red,
+        paddingLeft: 18
+      }
+    }, /*#__PURE__*/React.createElement("h1", {
+      style: {
+        fontSize: 22,
+        fontWeight: 700,
+        color: C.ink,
+        margin: "0 0 10px"
+      }
+    }, "The question bank didn't load"), /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: C.ink2,
+        fontSize: 16,
+        lineHeight: 1.6,
+        margin: 0
+      }
+    }, "bank.json has to sit in the same folder as this page. If you just uploaded it, give the site a minute and reload.")));
+  }
+  return children;
+}
+/* ---------- practice ---------- */
+
+function Practice({
+  onExit
+}) {
+  const [f, setF] = useState({
+    ...emptyFilter
+  });
+  const [len, setLen] = useState(10);
+  const [tMode, setTMode] = useState("none");
+  const [tVal, setTVal] = useState(60);
+  const [deck, setDeck] = useState(null);
+  const [at, setAt] = useState(0);
+  const [picked, setPicked] = useState(null);
+  const [log, setLog] = useState([]);
+  const [left, setLeft] = useState(0);
+  const [saved, setSaved] = useState(null);
+  const [ranOut, setRanOut] = useState(false);
+  const pool = useMemo(() => filterItems(f), [f]);
+  const secs = Math.max(5, Math.min(3600, Number(tVal) || 0));
+  const running = deck && at < deck.length;
+  const start = () => {
+    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    const n = len === "all" ? shuffled.length : Math.min(Number(len), shuffled.length);
+    setDeck(shuffled.slice(0, n));
+    setAt(0);
+    setPicked(null);
+    setLog([]);
+    setSaved(null);
+    setRanOut(false);
+    setLeft(tMode === "none" ? 0 : secs);
+  };
+  const finish = async finalLog => {
+    const ok = await saveRun({
+      when: new Date().toISOString(),
+      sessions: f.sessions,
+      topics: f.topics,
+      timer: tMode === "none" ? null : `${tMode}:${secs}s`,
+      results: finalLog
+    });
+    setSaved(ok);
+    setAt(deck.length);
+  };
+  const record = idx => {
+    const q = deck[at];
+    const entry = {
+      id: q.i,
+      correct: idx !== null && q.a.includes(idx) ? 1 : 0
+    };
+    const nextLog = [...log, entry];
+    setLog(nextLog);
+    return nextLog;
+  };
+  const answer = idx => {
+    if (picked === null) {
+      setPicked(idx);
+      record(idx);
+    }
+  };
+  const advance = async () => {
+    if (at + 1 < deck.length) {
+      setAt(at + 1);
+      setPicked(null);
+      if (tMode === "perq") setLeft(secs);
+      return;
+    }
+    await finish(log);
+  };
+
+  /* countdown */
+  useEffect(() => {
+    if (!running || tMode === "none") return;
+    if (tMode === "perq" && picked !== null) return;
+    if (left <= 0) return;
+    const id = setTimeout(() => setLeft(v => v - 1), 1000);
+    return () => clearTimeout(id);
+  }, [running, tMode, picked, left]);
+
+  /* expiry */
+  useEffect(() => {
+    if (!running || tMode === "none" || left > 0) return;
+    if (tMode === "perq") {
+      if (picked === null) {
+        setPicked(-1);
+        setRanOut(true);
+        record(null);
+      }
+    } else {
+      const q = deck[at];
+      const finalLog = picked === null ? [...log, {
+        id: q.i,
+        correct: 0
+      }] : log;
+      finish(finalLog);
+    }
+  }, [left, running, tMode, picked]);
+
+  /* setup */
+  if (!deck) {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+      style: {
+        fontSize: 30,
+        fontWeight: 700,
+        margin: 0,
+        color: C.ink
+      }
+    }, "Practice on your own"), /*#__PURE__*/React.createElement(Rule, null), /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: C.ink2,
+        fontSize: 17,
+        lineHeight: 1.6,
+        maxWidth: "62ch",
+        marginTop: 0
+      }
+    }, "Combine as many sessions and topics as you want. Nothing is graded and no answer is tied to your name — responses are pooled anonymously so the class can see which ideas are giving everyone trouble."), /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 28
+      }
+    }, /*#__PURE__*/React.createElement(Facets, {
+      f: f,
+      setF: setF,
+      count: pool.length
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        borderTop: `1px solid ${C.line}`,
+        marginTop: 28,
+        paddingTop: 24
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 14,
+        alignItems: "center",
+        flexWrap: "wrap"
+      }
+    }, /*#__PURE__*/React.createElement(Select, {
+      value: len,
+      onChange: setLen
+    }, /*#__PURE__*/React.createElement("option", {
+      value: 5
+    }, "5 questions"), /*#__PURE__*/React.createElement("option", {
+      value: 10
+    }, "10 questions"), /*#__PURE__*/React.createElement("option", {
+      value: 20
+    }, "20 questions"), /*#__PURE__*/React.createElement("option", {
+      value: 40
+    }, "40 questions"), /*#__PURE__*/React.createElement("option", {
+      value: "all"
+    }, "Everything available")), /*#__PURE__*/React.createElement(Select, {
+      value: tMode,
+      onChange: setTMode,
+      style: {
+        minWidth: 190
+      }
+    }, /*#__PURE__*/React.createElement("option", {
+      value: "none"
+    }, "No timer"), /*#__PURE__*/React.createElement("option", {
+      value: "perq"
+    }, "Timer on each question"), /*#__PURE__*/React.createElement("option", {
+      value: "set"
+    }, "Timer on the whole set")), tMode !== "none" && /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      min: "5",
+      max: "3600",
+      value: tVal,
+      onChange: e => setTVal(e.target.value),
+      style: {
+        fontFamily: FONT,
+        fontSize: 15,
+        padding: "9px 10px",
+        width: 78,
+        border: `1px solid ${C.line}`,
+        borderRadius: 2,
+        color: C.ink,
+        boxSizing: "border-box"
+      }
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: C.ink2,
+        fontSize: 15
+      }
+    }, "seconds ", tMode === "perq" ? "per question" : "total"))), tMode !== "none" && /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 14,
+        color: C.ink3,
+        marginTop: 12,
+        marginBottom: 0,
+        maxWidth: "62ch"
+      }
+    }, tMode === "perq" ? `${fmt(secs)} on the clock for each question. Run the clock down and the answer is revealed and counted as missed.` : `${fmt(secs)} for the whole set — closer to exam conditions. When time is up you go straight to your results.`)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 30,
+        display: "flex",
+        gap: 12
+      }
+    }, /*#__PURE__*/React.createElement(Btn, {
+      onClick: start,
+      disabled: pool.length === 0
+    }, "Start"), /*#__PURE__*/React.createElement(Btn, {
+      kind: "ghost",
+      onClick: onExit
+    }, "Back")));
+  }
+
+  /* summary */
+  if (at >= deck.length) {
+    const right = log.filter(r => r.correct).length;
+    const pct = log.length ? Math.round(right / log.length * 100) : 0;
+    const missed = log.map((r, i) => ({
+      ...r,
+      item: deck[i]
+    })).filter(r => !r.correct && r.item);
+    const skipped = deck.length - log.length;
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+      style: {
+        fontSize: 30,
+        fontWeight: 700,
+        margin: 0,
+        color: C.ink
+      }
+    }, right, " of ", log.length, " correct"), /*#__PURE__*/React.createElement(Rule, null), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 62,
+        fontWeight: 700,
+        lineHeight: 1,
+        color: pct >= 80 ? C.teal : pct >= 60 ? C.gold : C.red
+      }
+    }, pct, "%"), skipped > 0 && /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: C.gold,
+        fontSize: 15,
+        marginTop: 16,
+        marginBottom: 0
+      }
+    }, "Time ran out with ", skipped, " question", skipped === 1 ? "" : "s", " unseen."), missed.length > 0 && /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 34
+      }
+    }, /*#__PURE__*/React.createElement("h3", {
+      style: {
+        fontSize: 19,
+        fontWeight: 700,
+        color: C.ink,
+        marginBottom: 14
+      }
+    }, "Worth another look"), missed.map((m, k) => /*#__PURE__*/React.createElement("div", {
+      key: k,
+      style: {
+        borderLeft: `3px solid ${C.red}`,
+        paddingLeft: 14,
+        marginBottom: 18
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        color: C.ink,
+        fontSize: 15,
+        lineHeight: 1.5
+      }
+    }, m.item.q), /*#__PURE__*/React.createElement("div", {
+      style: {
+        color: C.teal,
+        fontSize: 15,
+        marginTop: 5,
+        fontWeight: 600
+      }
+    }, m.item.a.map(ai => m.item.o[ai]).join(" · "))))), saved === false && /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: C.gold,
+        fontSize: 14,
+        marginTop: 22
+      }
+    }, "Your answers couldn't be saved to the class pool. Your score above is still accurate."), /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 30,
+        display: "flex",
+        gap: 12
+      }
+    }, /*#__PURE__*/React.createElement(Btn, {
+      onClick: () => setDeck(null)
+    }, "Practice again"), /*#__PURE__*/React.createElement(Btn, {
+      kind: "ghost",
+      onClick: onExit
+    }, "Back")));
+  }
+
+  /* question */
+  const q = deck[at];
+  const done = picked !== null;
+  const total = tMode === "perq" ? secs : tMode === "set" ? secs : 0;
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 6,
+      gap: 12,
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement(Pill, {
+    tone: "grey"
+  }, q.t), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 16
+    }
+  }, tMode !== "none" && /*#__PURE__*/React.createElement(Clock, {
+    left: left,
+    total: total,
+    urgent: left <= 10
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.ink3,
+      fontSize: 14
+    }
+  }, at + 1, " of ", deck.length))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 3,
+      background: C.line,
+      marginBottom: 30
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 3,
+      background: C.red,
+      width: `${(at + (done ? 1 : 0)) / deck.length * 100}%`,
+      transition: "width 200ms ease"
+    }
+  })), /*#__PURE__*/React.createElement("h2", {
+    style: {
+      fontSize: 25,
+      fontWeight: 700,
+      color: C.ink,
+      lineHeight: 1.35,
+      margin: "0 0 26px",
+      maxWidth: "42ch"
+    }
+  }, q.q), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gap: 9
+    }
+  }, q.o.map((opt, i) => {
+    const isRight = q.a.includes(i);
+    let bg = "#fff",
+      bd = C.line,
+      fg = C.ink;
+    if (done && isRight) {
+      bg = "#E6F2F0";
+      bd = C.teal;
+      fg = C.teal;
+    } else if (done && i === picked) {
+      bg = C.redLight;
+      bd = C.red;
+      fg = C.redDark;
+    } else if (done) {
+      fg = C.ink3;
+    }
+    return /*#__PURE__*/React.createElement("button", {
+      key: i,
+      onClick: () => answer(i),
+      style: {
+        textAlign: "left",
+        fontFamily: FONT,
+        fontSize: 16.5,
+        lineHeight: 1.45,
+        padding: "14px 16px",
+        background: bg,
+        border: `1px solid ${bd}`,
+        borderRadius: 2,
+        color: fg,
+        cursor: done ? "default" : "pointer",
+        display: "flex",
+        gap: 13,
+        fontWeight: done && isRight ? 600 : 400
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: done && isRight ? C.teal : C.ink3,
+        fontWeight: 700,
+        flexShrink: 0
+      }
+    }, LETTERS[i]), /*#__PURE__*/React.createElement("span", null, opt));
+  })), done && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 26,
+      display: "flex",
+      alignItems: "center",
+      gap: 16,
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement(Btn, {
+    onClick: advance
+  }, at + 1 < deck.length ? "Next question" : "See results"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 15,
+      fontWeight: 600,
+      color: picked === -1 ? C.gold : q.a.includes(picked) ? C.teal : C.ink2
+    }
+  }, picked === -1 ? "Time — the answer is highlighted above" : q.a.includes(picked) ? "Correct" : "The answer is highlighted above")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: `1px solid ${C.line}`,
+      marginTop: 40,
+      paddingTop: 12
+    }
+  }, /*#__PURE__*/React.createElement(Btn, {
+    kind: "quiet",
+    size: "sm",
+    onClick: onExit
+  }, "Leave practice")));
+}
+
+/* ---------- live session: student ---------- */
+
+function LiveBanner({
+  onJoin
+}) {
+  const [st, setSt] = useState(null);
+  usePoll(async () => setSt(await getLive()), 4000, true);
+  if (!st || !st.active) return null;
+  return /*#__PURE__*/React.createElement("button", {
+    onClick: onJoin,
+    style: {
+      display: "block",
+      width: "100%",
+      textAlign: "left",
+      cursor: "pointer",
+      fontFamily: FONT,
+      background: C.redLight,
+      border: `1px solid ${C.red}`,
+      borderRadius: 2,
+      padding: "16px 20px",
+      marginBottom: 30
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 17,
+      fontWeight: 700,
+      color: C.redDark
+    }
+  }, "Live questions are running now"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      color: C.ink2,
+      marginTop: 4
+    }
+  }, "Tap to join — ", st.n, " question", st.n === 1 ? "" : "s", ", paced by your instructor."));
+}
+function LiveStudent({
+  onExit
+}) {
+  const [st, setSt] = useState(null);
+  const [picked, setPicked] = useState(null);
+  const [sentIdx, setSentIdx] = useState(-1);
+  const [log, setLog] = useState({});
+  usePoll(async () => {
+    const s = await getLive();
+    setSt(s);
+    if (s && typeof s.idx === "number" && s.idx !== sentIdx) setPicked(null);
+  }, 2000, true);
+  const item = useMemo(() => {
+    if (!st || !st.active || st.idx < 0) return null;
+    const id = st.items[st.idx];
+    return BANK.items.find(i => i.i === id) || null;
+  }, [st && st.idx, st && st.active]);
+  const submit = async choice => {
+    if (picked !== null || !item) return;
+    setPicked(choice);
+    setSentIdx(st.idx);
+    const correct = item.a.includes(choice) ? 1 : 0;
+    setLog({
+      ...log,
+      [st.idx]: correct
+    });
+    await api({
+      op: "live_answer",
+      idx: st.idx,
+      id: item.i,
+      choice,
+      correct
+    });
+  };
+  if (!st) {
+    return /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: C.ink3,
+        fontSize: 16
+      }
+    }, "Connecting…");
+  }
+  if (st.offline || st.error) {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      style: {
+        borderLeft: `3px solid ${C.red}`,
+        paddingLeft: 18,
+        maxWidth: "60ch"
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: C.ink2,
+        fontSize: 16.5,
+        lineHeight: 1.6,
+        marginTop: 0
+      }
+    }, "Couldn't reach the live session. Check your connection and try again.")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 20
+      }
+    }, /*#__PURE__*/React.createElement(Btn, {
+      kind: "ghost",
+      onClick: onExit
+    }, "Back")));
+  }
+
+  /* session ended */
+  if (!st.active) {
+    const answered = Object.keys(log).length;
+    const right = Object.values(log).filter(Boolean).length;
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+      style: {
+        fontSize: 28,
+        fontWeight: 700,
+        margin: 0,
+        color: C.ink
+      }
+    }, "That's the end of the questions"), /*#__PURE__*/React.createElement(Rule, null), answered > 0 ? /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 18,
+        color: C.ink2,
+        lineHeight: 1.6,
+        marginTop: 0
+      }
+    }, "You answered ", answered, " and got ", right, " right. Nothing was recorded against your name.") : /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 17,
+        color: C.ink2,
+        marginTop: 0
+      }
+    }, "No live session is running right now."), /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 26
+      }
+    }, /*#__PURE__*/React.createElement(Btn, {
+      onClick: onExit
+    }, "Back to practice")));
+  }
+
+  /* waiting room */
+  if (st.idx < 0 || !item) {
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        paddingTop: 30
+      }
+    }, /*#__PURE__*/React.createElement(Pill, null, "Live"), /*#__PURE__*/React.createElement("h2", {
+      style: {
+        fontSize: 30,
+        fontWeight: 700,
+        margin: "14px 0 0",
+        color: C.ink
+      }
+    }, "You're in"), /*#__PURE__*/React.createElement(Rule, null), /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 17.5,
+        color: C.ink2,
+        lineHeight: 1.6,
+        maxWidth: "50ch",
+        marginTop: 0
+      }
+    }, "Waiting for the first question. It'll appear here on its own — leave this open and look up at the shared screen."), /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 30
+      }
+    }, /*#__PURE__*/React.createElement(Btn, {
+      kind: "ghost",
+      size: "sm",
+      onClick: onExit
+    }, "Leave")));
+  }
+  const answered = picked !== null;
+  const showAnswer = st.revealed;
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 18
+    }
+  }, /*#__PURE__*/React.createElement(Pill, null, "Live · question ", st.idx + 1, " of ", st.n), answered && !showAnswer && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14,
+      color: C.teal,
+      fontWeight: 600
+    }
+  }, "Answer recorded")), /*#__PURE__*/React.createElement("h2", {
+    style: {
+      fontSize: 25,
+      fontWeight: 700,
+      color: C.ink,
+      lineHeight: 1.35,
+      margin: "0 0 26px",
+      maxWidth: "42ch"
+    }
+  }, item.q), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gap: 9
+    }
+  }, item.o.map((opt, i) => {
+    const isRight = item.a.includes(i);
+    let bg = "#fff",
+      bd = C.line,
+      fg = C.ink;
+    if (showAnswer && isRight) {
+      bg = "#E6F2F0";
+      bd = C.teal;
+      fg = C.teal;
+    } else if (showAnswer && i === picked) {
+      bg = C.redLight;
+      bd = C.red;
+      fg = C.redDark;
+    } else if (showAnswer) {
+      fg = C.ink3;
+    } else if (i === picked) {
+      bg = C.wash;
+      bd = C.ink3;
+    }
+    return /*#__PURE__*/React.createElement("button", {
+      key: i,
+      onClick: () => submit(i),
+      disabled: answered,
+      style: {
+        textAlign: "left",
+        fontFamily: FONT,
+        fontSize: 16.5,
+        lineHeight: 1.45,
+        padding: "15px 16px",
+        background: bg,
+        border: `1px solid ${bd}`,
+        borderRadius: 2,
+        color: fg,
+        cursor: answered ? "default" : "pointer",
+        display: "flex",
+        gap: 13,
+        fontWeight: showAnswer && isRight ? 600 : 400
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: showAnswer && isRight ? C.teal : C.ink3,
+        fontWeight: 700,
+        flexShrink: 0
+      }
+    }, LETTERS[i]), /*#__PURE__*/React.createElement("span", null, opt));
+  })), showAnswer && /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 22,
+      fontSize: 15.5,
+      fontWeight: 600,
+      color: answered ? item.a.includes(picked) ? C.teal : C.ink2 : C.ink3
+    }
+  }, answered ? item.a.includes(picked) ? "You got it." : "The correct answer is highlighted." : "You didn't answer this one."), !answered && !showAnswer && /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 22,
+      fontSize: 15,
+      color: C.ink3
+    }
+  }, "Pick one. You can't change it after."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: `1px solid ${C.line}`,
+      marginTop: 36,
+      paddingTop: 12
+    }
+  }, /*#__PURE__*/React.createElement(Btn, {
+    kind: "quiet",
+    size: "sm",
+    onClick: onExit
+  }, "Leave")));
+}
+/* ---------- shell ---------- */
+
+function App() {
+  const [view, setView] = useState("home");
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: FONT,
+      background: "#fff",
+      minHeight: "100vh",
+      color: C.ink,
+      display: "flex"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 8,
+      background: C.red,
+      flexShrink: 0
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      minWidth: 0,
+      display: "flex",
+      flexDirection: "column"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 880,
+      width: "100%",
+      margin: "0 auto",
+      padding: "36px 28px 60px",
+      boxSizing: "border-box",
+      flex: 1
+    }
+  }, view === "home" && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement(Pill, null, "LD 810 · Fall 2026")), /*#__PURE__*/React.createElement("h1", {
+    style: {
+      fontSize: 46,
+      fontWeight: 700,
+      lineHeight: 1.1,
+      margin: "0 0 16px",
+      maxWidth: "17ch",
+      color: C.ink
+    }
+  }, "Applied Statistics practice"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 18,
+      color: C.ink2,
+      lineHeight: 1.6,
+      maxWidth: "58ch",
+      margin: "0 0 34px"
+    }
+  }, BANK.items.length, " questions across all twelve sessions. Combine any sessions and topics you want, set your own clock, and go as many times as you like. Nothing here is graded and no answer is attached to your name."), /*#__PURE__*/React.createElement(LiveBanner, {
+    onJoin: () => setView("live")
+  }), /*#__PURE__*/React.createElement(Btn, {
+    onClick: () => setView("practice"),
+    style: {
+      fontSize: 17,
+      padding: "13px 26px"
+    }
+  }, "Start practicing"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: `1px solid ${C.line}`,
+      marginTop: 44,
+      paddingTop: 24
+    }
+  }, /*#__PURE__*/React.createElement("h2", {
+    style: {
+      fontSize: 17,
+      fontWeight: 700,
+      color: C.ink,
+      margin: "0 0 8px"
+    }
+  }, "How to get the most out of this"), /*#__PURE__*/React.createElement("ul", {
+    style: {
+      color: C.ink2,
+      fontSize: 15.5,
+      lineHeight: 1.7,
+      paddingLeft: 20,
+      margin: 0,
+      maxWidth: "62ch"
+    }
+  }, /*#__PURE__*/React.createElement("li", null, "Use the Exam buttons to pull only the sessions an assessment actually covers."), /*#__PURE__*/React.createElement("li", null, "Untimed first, to learn the material. Timed later, to rehearse the conditions."), /*#__PURE__*/React.createElement("li", null, "The questions you miss are listed at the end. That list is the study guide.")))), view === "practice" && /*#__PURE__*/React.createElement(Practice, {
+    onExit: () => setView("home")
+  }), view === "live" && /*#__PURE__*/React.createElement(LiveStudent, {
+    onExit: () => setView("home")
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: `1px solid ${C.line}`,
+      padding: "14px 28px",
+      maxWidth: 880,
+      width: "100%",
+      margin: "0 auto",
+      boxSizing: "border-box",
+      display: "flex",
+      justifyContent: "space-between",
+      fontSize: 12.5,
+      color: C.ink3,
+      flexWrap: "wrap",
+      gap: 8,
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("span", null, "Saint Martin's University · College of Education and Counseling"), /*#__PURE__*/React.createElement("span", null, BANK.items.length, " items"))));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(Loader, null, /*#__PURE__*/React.createElement(App, null)));
+</script>
+</body>
+</html>
