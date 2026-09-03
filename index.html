@@ -775,7 +775,8 @@ function CohortGate({
 /* ---------- practice ---------- */
 
 function Practice({
-  onExit
+  onExit,
+  cohort
 }) {
   const [f, setF] = useState({
     ...emptyFilter
@@ -809,7 +810,7 @@ function Practice({
       when: new Date().toISOString(),
       sessions: f.sessions,
       topics: f.topics,
-      cohort: savedCohort() || "open",
+      cohort: cohort || "open",
       timer: tMode === "none" ? null : `${tMode}:${secs}s`,
       results: finalLog
     });
@@ -872,7 +873,11 @@ function Practice({
 
   /* setup */
   if (!deck) {
-    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+    return /*#__PURE__*/React.createElement("div", null, cohort === COHORT_NAME ? /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement(Pill, null, COHORT_LABEL)) : null, /*#__PURE__*/React.createElement("h2", {
       style: {
         fontSize: 30,
         fontWeight: 700,
@@ -1481,13 +1486,15 @@ function ClassResults({
   onExit
 }) {
   const [sum, setSum] = useState(null);
-  const load = () => {
+  const [who, setWho] = useState("everyone");
+  const unlocked = savedCohort() === COHORT_NAME;
+  const load = w => {
     setSum(null);
-    loadSummary(COHORT_NAME).then(setSum);
+    loadSummary(w === "cohort" ? COHORT_NAME : "").then(setSum);
   };
   useEffect(() => {
-    load();
-  }, []);
+    load(who);
+  }, [who]);
   const view = useMemo(() => {
     if (!sum || !Array.isArray(sum.items)) return null;
     const byId = Object.fromEntries(BANK.items.map(i => [i.i, i]));
@@ -1523,22 +1530,35 @@ function ClassResults({
       flexWrap: "wrap",
       gap: 12
     }
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Pill, null, COHORT_LABEL), /*#__PURE__*/React.createElement("h2", {
+  }, /*#__PURE__*/React.createElement("div", null, who === "cohort" ? /*#__PURE__*/React.createElement(Pill, null, COHORT_LABEL) : /*#__PURE__*/React.createElement(Pill, {
+    tone: "grey"
+  }, "Everyone"), /*#__PURE__*/React.createElement("h2", {
     style: {
       fontSize: 29,
       fontWeight: 700,
       margin: "12px 0 0",
       color: C.ink
     }
-  }, "How the class is doing"), /*#__PURE__*/React.createElement(Rule, null)), /*#__PURE__*/React.createElement("div", {
+  }, who === "cohort" ? `How ${COHORT_LABEL} is doing` : "How everyone is doing"), /*#__PURE__*/React.createElement(Rule, null)), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
-      gap: 8
+      gap: 8,
+      flexWrap: "wrap"
     }
-  }, /*#__PURE__*/React.createElement(Btn, {
+  }, unlocked && /*#__PURE__*/React.createElement(Select, {
+    value: who,
+    onChange: setWho,
+    style: {
+      minWidth: 150
+    }
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "everyone"
+  }, "Everyone"), /*#__PURE__*/React.createElement("option", {
+    value: "cohort"
+  }, COHORT_LABEL, " only")), /*#__PURE__*/React.createElement(Btn, {
     kind: "ghost",
     size: "sm",
-    onClick: load
+    onClick: () => load(who)
   }, "Refresh"), /*#__PURE__*/React.createElement(Btn, {
     kind: "ghost",
     size: "sm",
@@ -1583,7 +1603,7 @@ function ClassResults({
       color: C.ink3,
       marginTop: 5
     }
-  }, "class average")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  }, "average score")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 44,
       fontWeight: 700,
@@ -1670,7 +1690,7 @@ function ClassResults({
       color: C.ink,
       marginBottom: 6
     }
-  }, "Where the class is struggling"), /*#__PURE__*/React.createElement("p", {
+  }, "Hardest questions so far"), /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 14.5,
       color: C.ink3,
@@ -1678,7 +1698,7 @@ function ClassResults({
       marginBottom: 16,
       maxWidth: "60ch"
     }
-  }, "Answers aren't shown here on purpose. Go practice these topics instead."), view.weak.map(r => /*#__PURE__*/React.createElement("div", {
+  }, "Answers aren't shown on purpose. Go practice these topics instead."), view.weak.map(r => /*#__PURE__*/React.createElement("div", {
     key: r.id,
     style: {
       display: "flex",
@@ -1813,32 +1833,7 @@ function App() {
       border: `1px solid ${C.line}`
     }
   }, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setView("practice"),
-    style: {
-      textAlign: "left",
-      fontFamily: FONT,
-      background: "#fff",
-      border: "none",
-      padding: "24px 26px",
-      cursor: "pointer",
-      width: "100%"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 21,
-      fontWeight: 700,
-      color: C.red
-    }
-  }, "Practice"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 15.5,
-      color: C.ink2,
-      marginTop: 6,
-      lineHeight: 1.5,
-      maxWidth: "58ch"
-    }
-  }, "Open to anyone. Pick any mix of sessions and topics, set your own clock, and go as many times as you like.")), inClass ? /*#__PURE__*/React.createElement("button", {
-    onClick: () => setView("results"),
+    onClick: () => setView(inClass ? "practice810" : "gate"),
     style: {
       textAlign: "left",
       fontFamily: FONT,
@@ -1861,7 +1856,9 @@ function App() {
       fontWeight: 700,
       color: C.red
     }
-  }, "How the class is doing"), /*#__PURE__*/React.createElement(Pill, null, COHORT_LABEL)), /*#__PURE__*/React.createElement("div", {
+  }, COHORT_LABEL, " practice"), inClass ? /*#__PURE__*/React.createElement(Pill, null, "Unlocked") : /*#__PURE__*/React.createElement(Pill, {
+    tone: "grey"
+  }, "Password")), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 15.5,
       color: C.ink2,
@@ -1869,8 +1866,8 @@ function App() {
       lineHeight: 1.5,
       maxWidth: "58ch"
     }
-  }, "Where the class is strong and where it isn't, pooled and anonymous. No answers given away.")) : /*#__PURE__*/React.createElement("button", {
-    onClick: () => setView("gate"),
+  }, inClass ? "Your practice counts toward the class pool. Pick any mix of sessions and topics, set your own clock." : "For students in the course. Enter the class password once on this device and your practice counts toward the class pool.")), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setView("practiceOpen"),
     style: {
       textAlign: "left",
       fontFamily: FONT,
@@ -1882,11 +1879,20 @@ function App() {
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
+      display: "flex",
+      alignItems: "baseline",
+      gap: 11,
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
       fontSize: 21,
       fontWeight: 700,
       color: C.ink
     }
-  }, COHORT_LABEL, " students"), /*#__PURE__*/React.createElement("div", {
+  }, "Practice"), /*#__PURE__*/React.createElement(Pill, {
+    tone: "grey"
+  }, "Open to anyone")), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 15.5,
       color: C.ink2,
@@ -1894,7 +1900,41 @@ function App() {
       lineHeight: 1.5,
       maxWidth: "58ch"
     }
-  }, "Enter the class password once to see how the class is doing and have your practice counted with the cohort."))), /*#__PURE__*/React.createElement("div", {
+  }, "No password needed. All ", BANK.items.length, " questions, same filters and timer.")), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setView("results"),
+    style: {
+      textAlign: "left",
+      fontFamily: FONT,
+      background: "#fff",
+      border: "none",
+      padding: "24px 26px",
+      cursor: "pointer",
+      width: "100%"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "baseline",
+      gap: 11,
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 21,
+      fontWeight: 700,
+      color: C.ink
+    }
+  }, "How everyone is doing"), /*#__PURE__*/React.createElement(Pill, {
+    tone: "grey"
+  }, "Open to anyone")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15.5,
+      color: C.ink2,
+      marginTop: 6,
+      lineHeight: 1.5,
+      maxWidth: "58ch"
+    }
+  }, "Which questions are hardest and how scores look by session. Pooled and anonymous, and no answers given away."))), /*#__PURE__*/React.createElement("div", {
     style: {
       borderTop: `1px solid ${C.line}`,
       marginTop: 40,
@@ -1916,14 +1956,18 @@ function App() {
       margin: 0,
       maxWidth: "62ch"
     }
-  }, /*#__PURE__*/React.createElement("li", null, "Use the Exam buttons to pull only the sessions an assessment actually covers."), /*#__PURE__*/React.createElement("li", null, "Untimed first, to learn the material. Timed later, to rehearse the conditions."), /*#__PURE__*/React.createElement("li", null, "The questions you miss are listed at the end. That list is the study guide.")))), view === "practice" && /*#__PURE__*/React.createElement(Practice, {
+  }, /*#__PURE__*/React.createElement("li", null, "Use the Exam buttons to pull only the sessions an assessment actually covers."), /*#__PURE__*/React.createElement("li", null, "Untimed first, to learn the material. Timed later, to rehearse the conditions."), /*#__PURE__*/React.createElement("li", null, "The questions you miss are listed at the end. That list is the study guide.")))), view === "practice810" && /*#__PURE__*/React.createElement(Practice, {
+    cohort: COHORT_NAME,
+    onExit: () => setView("home")
+  }), view === "practiceOpen" && /*#__PURE__*/React.createElement(Practice, {
+    cohort: "open",
     onExit: () => setView("home")
   }), view === "live" && /*#__PURE__*/React.createElement(LiveStudent, {
     onExit: () => setView("home")
   }), view === "gate" && /*#__PURE__*/React.createElement(CohortGate, {
     onUnlock: () => {
       setCohort(COHORT_NAME);
-      setView("results");
+      setView("practice810");
     },
     onCancel: () => setView("home")
   }), view === "results" && /*#__PURE__*/React.createElement(ClassResults, {
