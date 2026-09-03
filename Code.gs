@@ -26,8 +26,12 @@ function sheet_() {
   var sh = ss.getSheetByName(SHEET_NAME);
   if (!sh) {
     sh = ss.insertSheet(SHEET_NAME);
-    sh.appendRow(['timestamp', 'run_id', 'item_id', 'correct', 'sessions', 'topics', 'timer']);
+    sh.appendRow(['timestamp', 'run_id', 'item_id', 'correct', 'sessions', 'topics', 'timer', 'cohort']);
     sh.setFrozenRows(1);
+  }
+  // migrate sheets created before the cohort column existed
+  if (sh.getLastColumn() < 8) {
+    sh.getRange(1, 8).setValue('cohort');
   }
   return sh;
 }
@@ -62,7 +66,7 @@ function appendRows_(rows) {
   try {
     lock.waitLock(20000);
     var sh = sheet_();
-    sh.getRange(sh.getLastRow() + 1, 1, rows.length, 7).setValues(rows);
+    sh.getRange(sh.getLastRow() + 1, 1, rows.length, 8).setValues(rows);
     return rows.length;
   } finally {
     try { lock.releaseLock(); } catch (ignore) {}
@@ -105,8 +109,9 @@ function postPractice_(body) {
   var sessions = (body.sessions || []).join('|');
   var topics = (body.topics || []).join('|');
   var timer = body.timer || '';
+  var cohort = String(body.cohort || 'open');
   var rows = results.map(function (r) {
-    return [stamp, runId, String(r.id), Number(r.correct) ? 1 : 0, sessions, topics, timer];
+    return [stamp, runId, String(r.id), Number(r.correct) ? 1 : 0, sessions, topics, timer, cohort];
   });
   return json_({ ok: true, written: appendRows_(rows) });
 }
@@ -170,7 +175,7 @@ function postLiveAnswer_(body) {
 
   // durable copy, so live answers feed the same analytics pool as practice
   try {
-    appendRows_([[new Date(), s.runId, itemId, correct, '', '', 'live']]);
+    appendRows_([[new Date(), s.runId, itemId, correct, '', '', 'live', String(body.cohort || 'open')]]);
   } catch (err) { /* tally is already in; never fail a student's submit over this */ }
 
   return json_({ ok: true });
@@ -196,28 +201,47 @@ function doGet(e) {
       });
     }
 
-    return json_(summary_());
+    return json_(summary_(p.cohort || ''));
   } catch (err) {
     return json_({ error: String(err) });
   }
 }
 
-function summary_() {
+/**
+ * cohort '' or 'all' -> everything. Otherwise only rows matching that cohort.
+ * Rows written before the cohort column existed are treated as 'open'.
+ */
+function summary_(cohort) {
   var sh = sheet_();
   var last = sh.getLastRow();
-  if (last < 2) return { runs: 0, answers: 0, items: [] };
+  var want = String(cohort || '').toLowerCase();
+  var blank = { runs: 0, answers: 0, items: [], cohort: want || 'all', cohorts: [] };
+  if (last < 2) return blank;
 
-  var values = sh.getRange(2, 2, last - 1, 3).getValues(); // run_id, item_id, correct
-  var tally = {}, runs = {};
+  // columns B..H: run_id, item_id, correct, sessions, topics, timer, cohort
+  var values = sh.getRange(2, 2, last - 1, 7).getValues();
+  var tally = {}, runs = {}, seen = {}, answers = 0;
+
   for (var i = 0; i < values.length; i++) {
     var runId = values[i][0];
     var itemId = String(values[i][1]);
     if (!itemId) continue;
+    var row = String(values[i][6] || 'open').toLowerCase();
+    seen[row] = (seen[row] || 0) + 1;
+    if (want && want !== 'all' && row !== want) continue;
     runs[runId] = true;
+    answers += 1;
     if (!tally[itemId]) tally[itemId] = { id: itemId, n: 0, right: 0 };
     tally[itemId].n += 1;
     tally[itemId].right += Number(values[i][2]) ? 1 : 0;
   }
+
   var items = Object.keys(tally).map(function (k) { return tally[k]; });
-  return { runs: Object.keys(runs).length, answers: values.length, items: items };
+  return {
+    runs: Object.keys(runs).length,
+    answers: answers,
+    items: items,
+    cohort: want || 'all',
+    cohorts: Object.keys(seen).map(function (k) { return { name: k, answers: seen[k] }; })
+  };
 }

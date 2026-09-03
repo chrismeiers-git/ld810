@@ -35,6 +35,29 @@ const BANK_URL = "bank.json";
 let ENDPOINT = "";
 let endpointProblem = "unset"; // unset | dev | notexec | malformed | null
 
+/* Cohort gate. The password sits in config.json and is therefore visible to
+   anyone who looks — it tags results and gates the class-results view; it is
+   not a security control. */
+let COHORT_NAME = "LD810";
+let COHORT_LABEL = "LD 810";
+let COHORT_PASSWORD = "";
+const COHORT_STORE = "ld810_cohort";
+function savedCohort() {
+  try {
+    return window.localStorage.getItem(COHORT_STORE) || "";
+  } catch (e) {
+    return "";
+  }
+}
+function rememberCohort(v) {
+  try {
+    if (v) window.localStorage.setItem(COHORT_STORE, v);else window.localStorage.removeItem(COHORT_STORE);
+  } catch (e) {/* private browsing — unlock just won't persist */}
+}
+function checkPassword(v) {
+  if (!COHORT_PASSWORD) return false;
+  return String(v || "").trim().toLowerCase() === COHORT_PASSWORD.trim().toLowerCase();
+}
 function setEndpoint(raw) {
   const u = String(raw || "").trim();
   ENDPOINT = u;
@@ -344,12 +367,13 @@ function usePoll(fn, ms, on) {
     };
   }, [on, ms]);
 }
-async function loadSummary() {
+async function loadSummary(cohort) {
   if (!live()) return {
     offline: true
   };
   try {
-    const r = await fetch(`${ENDPOINT}?mode=summary&t=${Date.now()}`);
+    const q = cohort ? `&cohort=${encodeURIComponent(cohort)}` : "";
+    const r = await fetch(`${ENDPOINT}?mode=summary${q}&t=${Date.now()}`);
     if (!r.ok) return {
       error: `The results endpoint returned ${r.status}.`
     };
@@ -566,6 +590,9 @@ function Loader({
         if (c.ok) {
           const j = await c.json();
           setEndpoint(j.endpoint);
+          if (j.cohortName) COHORT_NAME = String(j.cohortName);
+          if (j.cohortLabel) COHORT_LABEL = String(j.cohortLabel);
+          if (j.cohortPassword) COHORT_PASSWORD = String(j.cohortPassword);
         }
       } catch (e) {/* no config.json — endpointProblem stays "unset" */}
       try {
@@ -658,6 +685,92 @@ function EndpointWarning({
       wordBreak: "break-all"
     }
   }, ENDPOINT) : null);
+}
+
+/* ---------- cohort gate ---------- */
+
+function CohortGate({
+  onUnlock,
+  onCancel
+}) {
+  const [v, setV] = useState("");
+  const [bad, setBad] = useState(false);
+  const submit = () => {
+    if (checkPassword(v)) {
+      rememberCohort(COHORT_NAME);
+      onUnlock();
+    } else {
+      setBad(true);
+      setV("");
+    }
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: 460
+    }
+  }, /*#__PURE__*/React.createElement("h2", {
+    style: {
+      fontSize: 28,
+      fontWeight: 700,
+      margin: 0,
+      color: C.ink
+    }
+  }, COHORT_LABEL, " students"), /*#__PURE__*/React.createElement(Rule, null), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 16.5,
+      color: C.ink2,
+      lineHeight: 1.6,
+      marginTop: 0
+    }
+  }, "Enter the class password. You'll only need to do this once on this device."), /*#__PURE__*/React.createElement("input", {
+    type: "password",
+    value: v,
+    autoFocus: true,
+    onChange: e => {
+      setV(e.target.value);
+      setBad(false);
+    },
+    onKeyDown: e => {
+      if (e.key === "Enter") submit();
+    },
+    placeholder: "Class password",
+    style: {
+      fontFamily: FONT,
+      fontSize: 17,
+      padding: "12px 14px",
+      width: "100%",
+      border: `1px solid ${bad ? C.red : C.line}`,
+      borderRadius: 2,
+      color: C.ink,
+      boxSizing: "border-box",
+      marginTop: 6
+    }
+  }), bad && /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.red,
+      fontSize: 14.5,
+      marginTop: 10,
+      fontWeight: 600
+    }
+  }, "That isn't the class password. Check your Moodle announcement."), !COHORT_PASSWORD && /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.gold,
+      fontSize: 14.5,
+      marginTop: 10
+    }
+  }, "No class password is set in config.json, so this can't be unlocked yet."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 22,
+      display: "flex",
+      gap: 12
+    }
+  }, /*#__PURE__*/React.createElement(Btn, {
+    onClick: submit,
+    disabled: !v.trim() || !COHORT_PASSWORD
+  }, "Continue"), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    onClick: onCancel
+  }, "Back")));
 }
 /* ---------- quiz builder ---------- */
 
@@ -1059,13 +1172,14 @@ function Stats({
   onExit
 }) {
   const [sum, setSum] = useState(null);
-  const load = () => {
+  const [who, setWho] = useState("all");
+  const load = c => {
     setSum(null);
-    loadSummary().then(setSum);
+    loadSummary(c === "all" ? "" : c).then(setSum);
   };
   useEffect(() => {
-    load();
-  }, []);
+    load(who);
+  }, [who]);
   const view = useMemo(() => {
     if (!sum || !Array.isArray(sum.items)) return null;
     const byId = Object.fromEntries(BANK.items.map(i => [i.i, i]));
@@ -1100,10 +1214,22 @@ function Stats({
       display: "flex",
       gap: 8
     }
-  }, /*#__PURE__*/React.createElement(Btn, {
+  }, /*#__PURE__*/React.createElement(Select, {
+    value: who,
+    onChange: setWho,
+    style: {
+      minWidth: 150
+    }
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "all"
+  }, "Everyone"), /*#__PURE__*/React.createElement("option", {
+    value: COHORT_NAME
+  }, COHORT_LABEL, " only"), /*#__PURE__*/React.createElement("option", {
+    value: "open"
+  }, "Open practice only")), /*#__PURE__*/React.createElement(Btn, {
     kind: "ghost",
     size: "sm",
-    onClick: load
+    onClick: () => load(who)
   }, "Refresh"), /*#__PURE__*/React.createElement(Btn, {
     kind: "ghost",
     size: "sm",
@@ -1174,7 +1300,14 @@ function Stats({
       color: C.ink3,
       marginTop: 5
     }
-  }, l)))), /*#__PURE__*/React.createElement("h3", {
+  }, l)))), Array.isArray(sum.cohorts) && sum.cohorts.length > 1 && /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 14,
+      color: C.ink3,
+      marginTop: -22,
+      marginBottom: 34
+    }
+  }, "In the sheet overall: ", sum.cohorts.map(c => `${c.name} ${c.answers}`).join(" · ")), /*#__PURE__*/React.createElement("h3", {
     style: {
       fontSize: 19,
       fontWeight: 700,
