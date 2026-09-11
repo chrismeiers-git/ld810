@@ -122,6 +122,20 @@ const FONT = "'Aptos','Calibri','Segoe UI',system-ui,-apple-system,sans-serif";
 const LETTERS = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const rid = () => Math.random().toString(36).slice(2, 10);
 
+/* Unique sources behind the "In the news" questions, in the order they first
+   appear in the bank, with a count of how many questions each one supports.
+   Driven off the items themselves, so new news questions show up here on their
+   own and nothing has to be maintained by hand. */
+function newsSources() {
+  const seen = new Map();
+  (BANK.items || []).forEach(i => {
+    if (i.c !== "news" || !i.url) return;
+    const hit = seen.get(i.url);
+    if (hit) hit.n += 1;else seen.set(i.url, { url: i.url, outlet: i.outlet || "Source", d: i.d || "", n: 1 });
+  });
+  return Array.from(seen.values());
+}
+
 /* Turn plain credit text into text + links. Each pair is [exact phrase, url];
    a pair with no url (or a phrase that isn't present) is simply skipped, so
    wording in bank.json can change without breaking this. */
@@ -2207,7 +2221,61 @@ function App() {
       margin: "12px 0 0",
       maxWidth: "66ch"
     }
-  }, withLinks((BANK.credits || {}).textbook_note || "", [[(BANK.credits || {}).advisor_text, (BANK.credits || {}).advisor_url], [(BANK.credits || {}).department_text, (BANK.credits || {}).department_url]])))), view === "practice810" && /*#__PURE__*/React.createElement(Practice, {
+  }, withLinks((BANK.credits || {}).textbook_note || "", [[(BANK.credits || {}).advisor_text, (BANK.credits || {}).advisor_url], [(BANK.credits || {}).department_text, (BANK.credits || {}).department_url]]))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: `1px solid ${C.line}`,
+      marginTop: 32,
+      paddingTop: 24
+    }
+  }, /*#__PURE__*/React.createElement("h2", {
+    style: {
+      fontSize: 17,
+      fontWeight: 700,
+      color: C.ink,
+      margin: "0 0 8px"
+    }
+  }, "Sources"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.ink2,
+      fontSize: 15,
+      lineHeight: 1.7,
+      margin: "0 0 10px",
+      maxWidth: "66ch"
+    }
+  }, "Questions in the ", /*#__PURE__*/React.createElement("strong", null, "In the news"), " set use figures as reported by these sources. Each question links to its own source under the answer — go read the original, that is the whole point."), /*#__PURE__*/React.createElement("ul", {
+    style: {
+      color: C.ink2,
+      fontSize: 14.5,
+      lineHeight: 1.7,
+      paddingLeft: 20,
+      margin: "0 0 14px",
+      maxWidth: "70ch"
+    }
+  }, newsSources().map(s => /*#__PURE__*/React.createElement("li", {
+    key: s.url
+  }, /*#__PURE__*/React.createElement("a", {
+    href: s.url,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    style: {
+      color: C.red
+    }
+  }, s.outlet, s.d ? ` — ${s.d}` : ""), " (", s.n, s.n === 1 ? " question" : " questions", ")"))), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.ink3,
+      fontSize: 14,
+      lineHeight: 1.7,
+      margin: 0,
+      maxWidth: "70ch"
+    }
+  }, "Textbook and publisher test-bank questions are drawn from ", /*#__PURE__*/React.createElement("a", {
+    href: (BANK.credits || {}).textbook_url || "#",
+    target: "_blank",
+    rel: "noopener noreferrer",
+    style: {
+      color: C.red
+    }
+  }, "Salkind & Frey"), ". Every other question was written for this course."))), view === "practice810" && /*#__PURE__*/React.createElement(Practice, {
     cohort: COHORT_NAME,
     onExit: () => setView("home")
   }), view === "practiceOpen" && /*#__PURE__*/React.createElement(Practice, {
