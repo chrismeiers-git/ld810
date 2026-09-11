@@ -44,7 +44,8 @@
 "taylor": "Taylor's Version",
 "ai": "All things AI",
 "kay": "Ironic Healthcare (in the style of Adam Kay)",
-"highered": "Higher Ed (humor included)"
+"highered": "Higher Ed (humor included)",
+"skc": "Sporting KC"
 },
 "tiers": {
 "authored": "Written to the LD 810 lecture slides",
@@ -52,7 +53,8 @@
 "exam": "Used on a Fall 2025 quiz or exam",
 "pub": "Publisher test bank — application level",
 "theme": "Themed sets",
-"extra": "Good to know — not on any assessment"
+"extra": "Good to know — not on any assessment",
+"news": "Current events — real reported figures, with the source"
 },
 "credits": {
 "author": "Chris Meiers, PhD",
@@ -10507,6 +10509,1663 @@
 "a": [
 0
 ]
-}
+},
+{
+"i": "SKC-01",
+"c": "theme",
+"th": "skc",
+"t": "Levels of measurement",
+"s": [
+2
+],
+"q": "A club historian records each Sporting KC trophy by competition: MLS Cup, U.S. Open Cup, Supporters' Shield. Competition name is measured at which level?",
+"o": [
+"Nominal — the categories name the competition and cannot be ranked or averaged",
+"Ordinal — MLS Cup outranks the others, so the scale is ordered",
+"Interval — the gaps between competitions are equal",
+"Ratio — a value of zero means no competition"
+],
+"a": [
+0
 ]
+},
+{
+"i": "SKC-02",
+"c": "theme",
+"th": "skc",
+"t": "Levels of measurement",
+"s": [
+2
+],
+"q": "The same historian codes each season's final conference placing (1st, 2nd, 3rd, and so on). Placing is measured at which level?",
+"o": [
+"Nominal",
+"Ordinal",
+"Interval",
+"Ratio"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-03",
+"c": "theme",
+"th": "skc",
+"t": "Levels of measurement",
+"s": [
+2
+],
+"q": "Preki is the club's all-time leader with 71 goals. Career goals is measured at which level?",
+"o": [
+"Nominal",
+"Ordinal",
+"Interval",
+"Ratio — zero goals is a true zero, and 70 goals is twice 35"
+],
+"a": [
+3
+]
+},
+{
+"i": "SKC-04",
+"c": "theme",
+"th": "skc",
+"t": "Variables and design",
+"s": [
+2
+],
+"q": "An analyst asks whether Sporting KC score more goals at Children's Mercy Park than on the road. In that study, venue (home or away) is the:",
+"o": [
+"Dependent variable",
+"Independent variable",
+"Confounding variable",
+"Outcome variable"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-05",
+"c": "theme",
+"th": "skc",
+"t": "Variables and design",
+"s": [
+2
+],
+"q": "In the same study, goals scored in the match is the:",
+"o": [
+"Independent variable",
+"Dependent variable",
+"Control variable",
+"Nominal predictor"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-06",
+"c": "theme",
+"th": "skc",
+"t": "Center and spread",
+"s": [
+2
+],
+"q": "Dom Dwyer's 22 goals in 2014 is the club's single-season record. If a striker's five season totals are 4, 6, 22, 7, and 5, which measure of center is most inflated by the record year?",
+"o": [
+"Median",
+"Mode",
+"Mean",
+"Interquartile range"
+],
+"a": [
+2
+]
+},
+{
+"i": "SKC-07",
+"c": "theme",
+"th": "skc",
+"t": "Center and spread",
+"s": [
+2
+],
+"q": "Sporting KC won the U.S. Open Cup in 2004, 2012, 2015, and 2017. What is the median of those four years?",
+"o": [
+"2012",
+"2013.5",
+"2015",
+"2012.5"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-08",
+"c": "theme",
+"th": "skc",
+"t": "Center and spread",
+"s": [
+2
+],
+"q": "Two forwards both average 9 goals per season. One has a standard deviation of 2 goals, the other 8. What does the difference tell a sporting director?",
+"o": [
+"The second forward is far less predictable — some big seasons and some very quiet ones",
+"The second forward is better, because a larger SD means a higher ceiling",
+"They are interchangeable, since the means match",
+"Nothing — goal totals cannot have a standard deviation"
+],
+"a": [
+0
+]
+},
+{
+"i": "SKC-09",
+"c": "theme",
+"th": "skc",
+"t": "Center and spread",
+"s": [
+2
+],
+"q": "A match-day report lists the variance of announced attendance as 2,250,000. The standard deviation is:",
+"o": [
+"About 1,500",
+"About 150",
+"2,250,000",
+"About 15,000"
+],
+"a": [
+0
+]
+},
+{
+"i": "SKC-10",
+"c": "theme",
+"th": "skc",
+"t": "Shape of data",
+"s": [
+2
+],
+"q": "A histogram of Sporting KC goals scored per match across a season shows most matches at 0–2 goals and a handful at 4–6. The distribution is:",
+"o": [
+"Negatively skewed",
+"Positively skewed",
+"Symmetric",
+"Uniform"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-11",
+"c": "theme",
+"th": "skc",
+"t": "Shape of data",
+"s": [
+2
+],
+"q": "Children's Mercy Park sells out most matches, with a few sparse crowds on cold midweek nights. For announced attendance, you should expect:",
+"o": [
+"The mean to sit below the median — a negatively skewed distribution",
+"The mean to sit above the median — a positively skewed distribution",
+"Mean, median, and mode to be identical",
+"A uniform distribution"
+],
+"a": [
+0
+]
+},
+{
+"i": "SKC-12",
+"c": "theme",
+"th": "skc",
+"t": "Chart choice",
+"s": [
+2
+],
+"q": "To show how the club's points total changed across every season since its first in 1996, the right display is a:",
+"o": [
+"Line graph",
+"Pie chart",
+"Histogram of one season",
+"Scatterplot of goals against assists"
+],
+"a": [
+0
+]
+},
+{
+"i": "SKC-13",
+"c": "theme",
+"th": "skc",
+"t": "Chart choice",
+"s": [
+2
+],
+"q": "To compare total goals scored by four different Sporting KC forwards in a single season, the clearest display is a:",
+"o": [
+"Bar chart",
+"Line graph",
+"Box plot of one player",
+"Pie chart of the league"
+],
+"a": [
+0
+]
+},
+{
+"i": "SKC-14",
+"c": "theme",
+"th": "skc",
+"t": "Chart choice",
+"s": [
+2
+],
+"q": "A graphic claims the attack is \"transformed,\" showing expected goals per match rising from 1.42 to 1.47 — with the y-axis running from 1.40 to 1.50. The problem is:",
+"o": [
+"A truncated axis makes a trivial change look dramatic",
+"Expected goals cannot be charted",
+"The wrong chart type was used",
+"The axis labels are missing"
+],
+"a": [
+0
+]
+},
+{
+"i": "SKC-15",
+"c": "theme",
+"th": "skc",
+"t": "Reliability",
+"s": [
+3
+],
+"q": "Two academy scouts independently grade the same 60 youth players on a 1–10 scale, and their grades correlate at .89. This is evidence of good:",
+"o": [
+"Inter-rater reliability",
+"Content validity",
+"Predictive validity",
+"Internal consistency"
+],
+"a": [
+0
+]
+},
+{
+"i": "SKC-16",
+"c": "theme",
+"th": "skc",
+"t": "Reliability",
+"s": [
+3
+],
+"q": "A GPS vest reports 9.1 km, 7.4 km, and 10.3 km of running for the same recorded training session when the file is processed three times. The measurement problem is one of:",
+"o": [
+"Validity — the vest is measuring the wrong construct",
+"Reliability — the readings are not consistent",
+"Sampling — three processings is too few",
+"Skew — the distances are not normal"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-17",
+"c": "theme",
+"th": "skc",
+"t": "Validity",
+"s": [
+3
+],
+"q": "A club rates \"defensive quality\" using nothing but each player's tackle count. The most serious objection is:",
+"o": [
+"Poor content validity — one narrow behavior cannot represent a broad construct",
+"Poor test-retest reliability",
+"Tackles are a nominal variable",
+"The sample of matches is too large"
+],
+"a": [
+0
+]
+},
+{
+"i": "SKC-18",
+"c": "theme",
+"th": "skc",
+"t": "Normal curve",
+"s": [
+4
+],
+"q": "Announced attendance at Children's Mercy Park is roughly normal with a mean of 19,000 and a standard deviation of 1,500. A crowd of 22,000 has a z-score of:",
+"o": [
+"+1.0",
+"+2.0",
+"+3.0",
+"+3,000"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-19",
+"c": "theme",
+"th": "skc",
+"t": "Normal curve",
+"s": [
+4
+],
+"q": "Using that same distribution (mean 19,000, SD 1,500), about what percent of matches draw between 17,500 and 20,500?",
+"o": [
+"50%",
+"68%",
+"95%",
+"99.7%"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-20",
+"c": "theme",
+"th": "skc",
+"t": "Sampling and standard error",
+"s": [
+5
+],
+"q": "A season-ticket survey about kickoff times samples 100 members; a follow-up samples 900. Compared with the first, the second survey's standard error of the mean is about:",
+"o": [
+"One-third as large",
+"One-ninth as large",
+"Three times as large",
+"The same"
+],
+"a": [
+0
+]
+},
+{
+"i": "SKC-21",
+"c": "theme",
+"th": "skc",
+"t": "Confidence intervals",
+"s": [
+5
+],
+"q": "A supporter survey estimates mean satisfaction at 4.2 of 5, 95% CI [4.0, 4.4]. Which interpretation is correct?",
+"o": [
+"95% of supporters rated between 4.0 and 4.4",
+"Intervals built this way capture the true mean about 95% of the time; 4.0–4.4 is the plausible range",
+"There is a 95% chance the sample mean is 4.2",
+"The result is significant at p = .95"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-22",
+"c": "theme",
+"th": "skc",
+"t": "Hypothesis testing",
+"s": [
+6
+],
+"q": "An analyst tests whether Sporting KC score more at home than away. H0 states that:",
+"o": [
+"Home scoring exceeds away scoring",
+"There is no difference in mean goals between home and away matches",
+"Away scoring exceeds home scoring",
+"The venue effect is large"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-23",
+"c": "theme",
+"th": "skc",
+"t": "Hypothesis testing",
+"s": [
+6
+],
+"q": "The club signs an expensive forward after a 9-match study \"showed\" he significantly outperforms the incumbent — but in truth there is no difference between them. The study made a:",
+"o": [
+"Type I error",
+"Type II error",
+"Correct decision",
+"Measurement error"
+],
+"a": [
+0
+]
+},
+{
+"i": "SKC-24",
+"c": "theme",
+"th": "skc",
+"t": "t-tests",
+"s": [
+7
+],
+"q": "To compare mean goals scored in home matches versus away matches across one season (different matches in each group), the appropriate test is a(n):",
+"o": [
+"Paired-samples t-test",
+"Independent-samples t-test",
+"One-sample t-test",
+"Chi-square test"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-25",
+"c": "theme",
+"th": "skc",
+"t": "t-tests",
+"s": [
+7
+],
+"q": "The same 24 players complete a sprint test in preseason and again in July. To test whether times changed, use a(n):",
+"o": [
+"Independent-samples t-test",
+"Paired-samples t-test",
+"One-way ANOVA",
+"Pearson correlation"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-26",
+"c": "theme",
+"th": "skc",
+"t": "ANOVA",
+"s": [
+9
+],
+"q": "An analyst compares mean minutes played across three position groups — defenders, midfielders, and forwards. The appropriate test is:",
+"o": [
+"Three separate t-tests",
+"One-way ANOVA",
+"Paired-samples t-test",
+"Simple regression"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-27",
+"c": "theme",
+"th": "skc",
+"t": "Correlation",
+"s": [
+10
+],
+"q": "Across 20 seasons, possession share and points earned correlate at r = .42. Which claim is NOT supported?",
+"o": [
+"The relationship is positive and moderate",
+"About 18% of the variance in points is shared with possession",
+"Holding the ball more causes a team to earn more points",
+"Seasons with more possession tended to bring more points"
+],
+"a": [
+2
+]
+},
+{
+"i": "SKC-28",
+"c": "theme",
+"th": "skc",
+"t": "Regression",
+"s": [
+10
+],
+"q": "A model gives Predicted points = 12 + 1.8(Wins). For a season with 15 wins, the predicted points total is:",
+"o": [
+"27",
+"39",
+"1.8",
+"15"
+],
+"a": [
+1
+]
+},
+{
+"i": "SKC-29",
+"c": "theme",
+"th": "skc",
+"t": "Multiple regression",
+"s": [
+11
+],
+"q": "A model predicts points from goals scored, goals conceded, and expected goals. Goals scored and expected goals correlate at r = .94. The diagnostic to check is:",
+"o": [
+"VIF, for multicollinearity",
+"Cronbach's alpha",
+"A scree plot",
+"Levene's test"
+],
+"a": [
+0
+]
+},
+{
+"i": "SKC-30",
+"c": "theme",
+"th": "skc",
+"t": "Factor analysis",
+"s": [
+12
+],
+"q": "A 28-item supporter survey is factor analyzed. Items about parking, ticket price, and concession lines load on one factor; items about atmosphere, the supporters' section, and matchday tradition load on another. Reasonable labels for the two factors:",
+"o": [
+"Matchday logistics vs. Atmosphere and belonging",
+"Nominal vs. Ordinal",
+"Reliability vs. Validity",
+"Home vs. Away"
+],
+"a": [
+0
+]
+},
+{
+"i": "NEWS-01",
+"c": "news",
+"t": "Levels of measurement",
+"s": [
+2
+],
+"q": "A Reuters/Ipsos poll asked which issue matters most to respondents in the midterms; 48% chose cost of living, others chose immigration, crime, and so on. The variable \"most important issue\" is measured at which level?",
+"o": [
+"Nominal — the answer names a category and cannot be ranked or averaged",
+"Ordinal — cost of living outranks the others",
+"Interval — the gaps between issues are equal",
+"Ratio — zero means no issue"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Jul 29–Aug 3, 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll"
+},
+{
+"i": "NEWS-02",
+"c": "news",
+"t": "Levels of measurement",
+"s": [
+2
+],
+"q": "Poll write-ups usually report a single \"disapprove\" percentage. If the underlying item had instead been recorded as strongly approve, somewhat approve, somewhat disapprove, strongly disapprove, that variable would be:",
+"o": [
+"Nominal",
+"Ordinal — ordered categories with unequal, unknown gaps",
+"Interval",
+"Ratio"
+],
+"a": [
+1
+],
+"outlet": "Reuters/Ipsos",
+"d": "Apr 24–27, 2026",
+"url": "https://www.ipsos.com/en-us/americans-increasingly-feel-economy-wrong-track"
+},
+{
+"i": "NEWS-03",
+"c": "news",
+"t": "Levels of measurement",
+"s": [
+2
+],
+"q": "The Bureau of Labor Statistics reported that nonfarm payroll employment increased by 162,000 in August 2026. Number of jobs added is measured at which level?",
+"o": [
+"Nominal",
+"Ordinal",
+"Interval",
+"Ratio — zero is a true zero and 160,000 is twice 80,000"
+],
+"a": [
+3
+],
+"outlet": "U.S. Bureau of Labor Statistics",
+"d": "August 2026 release",
+"url": "https://www.bls.gov/news.release/empsit.nr0.htm"
+},
+{
+"i": "NEWS-04",
+"c": "news",
+"t": "Variables and design",
+"s": [
+2
+],
+"q": "Pew reported the share of adults \"more concerned than excited\" about AI by age: 55% of those 18–29, 51% of those 30–49, 47% of those 50–64, and 59% of those 65+. In this comparison, age group is the:",
+"o": [
+"Dependent variable",
+"Independent (grouping) variable",
+"Confounding variable",
+"Outcome variable"
+],
+"a": [
+1
+],
+"outlet": "Pew Research Center",
+"d": "Jun 22–28, 2026",
+"url": "https://www.pewresearch.org/short-reads/2026/08/18/young-adults-in-the-us-are-increasingly-wary-of-ai-concerned-it-will-take-jobs/"
+},
+{
+"i": "NEWS-05",
+"c": "news",
+"t": "Variables and design",
+"s": [
+2
+],
+"q": "Concern about AI among adults under 30 rose 24 points between 2021 and 2026. Why can't we conclude that news coverage of AI caused the shift?",
+"o": [
+"Percentages cannot change over time",
+"No one was randomly assigned to a condition, so any number of things that also changed could explain it",
+"The sample was too large",
+"The variable is ordinal"
+],
+"a": [
+1
+],
+"outlet": "Pew Research Center",
+"d": "Jun 22–28, 2026",
+"url": "https://www.pewresearch.org/short-reads/2026/08/18/young-adults-in-the-us-are-increasingly-wary-of-ai-concerned-it-will-take-jobs/"
+},
+{
+"i": "NEWS-06",
+"c": "news",
+"t": "Variables and design",
+"s": [
+2
+],
+"q": "In the monthly jobs report, the payroll figure comes from a survey of employers and the unemployment rate comes from a separate survey of households. What follows from that?",
+"o": [
+"They are estimates of different things from different samples, so they can move in ways that seem to disagree",
+"They must always agree, since both describe the labor market",
+"One of the two surveys is wrong",
+"The unemployment rate is a census of all adults"
+],
+"a": [
+0
+],
+"outlet": "U.S. Bureau of Labor Statistics",
+"d": "August 2026 release",
+"url": "https://www.bls.gov/news.release/empsit.nr0.htm"
+},
+{
+"i": "NEWS-07",
+"c": "news",
+"t": "Center and spread",
+"s": [
+2
+],
+"q": "Pew's four age-group figures for concern about AI are 55%, 51%, 47%, and 59%. Their simple average is 53%, but Pew reports 52% for all adults. Why the difference?",
+"o": [
+"The overall figure is a weighted mean — the age groups are not equal in size",
+"One of the numbers must be a misprint",
+"Percentages cannot be averaged",
+"The overall figure is the median instead"
+],
+"a": [
+0
+],
+"outlet": "Pew Research Center",
+"d": "Jun 22–28, 2026",
+"url": "https://www.pewresearch.org/short-reads/2026/08/18/young-adults-in-the-us-are-increasingly-wary-of-ai-concerned-it-will-take-jobs/"
+},
+{
+"i": "NEWS-08",
+"c": "news",
+"t": "Center and spread",
+"s": [
+2
+],
+"q": "Using those same four age-group percentages — 55, 51, 47, 59 — what is the range?",
+"o": [
+"4 points",
+"12 points",
+"53 points",
+"59 points"
+],
+"a": [
+1
+],
+"outlet": "Pew Research Center",
+"d": "Jun 22–28, 2026",
+"url": "https://www.pewresearch.org/short-reads/2026/08/18/young-adults-in-the-us-are-increasingly-wary-of-ai-concerned-it-will-take-jobs/"
+},
+{
+"i": "NEWS-09",
+"c": "news",
+"t": "Center and spread",
+"s": [
+2
+],
+"q": "Pew's shares expecting AI to mean fewer jobs were 73% (18–29), 74% (30–49), 72% (50–64), and 63% (65+). What is the median of those four values?",
+"o": [
+"70.5",
+"72.5",
+"73",
+"74"
+],
+"a": [
+1
+],
+"outlet": "Pew Research Center",
+"d": "Jun 22–28, 2026",
+"url": "https://www.pewresearch.org/short-reads/2026/08/18/young-adults-in-the-us-are-increasingly-wary-of-ai-concerned-it-will-take-jobs/"
+},
+{
+"i": "NEWS-10",
+"c": "news",
+"t": "Center and spread",
+"s": [
+2
+],
+"q": "One Reuters/Ipsos poll of 4,505 adults reports a margin of error of ±1.5 points; another of 1,166 adults reports ±2.9. Which poll's estimates are more tightly bounded, and why?",
+"o": [
+"The 4,505-adult poll — a larger sample gives a smaller margin of error",
+"The 1,166-adult poll — a smaller sample is more focused",
+"Neither; margin of error does not depend on sample size",
+"Cannot tell without the percentages"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Jul–Aug 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll"
+},
+{
+"i": "NEWS-11",
+"c": "news",
+"t": "Shape of data",
+"s": [
+2
+],
+"q": "Suppose you plot the 12 monthly payroll changes for a year: most cluster between +120,000 and +180,000, with one month at −250,000. The distribution is:",
+"o": [
+"Positively skewed",
+"Negatively skewed — the long tail points toward the low values",
+"Symmetric",
+"Uniform"
+],
+"a": [
+1
+],
+"outlet": "U.S. Bureau of Labor Statistics",
+"d": "August 2026 release",
+"url": "https://www.bls.gov/news.release/empsit.nr0.htm"
+},
+{
+"i": "NEWS-12",
+"c": "news",
+"t": "Shape of data",
+"s": [
+2
+],
+"q": "A Reuters/Ipsos poll found 74% say the cost of living is on the wrong track. If each respondent had instead rated the economy 0–10 and almost everyone answered 0–2, the distribution of those ratings would be:",
+"o": [
+"Positively skewed, with a floor effect at 0",
+"Negatively skewed",
+"Normal",
+"Bimodal by definition"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "May 15–18, 2026",
+"url": "https://www.ipsos.com/en-us/americas-frustration-cost-living-continues-rise"
+},
+{
+"i": "NEWS-13",
+"c": "news",
+"t": "Shape of data",
+"s": [
+2
+],
+"q": "Approval percentages are bounded between 0 and 100. What does that imply when an approval figure sits near 35%?",
+"o": [
+"Nothing — bounded variables behave like unbounded ones",
+"The distribution of such estimates can be asymmetric near a boundary, so symmetry should be checked rather than assumed",
+"The figure must be normally distributed",
+"The figure must be skewed"
+],
+"a": [
+1
+],
+"outlet": "Reuters/Ipsos",
+"d": "May 15–18, 2026",
+"url": "https://www.ipsos.com/en-us/americas-frustration-cost-living-continues-rise"
+},
+{
+"i": "NEWS-14",
+"c": "news",
+"t": "Chart choice",
+"s": [
+2
+],
+"q": "Reuters/Ipsos found 61% saying the economy is on the wrong track in April 2026, up from 43% in January 2025. To show that movement across every poll in between, the right display is a:",
+"o": [
+"Line graph",
+"Pie chart",
+"Histogram of one month",
+"Scatterplot"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Apr 24–27, 2026",
+"url": "https://www.ipsos.com/en-us/americans-increasingly-feel-economy-wrong-track"
+},
+{
+"i": "NEWS-15",
+"c": "news",
+"t": "Chart choice",
+"s": [
+2
+],
+"q": "To compare AI concern across Pew's four age groups at a single point in time, the clearest display is a:",
+"o": [
+"Bar chart",
+"Line graph",
+"Histogram",
+"Pie chart of all adults"
+],
+"a": [
+0
+],
+"outlet": "Pew Research Center",
+"d": "Jun 22–28, 2026",
+"url": "https://www.pewresearch.org/short-reads/2026/08/18/young-adults-in-the-us-are-increasingly-wary-of-ai-concerned-it-will-take-jobs/"
+},
+{
+"i": "NEWS-16",
+"c": "news",
+"t": "Chart choice",
+"s": [
+2
+],
+"q": "A graphic shows Democrats at 35% and Republicans at 27% on handling the cost of living — with the y-axis running from 25% to 36%. The chart is:",
+"o": [
+"Misleading: the truncated axis makes an 8-point gap look like a chasm",
+"Fine, since both figures are plotted accurately",
+"Wrong because bar charts cannot show percentages",
+"Missing only a title"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Jul 29–Aug 3, 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll"
+},
+{
+"i": "NEWS-17",
+"c": "news",
+"t": "Reliability",
+"s": [
+3
+],
+"q": "Two Reuters/Ipsos polls fielded weeks apart both put presidential approval in the mid-30s. Taken together, that consistency is closest to evidence of:",
+"o": [
+"Stability of the measure over a short interval — the polling equivalent of test-retest reliability",
+"Construct validity",
+"Predictive validity",
+"A causal effect"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Apr–Aug 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll-0"
+},
+{
+"i": "NEWS-18",
+"c": "news",
+"t": "Reliability",
+"s": [
+3
+],
+"q": "Pew's figures come from the American Trends Panel, where the same people are surveyed repeatedly. What measurement risk does that design introduce?",
+"o": [
+"Panel conditioning — repeatedly answering the same questions can itself change how people respond",
+"Nothing; panels are immune to measurement problems",
+"The sample cannot be weighted",
+"Percentages become ordinal"
+],
+"a": [
+0
+],
+"outlet": "Pew Research Center",
+"d": "Jun 22–28, 2026",
+"url": "https://www.pewresearch.org/short-reads/2026/08/18/young-adults-in-the-us-are-increasingly-wary-of-ai-concerned-it-will-take-jobs/"
+},
+{
+"i": "NEWS-19",
+"c": "news",
+"t": "Reliability",
+"s": [
+3
+],
+"q": "Before believing that AI concern \"rose 15 points since 2021,\" what has to be true of the two surveys?",
+"o": [
+"The question wording and response options must be the same — a changed instrument breaks the comparison",
+"The sample sizes must be identical",
+"The same interviewers must have been used",
+"Nothing; any two percentages can be compared"
+],
+"a": [
+0
+],
+"outlet": "Pew Research Center",
+"d": "Jun 22–28, 2026",
+"url": "https://www.pewresearch.org/short-reads/2026/08/18/young-adults-in-the-us-are-increasingly-wary-of-ai-concerned-it-will-take-jobs/"
+},
+{
+"i": "NEWS-20",
+"c": "news",
+"t": "Validity",
+"s": [
+3
+],
+"q": "Forty-eight percent of respondents named \"cost of living\" as their most important midterm issue. Before accepting that number, the first question to ask is:",
+"o": [
+"What \"cost of living\" meant to each respondent — groceries, rent, gas, or something else",
+"Whether 48% is more than half",
+"Whether the sample was too large",
+"Whether the variable is ratio-level"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Jul 29–Aug 3, 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll"
+},
+{
+"i": "NEWS-21",
+"c": "news",
+"t": "Validity",
+"s": [
+3
+],
+"q": "A Reuters/Ipsos release reported approval at 34% among all adults and 37% among registered voters. Using the all-adults figure to forecast an election result is a problem of:",
+"o": [
+"Population mismatch — the measure is valid for adults, but the question is about voters",
+"Reliability",
+"Skewness",
+"Sampling error only"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Apr 24–27, 2026",
+"url": "https://www.ipsos.com/en-us/americans-increasingly-feel-economy-wrong-track"
+},
+{
+"i": "NEWS-22",
+"c": "news",
+"t": "Validity",
+"s": [
+3
+],
+"q": "Fifty-five percent of respondents said they would oppose a data center within 10 miles of their home. Treating that as a forecast of actual opposition at a future hearing assumes:",
+"o": [
+"Predictive validity — that a stated attitude tracks later behavior, which has to be demonstrated, not assumed",
+"Nothing; stated intent is behavior",
+"That the item is nominal",
+"That the sample was a census"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "May 15–18, 2026",
+"url": "https://www.ipsos.com/en-us/americas-frustration-cost-living-continues-rise"
+},
+{
+"i": "NEWS-23",
+"c": "news",
+"t": "Normal curve",
+"s": [
+4
+],
+"q": "A poll reports a margin of error of \"±1.5 percentage points at the 95% confidence level.\" Which z-value is doing the work behind that 95%?",
+"o": [
+"1.00",
+"1.65",
+"1.96",
+"2.58"
+],
+"a": [
+2
+],
+"outlet": "Reuters/Ipsos",
+"d": "Jul 29–Aug 3, 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll"
+},
+{
+"i": "NEWS-24",
+"c": "news",
+"t": "Normal curve",
+"s": [
+4
+],
+"q": "A poll of 1,166 adults reports a 95% margin of error of ±2.9 points, so its standard error is roughly 1.5 points. A result landing 3 points away from the true value is about how many standard errors out?",
+"o": [
+"Half a standard error",
+"About two standard errors",
+"About three standard errors",
+"Cannot be determined"
+],
+"a": [
+1
+],
+"outlet": "Reuters/Ipsos",
+"d": "Aug 14–17, 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll-0"
+},
+{
+"i": "NEWS-25",
+"c": "news",
+"t": "Normal curve",
+"s": [
+4
+],
+"q": "Applying the 68–95–99.7 rule to a poll estimate with a standard error of 1.5 points, about 68% of samples like this one would land within:",
+"o": [
+"1.5 points of the true value",
+"2.9 points of the true value",
+"3.0 points of the true value",
+"4.5 points of the true value"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Aug 14–17, 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll-0"
+},
+{
+"i": "NEWS-26",
+"c": "news",
+"t": "Sampling and standard error",
+"s": [
+5
+],
+"q": "One Reuters/Ipsos poll (n = 4,505) reports ±1.5 points; another (n = 1,166) reports ±2.9. The larger sample is about 3.9 times bigger but the margin of error is only about half as wide. Why?",
+"o": [
+"Standard error shrinks with the square root of n, and √3.9 ≈ 2",
+"Margin of error falls in direct proportion to n",
+"The two polls asked different questions",
+"One of the two figures must be wrong"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Jul–Aug 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll"
+},
+{
+"i": "NEWS-27",
+"c": "news",
+"t": "Sampling and standard error",
+"s": [
+5
+],
+"q": "A newsroom wants to cut a poll's ±2.9-point margin of error to about ±1.45. Roughly what must happen to the sample size?",
+"o": [
+"Double it",
+"Quadruple it",
+"Halve it",
+"Add 100 respondents"
+],
+"a": [
+1
+],
+"outlet": "Reuters/Ipsos",
+"d": "Aug 14–17, 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll-0"
+},
+{
+"i": "NEWS-28",
+"c": "news",
+"t": "Sampling and standard error",
+"s": [
+5
+],
+"q": "Two Reuters/Ipsos polls sampled 1,269 and 1,271 adults and reported margins of error of ±2.9 and ±2.8 points. What should you conclude from the 0.1-point difference?",
+"o": [
+"Essentially nothing — the samples are the same size, and the difference is rounding",
+"The second poll is meaningfully more precise",
+"The second poll had a better response rate",
+"The first poll is biased"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Apr–May 2026",
+"url": "https://www.ipsos.com/en-us/americas-frustration-cost-living-continues-rise"
+},
+{
+"i": "NEWS-29",
+"c": "news",
+"t": "Sampling and standard error",
+"s": [
+5
+],
+"q": "A poll of 4,505 adults reports ±1.5 points for the whole sample. A reporter quotes a figure for one subgroup and applies the same ±1.5. What is wrong?",
+"o": [
+"A subgroup is a smaller sample, so its margin of error is larger — sometimes much larger",
+"Subgroups have no margin of error",
+"The whole-sample margin always overstates subgroup error",
+"Nothing; the margin applies to every reported number"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Jul 29–Aug 3, 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll"
+},
+{
+"i": "NEWS-30",
+"c": "news",
+"t": "Sampling and standard error",
+"s": [
+5
+],
+"q": "The jobs report's +162,000 comes from a survey of employers, not from counting every job in the country. What follows?",
+"o": [
+"The figure is a sample-based estimate and carries sampling error",
+"The figure is exact, because payrolls are administrative records",
+"Sampling error applies only to opinion polls",
+"The figure cannot be compared across months"
+],
+"a": [
+0
+],
+"outlet": "U.S. Bureau of Labor Statistics",
+"d": "August 2026 release",
+"url": "https://www.bls.gov/news.release/empsit.tn.htm"
+},
+{
+"i": "NEWS-31",
+"c": "news",
+"t": "Sampling and standard error",
+"s": [
+5
+],
+"q": "BLS revises prior months' payroll estimates as more employer reports arrive. Statistically, what do those revisions illustrate?",
+"o": [
+"That an early estimate is one draw of a sample-based figure, refined as more data comes in",
+"That the original number was fabricated",
+"That the survey is invalid",
+"That sampling error can be eliminated by waiting"
+],
+"a": [
+0
+],
+"outlet": "U.S. Bureau of Labor Statistics",
+"d": "August 2026 release",
+"url": "https://www.bls.gov/news.release/empsit.tn.htm"
+},
+{
+"i": "NEWS-32",
+"c": "news",
+"t": "Confidence intervals",
+"s": [
+5
+],
+"q": "BLS states that the 90% confidence interval for the monthly change in total nonfarm employment is about ±122,000. For August 2026's reported +162,000, that interval runs from:",
+"o": [
+"+40,000 to +284,000",
+"+122,000 to +162,000",
+"−122,000 to +162,000",
+"+150,000 to +174,000"
+],
+"a": [
+0
+],
+"outlet": "U.S. Bureau of Labor Statistics",
+"d": "August 2026 release",
+"url": "https://www.bls.gov/news.release/empsit.tn.htm"
+},
+{
+"i": "NEWS-33",
+"c": "news",
+"t": "Confidence intervals",
+"s": [
+5
+],
+"q": "That interval for August 2026 (+40,000 to +284,000) does not include zero. The defensible reading is:",
+"o": [
+"The data are consistent with real job growth, though the plausible range is very wide",
+"Exactly 162,000 jobs were added",
+"Job growth was certainly strong",
+"The estimate is meaningless"
+],
+"a": [
+0
+],
+"outlet": "U.S. Bureau of Labor Statistics",
+"d": "August 2026 release",
+"url": "https://www.bls.gov/news.release/empsit.tn.htm"
+},
+{
+"i": "NEWS-34",
+"c": "news",
+"t": "Confidence intervals",
+"s": [
+5
+],
+"q": "Suppose a month's payroll estimate came in at +90,000, with the same ±122,000 interval. A headline reading \"the economy added jobs\" would be overstating things because:",
+"o": [
+"The interval runs from −32,000 to +212,000, so no change — or a small loss — is also consistent with the data",
+"+90,000 is too small a number to report",
+"The confidence level would have to be 95%",
+"Payroll estimates cannot be negative"
+],
+"a": [
+0
+],
+"outlet": "U.S. Bureau of Labor Statistics",
+"d": "August 2026 release",
+"url": "https://www.bls.gov/news.release/empsit.tn.htm"
+},
+{
+"i": "NEWS-35",
+"c": "news",
+"t": "Confidence intervals",
+"s": [
+5
+],
+"q": "The unemployment rate was \"unchanged at 4.1 percent,\" and BLS puts the confidence interval for a monthly change in the rate at about ±0.3 point. A reported month-to-month move of 0.1 point should therefore be treated as:",
+"o": [
+"Well inside the range of sampling noise — not evidence of a real shift",
+"A clear downturn",
+"Proof the rate is stable forever",
+"Impossible"
+],
+"a": [
+0
+],
+"outlet": "U.S. Bureau of Labor Statistics",
+"d": "August 2026 release",
+"url": "https://www.bls.gov/news.release/empsit.tn.htm"
+},
+{
+"i": "NEWS-36",
+"c": "news",
+"t": "Confidence intervals",
+"s": [
+5
+],
+"q": "A poll reports 48% with a margin of error of ±1.5 points \"at the 95% confidence level.\" What does the 95% describe?",
+"o": [
+"The long-run performance of the method: intervals built this way capture the true value about 95% of the time",
+"A 95% chance that 48% is exactly right",
+"That 95% of respondents agreed",
+"That the poll is 95% accurate"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Jul 29–Aug 3, 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll"
+},
+{
+"i": "NEWS-37",
+"c": "news",
+"t": "Hypothesis testing",
+"s": [
+6
+],
+"q": "Reuters/Ipsos put Democrats at 35% and Republicans at 27% on handling the cost of living, in a poll with a ±1.5-point margin of error. The 8-point gap is:",
+"o": [
+"Comfortably larger than the error in either estimate, so unlikely to be noise alone",
+"Within the margin of error, so meaningless",
+"Proof that Democrats will win the midterms",
+"Impossible to assess"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Jul 29–Aug 3, 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll"
+},
+{
+"i": "NEWS-38",
+"c": "news",
+"t": "Hypothesis testing",
+"s": [
+6
+],
+"q": "A commentator says two poll figures \"differ\" whenever they are more than one margin of error apart. What is the flaw?",
+"o": [
+"A difference has its own standard error, larger than either estimate's — so the correct test is of the difference, not of each number separately",
+"Margins of error cannot be compared at all",
+"The margin of error should be doubled for every comparison",
+"Nothing; the rule is exact"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Jul 29–Aug 3, 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll"
+},
+{
+"i": "NEWS-39",
+"c": "news",
+"t": "Hypothesis testing",
+"s": [
+6
+],
+"q": "The share naming the economy as the country's most important problem was 20% in April, up from 16% in March, in polls with margins of error near ±2.9 points. The honest conclusion is:",
+"o": [
+"The apparent 4-point rise is not distinguishable from sampling variation",
+"The economy became significantly more important",
+"The March poll was wrong",
+"The change is significant because 20 > 16"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Apr 24–27, 2026",
+"url": "https://www.ipsos.com/en-us/americans-increasingly-feel-economy-wrong-track"
+},
+{
+"i": "NEWS-40",
+"c": "news",
+"t": "Hypothesis testing",
+"s": [
+6
+],
+"q": "Approval reads 34% in one month's poll and 35% in the next. A headline announces a \"rebound.\" The statistical objection is:",
+"o": [
+"A 1-point move sits far inside the margin of error; there is no evidence of any change",
+"Approval cannot rise",
+"The second poll should have been larger",
+"One point is significant with a big enough sample, so the headline is fine"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Apr–May 2026",
+"url": "https://www.ipsos.com/en-us/americas-frustration-cost-living-continues-rise"
+},
+{
+"i": "NEWS-41",
+"c": "news",
+"t": "t-tests",
+"s": [
+7
+],
+"q": "A researcher has each respondent's 0–10 AI-concern rating and wants to compare the mean for adults 18–29 with the mean for adults 65+ (different people in each group). The appropriate test is a(n):",
+"o": [
+"Paired-samples t-test",
+"Independent-samples t-test",
+"One-sample t-test",
+"Chi-square test"
+],
+"a": [
+1
+],
+"outlet": "Pew Research Center",
+"d": "Jun 22–28, 2026",
+"url": "https://www.pewresearch.org/short-reads/2026/08/18/young-adults-in-the-us-are-increasingly-wary-of-ai-concerned-it-will-take-jobs/"
+},
+{
+"i": "NEWS-42",
+"c": "news",
+"t": "t-tests",
+"s": [
+7
+],
+"q": "Because the American Trends Panel re-interviews the same people, a researcher can compare each panelist's 2021 rating with that same panelist's 2026 rating. The appropriate test is a(n):",
+"o": [
+"Independent-samples t-test",
+"Paired-samples t-test",
+"One-way ANOVA",
+"Pearson correlation"
+],
+"a": [
+1
+],
+"outlet": "Pew Research Center",
+"d": "Jun 22–28, 2026",
+"url": "https://www.pewresearch.org/short-reads/2026/08/18/young-adults-in-the-us-are-increasingly-wary-of-ai-concerned-it-will-take-jobs/"
+},
+{
+"i": "NEWS-43",
+"c": "news",
+"t": "t-tests",
+"s": [
+7
+],
+"q": "An analyst wants to test whether this month's mean concern score in a single sample differs from a published national benchmark. The appropriate test is a(n):",
+"o": [
+"One-sample t-test",
+"Independent-samples t-test",
+"Paired-samples t-test",
+"ANOVA"
+],
+"a": [
+0
+],
+"outlet": "Pew Research Center",
+"d": "Jun 22–28, 2026",
+"url": "https://www.pewresearch.org/short-reads/2026/08/18/young-adults-in-the-us-are-increasingly-wary-of-ai-concerned-it-will-take-jobs/"
+},
+{
+"i": "NEWS-44",
+"c": "news",
+"t": "ANOVA",
+"s": [
+9
+],
+"q": "To compare mean AI-concern scores across all four of Pew's age groups at once, the appropriate test is:",
+"o": [
+"Six separate t-tests",
+"One-way ANOVA",
+"Paired-samples t-test",
+"Simple regression"
+],
+"a": [
+1
+],
+"outlet": "Pew Research Center",
+"d": "Jun 22–28, 2026",
+"url": "https://www.pewresearch.org/short-reads/2026/08/18/young-adults-in-the-us-are-increasingly-wary-of-ai-concerned-it-will-take-jobs/"
+},
+{
+"i": "NEWS-45",
+"c": "news",
+"t": "ANOVA",
+"s": [
+9
+],
+"q": "That ANOVA comes back significant. Looking at the four figures — 55%, 51%, 47%, 59% — what does the F-test alone let you say?",
+"o": [
+"That at least one age group differs from another; post-hoc comparisons are needed to say which",
+"That adults 65+ differ from every other group",
+"That all four groups differ from each other",
+"That age causes concern about AI"
+],
+"a": [
+0
+],
+"outlet": "Pew Research Center",
+"d": "Jun 22–28, 2026",
+"url": "https://www.pewresearch.org/short-reads/2026/08/18/young-adults-in-the-us-are-increasingly-wary-of-ai-concerned-it-will-take-jobs/"
+},
+{
+"i": "NEWS-46",
+"c": "news",
+"t": "Correlation",
+"s": [
+10
+],
+"q": "In one Reuters/Ipsos poll, 74% said the cost of living was on the wrong track and 73% disapproved of the president's handling of it. Across many months these two series move together almost in lockstep. The safest reading is:",
+"o": [
+"The two measures are strongly associated — plausibly tapping the same underlying sentiment — which is not the same as one causing the other",
+"Disapproval causes cost-of-living pessimism",
+"Cost-of-living pessimism causes disapproval",
+"The two measures are independent"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "May 15–18, 2026",
+"url": "https://www.ipsos.com/en-us/americas-frustration-cost-living-continues-rise"
+},
+{
+"i": "NEWS-47",
+"c": "news",
+"t": "Correlation",
+"s": [
+10
+],
+"q": "Suppose monthly \"wrong track\" percentages and presidential approval correlate at r = −.70 across three years of Reuters/Ipsos polls. The coefficient of determination is:",
+"o": [
+"−.70",
+".49",
+".70",
+".84"
+],
+"a": [
+1
+],
+"outlet": "Reuters/Ipsos",
+"d": "Apr 24–27, 2026",
+"url": "https://www.ipsos.com/en-us/americans-increasingly-feel-economy-wrong-track"
+},
+{
+"i": "NEWS-48",
+"c": "news",
+"t": "Regression",
+"s": [
+10
+],
+"q": "A model built on monthly payroll changes between +120,000 and +180,000 is used to predict what happens in a month with a change of +600,000. The problem is:",
+"o": [
+"Extrapolation far beyond the range of the data the model was fit on",
+"Multicollinearity",
+"Restriction of range in the outcome",
+"Nothing; regression models extend indefinitely"
+],
+"a": [
+0
+],
+"outlet": "U.S. Bureau of Labor Statistics",
+"d": "August 2026 release",
+"url": "https://www.bls.gov/news.release/empsit.nr0.htm"
+},
+{
+"i": "NEWS-49",
+"c": "news",
+"t": "Multiple regression",
+"s": [
+11
+],
+"q": "A model predicts presidential approval from \"cost-of-living pessimism\" and \"inflation disapproval\" — two poll items that track each other closely, at 74% and 73% in the same survey. The diagnostic to run is:",
+"o": [
+"VIF, to check multicollinearity between the two predictors",
+"Cronbach's alpha",
+"A scree plot",
+"Levene's test"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "May 15–18, 2026",
+"url": "https://www.ipsos.com/en-us/americas-frustration-cost-living-continues-rise"
+},
+{
+"i": "NEWS-50",
+"c": "news",
+"t": "Factor analysis",
+"s": [
+12
+],
+"q": "A long Reuters/Ipsos battery is factor analyzed. Items on grocery prices, rent, and gas costs load on one factor; items on corruption and trust in institutions load on another. The sensible interpretation is:",
+"o": [
+"Two distinct underlying dimensions — economic strain and institutional trust — rather than one general mood",
+"One factor with measurement error",
+"That the items are redundant and should all be deleted",
+"That the sample is too small"
+],
+"a": [
+0
+],
+"outlet": "Reuters/Ipsos",
+"d": "Jul–Aug 2026",
+"url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll"
+}
+],
+"skins": {
+"broncos": {
+"red": "#FB4F14",
+"redDark": "#002244",
+"redLight": "#FFF0E8"
+},
+"taylor": {
+"red": "#6B2D5C",
+"redDark": "#4A1F40",
+"redLight": "#F7EDF4"
+},
+"ai": {
+"red": "#1F6FEB",
+"redDark": "#0B3E8F",
+"redLight": "#EAF1FE"
+},
+"kay": {
+"red": "#0072CE",
+"redDark": "#004B87",
+"redLight": "#E8F2FB"
+},
+"highered": {
+"red": "#7B5E23",
+"redDark": "#54401A",
+"redLight": "#F7F1E2"
+},
+"skc": {
+"red": "#93B1D6",
+"redDark": "#002F65",
+"redLight": "#EEF3FA"
+},
+"news": {
+"red": "#111111",
+"redDark": "#000000",
+"redLight": "#F0F0F0"
+}
+}
 }

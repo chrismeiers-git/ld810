@@ -98,7 +98,7 @@ function initBank(b) {
   SESSIONS = Object.keys(b.m).map(Number).sort((x, y) => x - y);
 }
 const live = () => endpointProblem === null;
-const C = {
+const C_BASE = {
   red: "#BA0C2F",
   redDark: "#8A0922",
   redLight: "#FCEEF1",
@@ -110,6 +110,14 @@ const C = {
   teal: "#0F6E63",
   gold: "#B8860B"
 };
+/* C is mutated in place so every component picks up a skin on the next render.
+   Skins only move the accent colours (red / redDark / redLight); ink, line and
+   wash stay put, so text contrast never changes. */
+const C = { ...C_BASE };
+function applySkin(key) {
+  const s = key ? (BANK.skins || {})[key] : null;
+  Object.assign(C, C_BASE, s || {});
+}
 const FONT = "'Aptos','Calibri','Segoe UI',system-ui,-apple-system,sans-serif";
 const LETTERS = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const rid = () => Math.random().toString(36).slice(2, 10);
@@ -416,6 +424,7 @@ const emptyFilter = {
   topics: [],
   themes: [],
   extra: false,
+  news: false,
   search: ""
 };
 /* "extra" items come from textbook chapters LD 810 does not cover. They are
@@ -424,6 +433,7 @@ const emptyFilter = {
 const corePool = () => BANK.items.filter(i => i.c !== "extra");
 function filterItems(f) {
   let list = f.extra ? BANK.items.filter(i => i.c === "extra") : corePool();
+  if (f.news) list = list.filter(i => i.c === "news");
   if (f.themes && f.themes.length) list = list.filter(i => i.c === "theme" && f.themes.includes(i.th));
   if (f.sessions.length) list = list.filter(i => i.s.some(n => f.sessions.includes(n)));
   if (f.topics.length) list = list.filter(i => f.topics.includes(i.t));
@@ -469,10 +479,11 @@ function Facets({
   });
   const usedTopics = useMemo(() => {
     let pool = f.extra ? BANK.items.filter(i => i.c === "extra") : corePool();
+    if (f.news) pool = pool.filter(i => i.c === "news");
     if (f.themes && f.themes.length) pool = pool.filter(i => i.c === "theme" && f.themes.includes(i.th));
     if (f.sessions.length) pool = pool.filter(i => i.s.some(n => f.sessions.includes(n)));
     return Array.from(new Set(pool.map(i => i.t))).sort();
-  }, [f.sessions, f.themes, f.extra]);
+  }, [f.sessions, f.themes, f.extra, f.news]);
   const shownTopics = openTopics ? usedTopics : usedTopics.slice(0, 8);
   const any = f.sessions.length || f.topics.length || (f.themes && f.themes.length) || f.extra || f.search;
   const THEMES = Object.entries(BANK.themes || {});
@@ -520,7 +531,15 @@ function Facets({
       themes: f.themes.includes(k) ? f.themes.filter(x => x !== k) : [...f.themes, k]
     }),
     title: `${BANK.items.filter(i => i.th === k).length} questions`
-  }, label))), /*#__PURE__*/React.createElement("p", {
+  }, label)), /*#__PURE__*/React.createElement(Chip, {
+    key: "news",
+    on: !!f.news,
+    onClick: () => setF({
+      ...emptyFilter,
+      news: !f.news
+    }),
+    title: `${BANK.items.filter(i => i.c === "news").length} questions built from reported figures`
+  }, "In the news")), /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 13.5,
       color: C.ink3,
@@ -886,6 +905,26 @@ function Practice({
   const [left, setLeft] = useState(0);
   const [saved, setSaved] = useState(null);
   const [ranOut, setRanOut] = useState(false);
+  const [skinOn, setSkinOn] = useState(true);
+  /* One themed set selected (or the news set) gives the page its own accent.
+     Mixed selections keep the default palette — there is no single skin to use. */
+  const skinKey = f.news ? "news" : f.themes && f.themes.length === 1 ? f.themes[0] : null;
+  applySkin(skinOn ? skinKey : null);
+  const SkinToggle = () => skinKey ? /*#__PURE__*/React.createElement("button", {
+    onClick: () => setSkinOn(!skinOn),
+    title: skinOn ? "Back to the standard colours" : `Colour the page for ${(BANK.themes || {})[skinKey] || "this set"}`,
+    style: {
+      fontFamily: FONT,
+      fontSize: 12.5,
+      padding: "3px 9px",
+      borderRadius: 2,
+      cursor: "pointer",
+      border: `1px solid ${skinOn ? C.red : C.line}`,
+      background: skinOn ? C.redLight : "#fff",
+      color: skinOn ? C.redDark : C.ink3,
+      whiteSpace: "nowrap"
+    }
+  }, skinOn ? "Skin on" : "Skin off") : null;
   const pool = useMemo(() => filterItems(f), [f]);
   const secs = Math.max(5, Math.min(3600, Number(tVal) || 0));
   const running = deck && at < deck.length;
@@ -1201,7 +1240,7 @@ function Practice({
       alignItems: "center",
       gap: 16
     }
-  }, tMode !== "none" && /*#__PURE__*/React.createElement(Clock, {
+  }, /*#__PURE__*/React.createElement(SkinToggle, null), tMode !== "none" && /*#__PURE__*/React.createElement(Clock, {
     left: left,
     total: total,
     urgent: left <= 10
@@ -1294,7 +1333,22 @@ function Practice({
       fontWeight: 600,
       color: picked === -1 ? C.gold : q.a.includes(picked) ? C.teal : C.ink2
     }
-  }, picked === -1 ? "Time — the answer is highlighted above" : q.a.includes(picked) ? "Correct" : "The answer is highlighted above")), done && ["lecture", "pub", "extra"].includes(q.c) && q.src && /*#__PURE__*/React.createElement("p", {
+  }, picked === -1 ? "Time — the answer is highlighted above" : q.a.includes(picked) ? "Correct" : "The answer is highlighted above")), done && q.c === "news" && q.url && /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 12.5,
+      color: C.ink3,
+      lineHeight: 1.5,
+      marginTop: 14,
+      maxWidth: "70ch"
+    }
+  }, "Reported figures from ", q.outlet, q.d ? `, ${q.d}` : "", ". ", /*#__PURE__*/React.createElement("a", {
+    href: q.url,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    style: {
+      color: C.red
+    }
+  }, "Check the source"), " \u2014 always worth doing."), done && ["lecture", "pub", "extra"].includes(q.c) && q.src && /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 12.5,
       color: C.ink3,
