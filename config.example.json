@@ -1,0 +1,7 @@
+{
+  "endpoint": "PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE",
+  "cohortName": "LD810",
+  "cohortLabel": "LD 810",
+  "cohortPassword": "CHANGE_ME",
+  "_note": "Copy to config.json and fill in. endpoint must end in /exec, never /dev. cohortPassword is visible to anyone who views source - it tags results and gates the class-results view, it is not security."
+}
