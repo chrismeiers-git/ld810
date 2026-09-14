@@ -92,6 +92,113 @@ function publicState_(s) {
 
 /* ---------- POST ---------- */
 
+/* =====================================================================
+   Access roster.
+
+   Lives in a tab of THIS spreadsheet, never in the public repo. Columns:
+     A email | B role | C note | D added
+   Roles:
+     student    - the LD 810 class link: course pool + class reporting
+     viewer     - the public reporting view only
+     instructor - everything, including the console
+
+   This gates convenience, not secrets. Anyone who knows a listed address
+   could type it. It exists so the roster stays private and so you can add
+   or remove someone without touching the site.
+   ===================================================================== */
+
+var ROSTER_NAME = 'roster';
+
+function roster_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName(ROSTER_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(ROSTER_NAME);
+    sh.appendRow(['email', 'role', 'note', 'added']);
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+
+function normEmail_(v) {
+  return String(v || '').trim().toLowerCase();
+}
+
+/* Returns {ok, role, label} for an email, or {ok:false} if not listed. */
+function lookupAccess_(email) {
+  var want = normEmail_(email);
+  if (!want || want.indexOf('@') < 1) return { ok: false, error: 'That does not look like an email address.' };
+  var sh = roster_();
+  var last = sh.getLastRow();
+  if (last < 2) return { ok: false, error: 'No one has been granted access yet.' };
+  var vals = sh.getRange(2, 1, last - 1, 3).getValues();
+  for (var i = 0; i < vals.length; i++) {
+    if (normEmail_(vals[i][0]) === want) {
+      var role = String(vals[i][1] || 'viewer').trim().toLowerCase();
+      if (['student', 'viewer', 'instructor'].indexOf(role) < 0) role = 'viewer';
+      return { ok: true, role: role, email: want, note: String(vals[i][2] || '') };
+    }
+  }
+  return { ok: false, error: 'That address is not on the list. Ask Chris to add it.' };
+}
+
+/* Add or update one address. Run from the editor:
+     grantAccess('jclark@stmartin.edu', 'viewer', 'colleague - reporting only')
+     grantAccess('student@stmartin.edu', 'student', 'LD 810 Fall 2026')  */
+function grantAccess(email, role, note) {
+  var want = normEmail_(email);
+  if (!want || want.indexOf('@') < 1) throw new Error('Not an email address: ' + email);
+  role = String(role || 'student').trim().toLowerCase();
+  if (['student', 'viewer', 'instructor'].indexOf(role) < 0) throw new Error('role must be student, viewer or instructor');
+  var sh = roster_();
+  var last = sh.getLastRow();
+  if (last >= 2) {
+    var vals = sh.getRange(2, 1, last - 1, 1).getValues();
+    for (var i = 0; i < vals.length; i++) {
+      if (normEmail_(vals[i][0]) === want) {
+        sh.getRange(i + 2, 2).setValue(role);
+        if (note) sh.getRange(i + 2, 3).setValue(note);
+        Logger.log('Updated ' + want + ' -> ' + role);
+        return want;
+      }
+    }
+  }
+  sh.appendRow([want, role, note || '', new Date()]);
+  Logger.log('Added ' + want + ' as ' + role);
+  return want;
+}
+
+/* Add several at once: grantMany(['a@x.edu','b@x.edu'], 'student', 'LD 810') */
+function grantMany(emails, role, note) {
+  (emails || []).forEach(function (e) { grantAccess(e, role, note); });
+  Logger.log('Roster now holds ' + Math.max(0, roster_().getLastRow() - 1) + ' address(es).');
+}
+
+/* Remove one address. */
+function revokeAccess(email) {
+  var want = normEmail_(email);
+  var sh = roster_();
+  var last = sh.getLastRow();
+  if (last < 2) { Logger.log('Roster is empty.'); return 0; }
+  var vals = sh.getRange(2, 1, last - 1, 1).getValues();
+  for (var i = vals.length - 1; i >= 0; i--) {
+    if (normEmail_(vals[i][0]) === want) { sh.deleteRow(i + 2); Logger.log('Removed ' + want); return 1; }
+  }
+  Logger.log('Not found: ' + want);
+  return 0;
+}
+
+/* Print the roster to the log. */
+function listAccess() {
+  var sh = roster_();
+  var last = sh.getLastRow();
+  if (last < 2) { Logger.log('Roster is empty.'); return []; }
+  var vals = sh.getRange(2, 1, last - 1, 3).getValues();
+  Logger.log(vals.length + ' address(es):');
+  vals.forEach(function (r) { Logger.log('  ' + r[0] + '  [' + r[1] + ']  ' + (r[2] || '')); });
+  return vals;
+}
+
 function doPost(e) {
   try {
     var body = JSON.parse(e.postData.contents);
@@ -101,6 +208,7 @@ function doPost(e) {
     if (op === 'live_state') return postLiveState_(body);
     if (op === 'live_end') return postLiveEnd_();
     if (op === 'live_answer') return postLiveAnswer_(body);
+    if (op === 'access_check') return json_(lookupAccess_(body.email));
     return json_({ ok: false, error: 'Unknown op: ' + op });
   } catch (err) {
     return json_({ ok: false, error: String(err) });
@@ -214,6 +322,26 @@ function doGet(e) {
         idx: idx, counts: t.counts, total: t.total,
         right: t.right, state: publicState_(s)
       });
+    }
+
+    /* Reporting scopes.
+         public - everything pooled, no cohort split. Open to anyone who is
+                  on the roster; the client shows topics and themes only.
+         class  - LD 810 rows only. Requires a student or instructor address.
+       An unlisted address gets an empty result, never data. */
+    if (mode === 'summary') {
+      var scope = String(p.scope || '').toLowerCase();
+      if (scope === 'public' || scope === 'class') {
+        var acc = lookupAccess_(p.email || '');
+        if (!acc.ok) return json_({ error: acc.error || 'Not authorized.', denied: true });
+        if (scope === 'class' && acc.role === 'viewer') {
+          return json_({ error: 'That address has reporting access, but not to the class view.', denied: true });
+        }
+        var out = summary_(scope === 'class' ? (p.cohort || 'LD810') : 'all');
+        out.scope = scope;
+        out.role = acc.role;
+        return json_(out);
+      }
     }
 
     return json_(summary_(p.cohort || ''));

@@ -85,3 +85,42 @@ Maintenance functions live at the bottom of `Code.gs` and are **editor-only** �
 no `op` routes to them, so no deployment is needed and no student can reach them.
 Run `listRuns()` to see what is there, `previewDeleteRuns([...])` to check, then
 `deleteRuns([...])` to remove. Deletion snapshots the whole tab first.
+
+## The three links
+
+| Who | Link | Practice pool | Reporting |
+|---|---|---|---|
+| Anyone | `https://chrismeiers-git.github.io/ld810/` | everything | topics and themes, pooled — needs a granted email |
+| LD 810 students | `https://chrismeiers-git.github.io/ld810/?class=1` | everything, tagged to the class | sessions, topics and themes for LD 810 — needs a `student` email |
+| You | `console.html` | — | full detail, including per-item |
+
+Both site links are permanent. `?class=1` is the only difference between them.
+
+## Granting access
+
+The roster is a **`roster` tab in the results spreadsheet** — never in this repo.
+This repo is public, so a list of student addresses here would be a public
+roster, in git history forever, and would gate nothing: the check would run in
+JavaScript the visitor controls. Keeping it in the Sheet means the list stays
+private and you can add or remove someone without touching the site.
+
+Run these from the Apps Script editor:
+
+```
+grantAccess('jclark@stmartin.edu', 'viewer', 'reporting only')
+grantMany(['a@stmartin.edu','b@stmartin.edu'], 'student', 'LD 810 Fall 2026')
+revokeAccess('someone@stmartin.edu')
+listAccess()
+```
+
+Roles: `student` = class link and class reporting · `viewer` = public reporting
+only · `instructor` = both.
+
+**What this is and is not.** It keeps the roster private and lets you add and
+revoke people. It is not authentication: anyone who knows a listed address
+could type it. That is proportionate here — the data is anonymous, ungraded
+practice answers — but do not treat the class view as private to the class.
+
+The server decides every time. An address that is not on the roster gets a
+refusal, never data; a `viewer` asking for the class scope is refused. The
+browser only remembers which address was typed, on that person's own device.
