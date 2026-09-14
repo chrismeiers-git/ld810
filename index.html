@@ -2214,7 +2214,6 @@ function ClassResults({
 }) {
   const [sum, setSum] = useState(null);
   const [who, setWho] = useState("everyone");
-  const unlocked = savedCohort() === COHORT_NAME;
   const load = w => {
     setSum(null);
     loadSummary(w === "cohort" ? COHORT_NAME : "").then(setSum);
@@ -2272,7 +2271,7 @@ function ClassResults({
       gap: 8,
       flexWrap: "wrap"
     }
-  }, unlocked && /*#__PURE__*/React.createElement(Select, {
+  }, /*#__PURE__*/React.createElement(Select, {
     value: who,
     onChange: setWho,
     style: {
@@ -2499,6 +2498,17 @@ function App() {
   const [view, setView] = useState("home");
   const [cohort, setCohort] = useState(savedCohort());
   const inClass = cohort === COHORT_NAME;
+  const [linkCopied, setLinkCopied] = useState(false);
+  const openLink = `${window.location.origin}${window.location.pathname}`;
+  const copyOpenLink = () => {
+    try {
+      if (navigator.clipboard) navigator.clipboard.writeText(openLink);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 1800);
+    } catch (e) {
+      setLinkCopied(false);
+    }
+  };
   return /*#__PURE__*/React.createElement("div", {
     style: {
       fontFamily: FONT,
@@ -2602,7 +2612,7 @@ function App() {
       background: C.line,
       border: `1px solid ${C.line}`
     }
-  }, /*#__PURE__*/React.createElement("button", {
+  }, CLASS_MODE && /*#__PURE__*/React.createElement("button", {
     onClick: () => setView(inClass ? "practice810" : "gate"),
     style: {
       textAlign: "left",
@@ -2670,7 +2680,40 @@ function App() {
       lineHeight: 1.5,
       maxWidth: "58ch"
     }
-  }, "No password needed. All ", BANK.items.length, " questions, same filters and timer.")), /*#__PURE__*/React.createElement("button", {
+  }, "No password needed. All ", BANK.items.length, " questions, same filters and timer.")), CLASS_MODE && /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "18px 26px",
+      background: C.wash
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13.5,
+      color: C.ink3,
+      marginBottom: 8
+    }
+  }, "Know someone outside the class who wants to practice? This is the open link \u2014 it is not tied to LD 810."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8,
+      alignItems: "center",
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement("code", {
+    style: {
+      fontSize: 13,
+      padding: "7px 10px",
+      background: "#fff",
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      wordBreak: "break-all",
+      flex: "1 1 auto",
+      minWidth: 0
+    }
+  }, openLink), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    size: "sm",
+    onClick: copyOpenLink
+  }, linkCopied ? "Copied" : "Copy link"))), /*#__PURE__*/React.createElement("button", {
     onClick: () => setView("report"),
     style: {
       textAlign: "left",
@@ -2694,9 +2737,9 @@ function App() {
       fontWeight: 700,
       color: C.ink
     }
-  }, CLASS_MODE ? "LD 810 class results" : "How everyone is doing"), /*#__PURE__*/React.createElement(Pill, {
+  }, "How everyone is doing"), /*#__PURE__*/React.createElement(Pill, {
     tone: "grey"
-  }, CLASS_MODE ? "Class access" : "By invitation")), /*#__PURE__*/React.createElement("div", {
+  }, "Open to everyone")), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 15.5,
       color: C.ink2,
@@ -2704,7 +2747,7 @@ function App() {
       lineHeight: 1.5,
       maxWidth: "58ch"
     }
-  }, CLASS_MODE ? "How the class is doing by session, topic and themed set. Pooled and anonymous, and no answers given away." : "Which topics and themed sets people find hardest. Pooled and anonymous, and no answers given away. Enter the email address Chris granted access to."))), /*#__PURE__*/React.createElement("div", {
+  }, "Pooled and anonymous \u2014 no login needed, and no answers given away. Switch the view once you're in to compare against LD 810 only."))), /*#__PURE__*/React.createElement("div", {
     style: {
       borderTop: `1px solid ${C.line}`,
       marginTop: 40,
@@ -2845,10 +2888,7 @@ function App() {
       setView("practice810");
     },
     onCancel: () => setView("home")
-  }), view === "results" && /*#__PURE__*/React.createElement(ClassResults, {
-    onExit: () => setView("home")
-  }), view === "report" && /*#__PURE__*/React.createElement(Report, {
-    scope: CLASS_MODE ? "class" : "public",
+  }), view === "report" && /*#__PURE__*/React.createElement(ClassResults, {
     onExit: () => setView("home")
   })), /*#__PURE__*/React.createElement("div", {
     style: {
