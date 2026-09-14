@@ -50,12 +50,11 @@ const NORECORD = (() => {
   }
 })();
 
-/* Cohort gate. The password sits in config.json and is therefore visible to
-   anyone who looks — it tags results and gates the class-results view; it is
-   not a security control. */
+/* Cohort gate. Unlocking class practice checks the visitor's email against
+   the private roster (the same roster and lookup reporting access uses),
+   not a shared password. */
 let COHORT_NAME = "LD810";
 let COHORT_LABEL = "LD 810";
-let COHORT_PASSWORD = "";
 const COHORT_STORE = "ld810_cohort";
 const NAME_STORE = "ld810_player_name";
 
@@ -118,10 +117,6 @@ function rememberCohort(v) {
   try {
     if (v) window.localStorage.setItem(COHORT_STORE, v);else window.localStorage.removeItem(COHORT_STORE);
   } catch (e) {/* private browsing — unlock just won't persist */}
-}
-function checkPassword(v) {
-  if (!COHORT_PASSWORD) return false;
-  return String(v || "").trim().toLowerCase() === COHORT_PASSWORD.trim().toLowerCase();
 }
 function setEndpoint(raw) {
   const u = String(raw || "").trim();
@@ -822,7 +817,6 @@ function Loader({
           setEndpoint(j.endpoint);
           if (j.cohortName) COHORT_NAME = String(j.cohortName);
           if (j.cohortLabel) COHORT_LABEL = String(j.cohortLabel);
-          if (j.cohortPassword) COHORT_PASSWORD = String(j.cohortPassword);
         }
       } catch (e) {/* no config.json — endpointProblem stays "unset" */}
       try {
@@ -1280,16 +1274,30 @@ function CohortGate({
   onUnlock,
   onCancel
 }) {
-  const [v, setV] = useState("");
-  const [bad, setBad] = useState(false);
-  const submit = () => {
-    if (checkPassword(v)) {
-      rememberCohort(COHORT_NAME);
-      onUnlock();
-    } else {
-      setBad(true);
-      setV("");
+  const [email, setEmail] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState(null);
+  const submit = async () => {
+    const e = (email || "").trim().toLowerCase();
+    if (!e) return;
+    setBusy(true);
+    setErr(null);
+    const r = await checkAccess(e);
+    setBusy(false);
+    if (!r.ok) {
+      setErr(r.error || "That address isn't on the class list. Check your Moodle announcement.");
+      return;
     }
+    if (r.role === "viewer") {
+      setErr("That address has reporting access, but isn't set up for class practice.");
+      return;
+    }
+    storeAccess({
+      email: e,
+      role: r.role
+    });
+    rememberCohort(COHORT_NAME);
+    onUnlock();
   };
   return /*#__PURE__*/React.createElement("div", {
     style: {
@@ -1309,43 +1317,38 @@ function CohortGate({
       lineHeight: 1.6,
       marginTop: 0
     }
-  }, "Enter the class password. You'll only need to do this once on this device."), /*#__PURE__*/React.createElement("input", {
-    type: "password",
-    value: v,
+  }, "Enter the email address Chris has on file for the class. You'll only need to do this once on this device."), /*#__PURE__*/React.createElement("input", {
+    type: "email",
+    value: email,
     autoFocus: true,
+    autoComplete: "email",
     onChange: e => {
-      setV(e.target.value);
-      setBad(false);
+      setEmail(e.target.value);
+      setErr(null);
     },
     onKeyDown: e => {
       if (e.key === "Enter") submit();
     },
-    placeholder: "Class password",
+    placeholder: "you@stmartin.edu",
     style: {
       fontFamily: FONT,
       fontSize: 17,
       padding: "12px 14px",
       width: "100%",
-      border: `1px solid ${bad ? C.red : C.line}`,
+      border: `1px solid ${err ? C.red : C.line}`,
       borderRadius: 2,
       color: C.ink,
       boxSizing: "border-box",
       marginTop: 6
     }
-  }), bad && /*#__PURE__*/React.createElement("p", {
+  }), err && /*#__PURE__*/React.createElement("p", {
     style: {
       color: C.red,
       fontSize: 14.5,
       marginTop: 10,
       fontWeight: 600
     }
-  }, "That isn't the class password. Check your Moodle announcement."), !COHORT_PASSWORD && /*#__PURE__*/React.createElement("p", {
-    style: {
-      color: C.gold,
-      fontSize: 14.5,
-      marginTop: 10
-    }
-  }, "No class password is set in config.json, so this can't be unlocked yet."), /*#__PURE__*/React.createElement("div", {
+  }, err), /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 22,
       display: "flex",
@@ -1353,8 +1356,8 @@ function CohortGate({
     }
   }, /*#__PURE__*/React.createElement(Btn, {
     onClick: submit,
-    disabled: !v.trim() || !COHORT_PASSWORD
-  }, "Continue"), /*#__PURE__*/React.createElement(Btn, {
+    disabled: busy || !email.trim()
+  }, busy ? "Checking\u2026" : "Continue"), /*#__PURE__*/React.createElement(Btn, {
     kind: "ghost",
     onClick: onCancel
   }, "Back")));
@@ -2509,6 +2512,17 @@ function App() {
       setLinkCopied(false);
     }
   };
+  const [classLinkCopied, setClassLinkCopied] = useState(false);
+  const classLink = `${window.location.origin}${window.location.pathname}?class=1`;
+  const copyClassLink = () => {
+    try {
+      if (navigator.clipboard) navigator.clipboard.writeText(classLink);
+      setClassLinkCopied(true);
+      setTimeout(() => setClassLinkCopied(false), 1800);
+    } catch (e) {
+      setClassLinkCopied(false);
+    }
+  };
   return /*#__PURE__*/React.createElement("div", {
     style: {
       fontFamily: FONT,
@@ -2874,7 +2888,41 @@ function App() {
     style: {
       color: C.red
     }
-  }, "Salkind & Frey"), ". Every other question was written for this course."))), view === "practice810" && /*#__PURE__*/React.createElement(Practice, {
+  }, "Salkind & Frey"), ". Every other question was written for this course.")), !CLASS_MODE && /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: `1px solid ${C.line}`,
+      marginTop: 32,
+      paddingTop: 24
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13.5,
+      color: C.ink3,
+      marginBottom: 8
+    }
+  }, "In LD 810? Use the class link so your practice and results are tagged to the course:"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8,
+      alignItems: "center",
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement("code", {
+    style: {
+      fontSize: 13,
+      padding: "7px 10px",
+      background: C.wash,
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      wordBreak: "break-all",
+      flex: "1 1 auto",
+      minWidth: 0
+    }
+  }, classLink), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    size: "sm",
+    onClick: copyClassLink
+  }, classLinkCopied ? "Copied" : "Copy link")))), view === "practice810" && /*#__PURE__*/React.createElement(Practice, {
     cohort: COHORT_NAME,
     onExit: () => setView("home")
   }), view === "practiceOpen" && /*#__PURE__*/React.createElement(Practice, {
