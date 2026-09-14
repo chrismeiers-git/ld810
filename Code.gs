@@ -143,8 +143,8 @@ function lookupAccess_(email) {
 }
 
 /* Add or update one address. Run from the editor:
-     grantAccess('jclark@stmartin.edu', 'viewer', 'colleague - reporting only')
-     grantAccess('student@stmartin.edu', 'student', 'LD 810 Fall 2026')  */
+     grantAccess('colleague@example.edu', 'viewer', 'reporting only')
+     grantAccess('someone@example.edu', 'student', 'LD 810 Fall 2026')  */
 function grantAccess(email, role, note) {
   var want = normEmail_(email);
   if (!want || want.indexOf('@') < 1) throw new Error('Not an email address: ' + email);

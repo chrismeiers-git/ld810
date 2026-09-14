@@ -107,9 +107,9 @@ private and you can add or remove someone without touching the site.
 Run these from the Apps Script editor:
 
 ```
-grantAccess('jclark@stmartin.edu', 'viewer', 'reporting only')
-grantMany(['a@stmartin.edu','b@stmartin.edu'], 'student', 'LD 810 Fall 2026')
-revokeAccess('someone@stmartin.edu')
+grantAccess('colleague@example.edu', 'viewer', 'reporting only')
+grantMany(['one@example.edu','two@example.edu'], 'student', 'LD 810 Fall 2026')
+revokeAccess('someone@example.edu')
 listAccess()
 ```
 
