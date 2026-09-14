@@ -51,3 +51,37 @@ People Who (Think They) Hate Statistics* (SAGE). A tribute to the Department of
 Educational Psychology at the University of Kansas and to Dr. William Skorupski.
 
 "The grammar of science is statistics." - Karl Pearson
+
+## Running a session
+
+Three buttons on the console's **Build a quiz** screen, after you have selected items:
+
+| Button | Who joins | Recorded as |
+|---|---|---|
+| Run this live in class | Students, via the banner on the main page | `cohort=LD810` |
+| Open session — guests welcome | Anyone, no class password | `cohort=guest`, plus a first name if they give one |
+| Test run — nothing recorded | Anyone | nothing at all |
+
+Each writes a banner at the top of the console that only turns green once the
+Apps Script confirms the mode. **A red banner means the deployment is stale** —
+redeploy (Deploy → Manage deployments → edit → New version) or end the session.
+
+Filters include **themed sets** as well as sessions and topics, so a live round
+can be all Sporting KC, or Sporting KC narrowed to ANOVA.
+
+## No-record practice
+
+`index.html?norecord=1` opens the student app in a mode that never posts a
+practice run. Read from the URL only, never stored, so it cannot stick on a
+student's device.
+
+## Results sheet
+
+Columns: `timestamp, run_id, item_id, correct, sessions, topics, timer, cohort, name`.
+The `name` column is new and back-fills as blank on existing rows; `sheet_()`
+adds it automatically on the next write.
+
+Maintenance functions live at the bottom of `Code.gs` and are **editor-only** —
+no `op` routes to them, so no deployment is needed and no student can reach them.
+Run `listRuns()` to see what is there, `previewDeleteRuns([...])` to check, then
+`deleteRuns([...])` to remove. Deletion snapshots the whole tab first.

@@ -26,12 +26,16 @@ function sheet_() {
   var sh = ss.getSheetByName(SHEET_NAME);
   if (!sh) {
     sh = ss.insertSheet(SHEET_NAME);
-    sh.appendRow(['timestamp', 'run_id', 'item_id', 'correct', 'sessions', 'topics', 'timer', 'cohort']);
+    sh.appendRow(['timestamp', 'run_id', 'item_id', 'correct', 'sessions', 'topics', 'timer', 'cohort', 'name']);
     sh.setFrozenRows(1);
   }
   // migrate sheets created before the cohort column existed
   if (sh.getLastColumn() < 8) {
     sh.getRange(1, 8).setValue('cohort');
+  }
+  // migrate sheets created before the guest-name column existed
+  if (sh.getLastColumn() < 9) {
+    sh.getRange(1, 9).setValue('name');
   }
   return sh;
 }
@@ -45,7 +49,7 @@ function json_(obj) {
 function cache_() { return CacheService.getScriptCache(); }
 
 function blankState_() {
-  return { active: false, idx: -1, revealed: false, items: [], runId: '', label: '', test: false };
+  return { active: false, idx: -1, revealed: false, items: [], runId: '', label: '', test: false, guest: false };
 }
 
 function getState_() {
@@ -66,7 +70,7 @@ function appendRows_(rows) {
   try {
     lock.waitLock(20000);
     var sh = sheet_();
-    sh.getRange(sh.getLastRow() + 1, 1, rows.length, 8).setValues(rows);
+    sh.getRange(sh.getLastRow() + 1, 1, rows.length, rows[0].length).setValues(rows);
     return rows.length;
   } finally {
     try { lock.releaseLock(); } catch (ignore) {}
@@ -81,7 +85,8 @@ function publicState_(s) {
     items: s.items || [],
     n: (s.items || []).length,
     label: s.label || '',
-    test: !!s.test
+    test: !!s.test,
+    guest: !!s.guest
   };
 }
 
@@ -112,7 +117,7 @@ function postPractice_(body) {
   var timer = body.timer || '';
   var cohort = String(body.cohort || 'open');
   var rows = results.map(function (r) {
-    return [stamp, runId, String(r.id), Number(r.correct) ? 1 : 0, sessions, topics, timer, cohort];
+    return [stamp, runId, String(r.id), Number(r.correct) ? 1 : 0, sessions, topics, timer, cohort, String(body.name || '').slice(0, 40)];
   });
   return json_({ ok: true, written: appendRows_(rows) });
 }
@@ -127,7 +132,8 @@ function postLiveStart_(body) {
     label: body.label || 'Live session',
     // A test session behaves exactly like a real one - students can join and
     // the live bars still update - but nothing is written to the Sheet.
-    test: !!body.test
+    test: !!body.test,
+    guest: !!body.guest
   });
   return json_({ ok: true, state: publicState_(s) });
 }
@@ -182,7 +188,8 @@ function postLiveAnswer_(body) {
   // display, but the Sheet never sees the row.
   if (!s.test) {
     try {
-      appendRows_([[new Date(), s.runId, itemId, correct, '', '', 'live', String(body.cohort || 'open')]]);
+      var liveCohort = s.guest ? 'guest' : String(body.cohort || 'open');
+      appendRows_([[new Date(), s.runId, itemId, correct, '', '', 'live', liveCohort, String(body.name || '').slice(0, 40)]]);
     } catch (err) { /* tally is already in; never fail a student's submit over this */ }
   }
 
