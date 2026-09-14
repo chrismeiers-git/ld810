@@ -4478,7 +4478,7 @@
 "the variables are not related",
 "the sample is random",
 "each observation falls into only one cell",
-"all of the above"
+"the expected frequencies are equal across all cells"
 ],
 "a": [
 2
@@ -4892,7 +4892,7 @@
 "normal distributions",
 "equal variances",
 "independent observations",
-"all of the above"
+"that the two groups contain the same number of cases"
 ],
 "a": [
 2
@@ -12900,7 +12900,7 @@
 "s": [
 1
 ],
-"q": "Both kinds of statistics are useful. The common mistake is:",
+"q": "Descriptive statistics summarize the group you measured; inferential statistics reason beyond it. Both are useful. The common mistake is:",
 "o": [
 "Using descriptive statistics at all",
 "Reporting a descriptive summary of a self-selected group as if it described everyone",
@@ -16176,7 +16176,7 @@
 "s": [
 8
 ],
-"q": "A survey of parents doubles its sample from 400 to 1,600. What happens to the standard error of the mean?",
+"q": "A survey of parents increases its sample from 400 to 1,600. What happens to the standard error of the mean?",
 "o": [
 "It doubles",
 "It stays the same because the population is unchanged",
