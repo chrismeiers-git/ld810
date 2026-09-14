@@ -23470,6 +23470,546 @@
 "a": [
 1
 ]
+},
+{
+"i": "DITW-01",
+"c": "authored",
+"t": "The three questions",
+"s": [
+1
+],
+"q": "A global report states that 7 in 10 health workers are women. Which question does this course teach you to ask FIRST?",
+"o": [
+"Who counts as a health worker, and where the number came from",
+"Whether the finding is convenient for the report's sponsor",
+"How widely the report was shared after it was published",
+"Whether the percentage sits above or below the halfway mark"
+],
+"a": [
+0
+]
+},
+{
+"i": "DITW-02",
+"c": "authored",
+"t": "Descriptive vs inferential",
+"s": [
+1
+],
+"q": "A firm surveys 400 chief executives and reports that 71 percent feel like impostors, then writes about what 'CEOs' believe. Moving from the 400 to all CEOs is:",
+"o": [
+"Inferential, because the claim reaches beyond those measured",
+"Descriptive, because 71 percent describes the respondents",
+"Invalid by definition, since samples cannot support claims",
+"A census, because every executive surveyed was counted"
+],
+"a": [
+0
+]
+},
+{
+"i": "DITW-03",
+"c": "authored",
+"t": "What statistics cannot do",
+"s": [
+1
+],
+"q": "An official credits a new policy for a drop in crime. Analysts note the decline began before the policy took effect. What does the timing objection establish?",
+"o": [
+"That the crime data must have been fabricated",
+"That the policy definitely made the problem worse",
+"That a pre-existing trend is a rival explanation",
+"That the sample of years was far too small"
+],
+"a": [
+2
+]
+},
+{
+"i": "DITW-04",
+"c": "authored",
+"t": "Claims and evidence",
+"s": [
+1
+],
+"q": "Two statements reach a leadership meeting: 'Scam losses hit $16 billion last year, per federal complaint data' and 'Fraud feels worse than ever this year.' What separates them?",
+"o": [
+"Nothing; both are claims about the scale of fraud losses today",
+"The second is more reliable because it reflects lived experience",
+"The first names a measured quantity and a source, so it is checkable",
+"The first is the opinion here and the second is the statistic"
+],
+"a": [
+2
+]
+},
+{
+"i": "DITW-05",
+"c": "authored",
+"t": "The three questions",
+"s": [
+1
+],
+"q": "A classmate responds to a statistic about youth health outcomes by asking why the problem exists. A second asks how the rate was measured and against what baseline. Which is the statistical question?",
+"o": [
+"Both, because any question about data is a statistical one",
+"Neither, because both are commentary rather than analysis",
+"The second, because it asks how the number was produced",
+"The first, because it addresses the causes behind the outcome"
+],
+"a": [
+2
+]
+},
+{
+"i": "DITW-06",
+"c": "authored",
+"t": "Levels of measurement",
+"s": [
+2
+],
+"q": "To support a claim about a hot summer, an analyst converts each day's high temperature into a yes/no indicator for 'reached 80 degrees.' The variable has changed from:",
+"o": [
+"Nominal to ratio",
+"Interval or ratio to nominal",
+"Ordinal to interval",
+"Ratio to ordinal with five categories"
+],
+"a": [
+1
+]
+},
+{
+"i": "DITW-07",
+"c": "authored",
+"t": "Levels of measurement",
+"s": [
+2
+],
+"q": "A workforce report records each health worker's country of employment across 204 countries. Country is measured at which level?",
+"o": [
+"Ratio, because a value of zero would mean no country",
+"Nominal, because it names a category that cannot be ranked",
+"Interval, because the gaps between countries are equal",
+"Ordinal, because some countries employ more workers than others"
+],
+"a": [
+1
+]
+},
+{
+"i": "DITW-08",
+"c": "authored",
+"t": "Chart choice",
+"s": [
+2
+],
+"q": "A chart shows a crime rate moving from 480 to 500 per 100,000, with the vertical axis running only from 470 to 510. What is the problem?",
+"o": [
+"There is no problem, since the plotted values are accurate",
+"The axis should always begin just below the smallest value",
+"Crime rates should always be displayed as a pie chart instead",
+"The truncated axis makes a four percent change look dramatic"
+],
+"a": [
+3
+]
+},
+{
+"i": "DITW-09",
+"c": "authored",
+"t": "Variables and design",
+"s": [
+2
+],
+"q": "A researcher asks whether switching to a new crime-reporting system changed the number of offenses recorded. In that study, the reporting system in use is the:",
+"o": [
+"Independent variable",
+"Outcome variable",
+"Confounding variable",
+"Dependent variable"
+],
+"a": [
+0
+]
+},
+{
+"i": "DITW-10",
+"c": "authored",
+"t": "Shape of data",
+"s": [
+2
+],
+"q": "A consumer agency plots dollar losses for every reported scam. Most victims lose a few hundred dollars; a handful lose hundreds of thousands. The distribution is:",
+"o": [
+"Positively skewed",
+"Uniform",
+"Negatively skewed",
+"Symmetric"
+],
+"a": [
+0
+]
+},
+{
+"i": "DITW-11",
+"c": "authored",
+"t": "Chart choice",
+"s": [
+2
+],
+"q": "To show a documented scam-loss total of $16 billion beside an estimated true total of up to $200 billion, the clearest display is:",
+"o": [
+"A scatterplot of losses against estimates",
+"A histogram of the documented total",
+"A line graph across the two values",
+"A bar chart comparing the two quantities"
+],
+"a": [
+3
+]
+},
+{
+"i": "DITW-12",
+"c": "authored",
+"t": "Center and spread",
+"s": [
+3
+],
+"q": "To support 'warmer than normal,' one analyst counts days at or above 80 degrees; another averages each day's departure from its historical norm. What is the statistical advantage of the second?",
+"o": [
+"It converts a ratio variable into a simple count",
+"It uses every day rather than only days past a cutoff",
+"It removes any need for historical comparison data",
+"It is far easier to compute without a computer"
+],
+"a": [
+1
+]
+},
+{
+"i": "DITW-13",
+"c": "authored",
+"t": "Center and spread",
+"s": [
+3
+],
+"q": "Reading a monthly jobs report, a student asks whether the month's change is 'a normal amount of fluctuation.' Statistically, she is asking for:",
+"o": [
+"The mode of monthly changes across the same period",
+"The variability of monthly changes in prior years",
+"The mean of the current month taken on its own",
+"The level of measurement of the jobs variable"
+],
+"a": [
+1
+]
+},
+{
+"i": "DITW-14",
+"c": "authored",
+"t": "Center and spread",
+"s": [
+3
+],
+"q": "An agency reports both the mean and the median dollar loss per scam report. The mean is far larger. Which should the agency lead with when describing a typical victim's loss?",
+"o": [
+"The median, because large losses pull the mean off typical",
+"The mean, because it uses every observation in the data",
+"The mean, because medians cannot be computed for money",
+"Neither; only the mode describes a typical case here"
+],
+"a": [
+0
+]
+},
+{
+"i": "DITW-15",
+"c": "authored",
+"t": "Center and spread",
+"s": [
+3
+],
+"q": "Two summers have the same mean daily temperature anomaly, but one has a standard deviation three times larger. What does that tell a city planner?",
+"o": [
+"The second summer swung much more from day to day",
+"The two summers are statistically identical",
+"The second summer's data must contain an error",
+"The second summer was warmer overall"
+],
+"a": [
+0
+]
+},
+{
+"i": "DITW-16",
+"c": "authored",
+"t": "Center and spread",
+"s": [
+3
+],
+"q": "A crime rate of 500 per 100,000 residents, expressed as a percentage of the population, is:",
+"o": [
+"0.05 percent",
+"5 percent",
+"0.5 percent",
+"50 percent"
+],
+"a": [
+2
+]
+},
+{
+"i": "DITW-17",
+"c": "authored",
+"t": "Validity",
+"s": [
+4
+],
+"q": "A global report aggregates health-worker counts across 204 countries, where 'nurse' and 'community health worker' are licensed and defined differently. The most serious measurement concern is:",
+"o": [
+"Inter-rater reliability, because many analysts coded the records",
+"Test-retest reliability, because the counts were taken at one time",
+"Sampling error, because 204 countries is a limited sample",
+"Construct validity, since one label may cover different constructs"
+],
+"a": [
+3
+]
+},
+{
+"i": "DITW-18",
+"c": "authored",
+"t": "Reliability",
+"s": [
+4
+],
+"q": "A weather station has moved twice and changed sensor type three times in 130 years. A claim compares this year's hot-day count to the 130-year average. Which reliability concern applies?",
+"o": [
+"Inter-rater reliability between the forecasters on duty",
+"Consistency of measurement across time as the instrument changes",
+"Parallel-forms reliability across the two sensor models",
+"Internal consistency among the items on the temperature scale"
+],
+"a": [
+1
+]
+},
+{
+"i": "DITW-19",
+"c": "authored",
+"t": "Reliability",
+"s": [
+4
+],
+"q": "A national crime dataset switched reporting systems in one year, so that year's figures come from different inputs than those around it. A trend line includes it unflagged. The best criticism is:",
+"o": [
+"A different chart type would resolve the comparability problem",
+"The newer year should be weighted more heavily than older years",
+"The instrument changed, so that year is not comparable to others",
+"There is no issue, since one agency published every year shown"
+],
+"a": [
+2
+]
+},
+{
+"i": "DITW-20",
+"c": "authored",
+"t": "Reliability and validity",
+"s": [
+4
+],
+"q": "An analyst verifies that the station really did record 34 days at or above 80 degrees. What has she established, and what remains open?",
+"o": [
+"That both reliability and validity are established for this claim",
+"That the count is accurate; whether it is the right measure remains open",
+"That validity is established but reliability is still an open question",
+"That neither can be judged, because a count cannot be verified"
+],
+"a": [
+1
+]
+},
+{
+"i": "DITW-21",
+"c": "authored",
+"t": "Validity",
+"s": [
+4
+],
+"q": "In one survey, 71 percent of executives report feeling like impostors and 85 percent report being fully competent. The best interpretation is:",
+"o": [
+"The sample was too small for either percentage to mean much",
+"The items tap different constructs and can both be accurate",
+"The survey is unreliable, since the two results contradict",
+"At least one of the two figures must be a reporting error"
+],
+"a": [
+1
+]
+},
+{
+"i": "DITW-22",
+"c": "authored",
+"t": "Validity",
+"s": [
+4
+],
+"q": "A workforce study measures 'burnout' using a single question asking staff whether they feel tired at work. The strongest objection is:",
+"o": [
+"The sample is too large, making small differences significant",
+"Poor test-retest reliability, because moods change from day to day",
+"Poor content validity; one item cannot represent the construct",
+"Tiredness is nominal, so it cannot support a burnout score"
+],
+"a": [
+2
+]
+},
+{
+"i": "DITW-23",
+"c": "authored",
+"t": "Normal curve",
+"s": [
+6
+],
+"q": "Daily temperature anomalies for a city are roughly normal with a mean of 0 and a standard deviation of 3 degrees. A day running 6 degrees above its historical norm has a z-score of:",
+"o": [
+"+1.0",
+"+3.0",
+"+6.0",
+"+2.0"
+],
+"a": [
+3
+]
+},
+{
+"i": "DITW-24",
+"c": "authored",
+"t": "Normal curve",
+"s": [
+6
+],
+"q": "Monthly job changes over many years are roughly normal with a mean of 150,000 and a standard deviation of 60,000. About what share of months fall between 90,000 and 210,000?",
+"o": [
+"About 34 percent",
+"About 99.7 percent",
+"About 95 percent",
+"About 68 percent"
+],
+"a": [
+3
+]
+},
+{
+"i": "DITW-25",
+"c": "authored",
+"t": "Normal curve",
+"s": [
+6
+],
+"q": "A city's count of days above 80 degrees this summer lands at the 90th percentile of its historical record. What does that mean?",
+"o": [
+"Ninety percent of this summer's days went above 80 degrees",
+"This summer's count exceeded about 90 percent of past summers",
+"The count came in 90 percent above the historical average",
+"The result is statistically significant at the .90 level"
+],
+"a": [
+1
+]
+},
+{
+"i": "DITW-26",
+"c": "authored",
+"t": "Sampling and standard error",
+"s": [
+7
+],
+"q": "A student proposes judging whether a 400-executive survey is representative by comparing 400 to the total number of executives nationally. The best response is:",
+"o": [
+"Incorrect; it depends on how the 400 were actually selected",
+"Correct; if 400 is at least a tenth of the population it holds",
+"Correct, because a representative sample must exceed 1,000",
+"Incorrect; it can only be judged from the margin of error"
+],
+"a": [
+0
+]
+},
+{
+"i": "DITW-27",
+"c": "authored",
+"t": "Sampling and standard error",
+"s": [
+7
+],
+"q": "A self-selected online survey grows from 400 respondents to 4,000. What changes?",
+"o": [
+"Selection bias is removed once the sample passes 1,000",
+"Both bias and margin of error are eliminated by the increase",
+"Nothing changes, because the population is unchanged",
+"The margin of error narrows, but recruitment bias remains"
+],
+"a": [
+3
+]
+},
+{
+"i": "DITW-28",
+"c": "authored",
+"t": "Confidence intervals",
+"s": [
+7
+],
+"q": "A survey reports 71 percent with a margin of error of plus or minus 4 points. What range should a reader hold in mind?",
+"o": [
+"Roughly 67 to 75 percent",
+"Roughly 69 to 73 percent",
+"Roughly 63 to 79 percent",
+"Exactly 71 percent, since that is the measured value"
+],
+"a": [
+0
+]
+},
+{
+"i": "DITW-29",
+"c": "authored",
+"t": "Confidence intervals",
+"s": [
+7
+],
+"q": "A report gives $16 billion in documented scam losses and up to $200 billion as the estimated true figure. The $200 billion number is best described as:",
+"o": [
+"A more precise measurement than the documented figure",
+"A typographical error in the published report",
+"A model-based estimate using an assumed reporting rate",
+"A confidence interval around the documented total"
+],
+"a": [
+2
+]
+},
+{
+"i": "DITW-30",
+"c": "authored",
+"t": "Confidence intervals",
+"s": [
+7
+],
+"q": "A monthly jobs estimate of +162,000 is published with a 90 percent confidence interval of plus or minus 122,000. What should a leader conclude?",
+"o": [
+"Ninety percent of industries added jobs during the month",
+"The survey behind the estimate was conducted incorrectly",
+"The true change is certainly 162,000, as the estimate reports",
+"The estimate is too imprecise to rule out a much smaller change"
+],
+"a": [
+3
+]
 }
 ],
 "skins": {
