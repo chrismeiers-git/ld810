@@ -116,7 +116,7 @@
 "s": [
 2
 ],
-"q": "In that same study of roleplaying and moral reasoning, what is the dependent variable?",
+"q": "A chaplain studies whether the number of tabletop roleplaying sessions a soldier attends affects scores on a moral reasoning inventory. What is the dependent variable?",
 "o": [
 "Number of sessions attended",
 "Score on the moral reasoning inventory",
@@ -152,7 +152,7 @@
 "s": [
 2
 ],
-"q": "In that same transcript-processing study, what is the independent variable?",
+"q": "A university replaces its student information system and tracks the average number of days to process a transcript request before and after go-live. What is the independent variable?",
 "o": [
 "Days to process a request",
 "Whether the request came before or after go-live",
@@ -7736,7 +7736,7 @@
 "s": [
 12
 ],
-"q": "In the same model, 'total yards' and 'yards per play' correlate at r = .93. Including both creates:",
+"q": "A model predicts Broncos wins from turnover margin, sacks, total yards and yards per play. In that model 'total yards' and 'yards per play' correlate at r = .93. Including both creates:",
 "o": [
 "Multicollinearity",
 "Heteroscedasticity",
@@ -7850,7 +7850,7 @@
 "s": [
 2
 ],
-"q": "In the same study, what is the dependent variable?",
+"q": "A label studies whether releasing a 'Taylor's Version' re-recording changes streams of the original recording. The dependent variable is:",
 "o": [
 "Whether a re-recording exists",
 "Streams of the original recording",
@@ -7888,7 +7888,7 @@
 "s": [
 3
 ],
-"q": "For that same album, which summary would a critic use to describe the 'typical' track length without the 10-minute song dominating?",
+"q": "Track lengths on a 13-song album run 3.2 to 4.1 minutes, except for one 10.2-minute closer. Which summary would a critic use to describe the 'typical' track length without the long song dominating?",
 "o": [
 "Mean",
 "Median",
@@ -8116,7 +8116,7 @@
 "s": [
 6
 ],
-"q": "Using the same distribution, about what percent of shows drew between 54,000 and 70,000?",
+"q": "Attendance across a 150-show tour is roughly normal with mean 62,000 and SD 8,000. About what percent of shows drew between 54,000 and 70,000?",
 "o": [
 "34%",
 "68%",
@@ -8515,7 +8515,7 @@
 "s": [
 2
 ],
-"q": "In the same study, students who *chose* to use the tutor also tend to be more motivated. If assignment had not been random, motivation would be a:",
+"q": "A university studies whether an AI tutor changes final exam scores, but lets students decide for themselves whether to use it. Students who choose the tutor also tend to be more motivated. Motivation is a:",
 "o": [
 "Dependent variable",
 "Confounding variable",
@@ -9199,7 +9199,7 @@
 "s": [
 2
 ],
-"q": "In the same pilot, prescribing errors are the:",
+"q": "Thursday. A trust pilot gives half the junior doctors a 20-minute protected break and measures prescribing errors. Prescribing errors are the:",
 "o": [
 "Independent variable",
 "Dependent variable",
@@ -9883,7 +9883,7 @@
 "s": [
 2
 ],
-"q": "In that study, students who *chose* the 9:30 section also tend to be night owls. If sections were not randomly assigned, chronotype is a:",
+"q": "A provost moves the 8:00 a.m. section to 9:30 and compares attendance, but lets students pick their own section. Students who choose 9:30 also tend to be night owls. Chronotype is a:",
 "o": [
 "Dependent variable",
 "Confounding variable",
@@ -10605,7 +10605,7 @@
 "s": [
 2
 ],
-"q": "In the same study, goals scored in the match is the:",
+"q": "An analyst asks whether Sporting KC score more goals at Children's Mercy Park than on the road. Goals scored in the match is the:",
 "o": [
 "Independent variable",
 "Dependent variable",
@@ -21237,7 +21237,7 @@
 "s": [
 13
 ],
-"q": "In the same AI-attitudes analysis, the first four components have eigenvalues of 6.2, 2.4, 1.3, and 0.6. Using the conventional eigenvalue-greater-than-one rule, how many factors are retained?",
+"q": "A 24-item AI-attitudes survey is factor analyzed. The first four components have eigenvalues of 6.2, 2.4, 1.3, and 0.6. Using the conventional eigenvalue-greater-than-one rule, how many factors are retained?",
 "o": [
 "One",
 "Four",
