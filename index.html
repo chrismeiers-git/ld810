@@ -35,6 +35,21 @@ const BANK_URL = "bank.json";
 let ENDPOINT = "";
 let endpointProblem = "unset"; // unset | dev | notexec | malformed | null
 
+/* No-record mode. Add ?norecord=1 (or #norecord) to the URL and this tab
+   never posts a practice run to the results sheet. Deliberately NOT stored
+   in localStorage: it lasts only as long as the URL that turned it on, so
+   it can't silently stick on a student's device. */
+const NORECORD = (() => {
+  try {
+    const p = new URLSearchParams(window.location.search);
+    const v = (p.get("norecord") || "").toLowerCase();
+    if (v === "1" || v === "true" || v === "yes") return true;
+    return window.location.hash.toLowerCase().indexOf("norecord") !== -1;
+  } catch (e) {
+    return false;
+  }
+})();
+
 /* Cohort gate. The password sits in config.json and is therefore visible to
    anyone who looks — it tags results and gates the class-results view; it is
    not a security control. */
@@ -337,6 +352,7 @@ function CopyBox({
    answers directly — an application/json body would trigger a
    preflight that Apps Script does not handle. */
 async function saveRun(payload) {
+  if (NORECORD) return null;
   if (!live()) return false;
   try {
     const r = await fetch(ENDPOINT, {
@@ -782,6 +798,33 @@ function Loader({
 
 /* ---------- endpoint warning ---------- */
 
+function NoRecordBanner() {
+  if (!NORECORD) return null;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: `1px solid ${C.teal}`,
+      background: "#EAF4F2",
+      borderRadius: 2,
+      padding: "14px 18px",
+      marginBottom: 26
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      fontWeight: 700,
+      color: C.teal,
+      marginBottom: 5
+    }
+  }, "Practice mode \u2014 nothing is being recorded"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14.5,
+      color: C.ink2,
+      lineHeight: 1.55,
+      maxWidth: "64ch"
+    }
+  }, "This tab was opened with no-record turned on. Everything works normally and your score is real, but no answer reaches the results sheet. Drop the ?norecord=1 from the address to go back to the ordinary app."));
+}
+
 function EndpointWarning({
   compact
 }) {
@@ -1201,7 +1244,29 @@ function Practice({
         marginTop: 5,
         fontWeight: 600
       }
-    }, m.item.a.map(ai => m.item.o[ai]).join(" · "))))), saved === false && /*#__PURE__*/React.createElement("div", {
+    }, m.item.a.map(ai => m.item.o[ai]).join(" · "))))), saved === null && NORECORD && /*#__PURE__*/React.createElement("div", {
+      style: {
+        border: `1px solid ${C.teal}`,
+        background: "#EAF4F2",
+        borderRadius: 2,
+        padding: "14px 18px",
+        marginTop: 26,
+        maxWidth: "64ch"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 15,
+        fontWeight: 700,
+        color: C.teal,
+        marginBottom: 4
+      }
+    }, "Nothing was recorded"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 14.5,
+        color: C.ink2,
+        lineHeight: 1.55
+      }
+    }, "No-record mode was on for this run, so your score above is the only place it exists. Nothing reached the results sheet.")), saved === false && /*#__PURE__*/React.createElement("div", {
       style: {
         border: `1px solid ${C.gold}`,
         background: "#FBF3E0",
@@ -2041,7 +2106,7 @@ function App() {
       color: C.ink3,
       fontSize: 14
     }
-  }, " — ", (BANK.credits || {}).quote_by || "Karl Pearson"))), /*#__PURE__*/React.createElement(EndpointWarning, null), /*#__PURE__*/React.createElement(LiveBanner, {
+  }, " — ", (BANK.credits || {}).quote_by || "Karl Pearson"))), /*#__PURE__*/React.createElement(NoRecordBanner, null), /*#__PURE__*/React.createElement(EndpointWarning, null), /*#__PURE__*/React.createElement(LiveBanner, {
     onJoin: () => setView("live")
   }), /*#__PURE__*/React.createElement("div", {
     style: {

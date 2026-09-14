@@ -253,3 +253,121 @@ function summary_(cohort) {
     cohorts: Object.keys(seen).map(function (k) { return { name: k, answers: seen[k] }; })
   };
 }
+
+
+/* =====================================================================
+   Maintenance helpers — run these from the Apps Script editor only.
+   They are not reachable over the web app: no `op` routes to them, so
+   deploying is not required and no student can trigger them.
+
+   Order of use:  backupResponses_()  ->  listRuns()  ->  deleteRuns([...])
+   ===================================================================== */
+
+/* Snapshot the responses tab before any deletion. Returns the new tab name.
+   deleteRuns() calls this for you; you can also call it on its own. */
+function backupResponses_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName(SHEET_NAME);
+  if (!sh) throw new Error('No "' + SHEET_NAME + '" tab to back up.');
+  var name = 'backup_' + Utilities.formatDate(new Date(), ss.getSpreadsheetTimeZone(), 'yyyy-MM-dd_HHmmss');
+  sh.copyTo(ss).setName(name);
+  Logger.log('Backup tab created: ' + name);
+  return name;
+}
+
+/* List every practice/live run in the sheet, newest first, so you can see
+   what is actually there before deleting anything. Read the output in
+   Executions (or View -> Logs). Copy the run ids you want gone into
+   deleteRuns([...]). */
+function listRuns() {
+  var sh = sheet_();
+  var last = sh.getLastRow();
+  if (last < 2) { Logger.log('No responses yet.'); return []; }
+  var vals = sh.getRange(2, 1, last - 1, 8).getValues();
+  var tz = SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone();
+  var byRun = {};
+  vals.forEach(function (r) {
+    var id = String(r[1]);
+    if (!byRun[id]) {
+      byRun[id] = { id: id, when: r[0], rows: 0, correct: 0, cohort: String(r[7] || ''), timer: String(r[6] || '') };
+    }
+    byRun[id].rows++;
+    byRun[id].correct += Number(r[3]) ? 1 : 0;
+    if (r[0] instanceof Date && r[0] < byRun[id].when) byRun[id].when = r[0];
+  });
+  var runs = Object.keys(byRun).map(function (k) { return byRun[k]; });
+  runs.sort(function (a, b) { return b.when - a.when; });
+  Logger.log(runs.length + ' run(s), ' + (last - 1) + ' answer rows total. Newest first:');
+  runs.forEach(function (r) {
+    Logger.log([
+      Utilities.formatDate(new Date(r.when), tz, 'yyyy-MM-dd HH:mm'),
+      r.rows + ' answers',
+      r.correct + ' correct',
+      'cohort=' + (r.cohort || '(none)'),
+      (r.timer === 'live' ? 'LIVE' : 'practice'),
+      r.id
+    ].join('  |  '));
+  });
+  return runs;
+}
+
+/* Preview only: what deleteRuns() would remove for these run ids.
+   Nothing is changed. */
+function previewDeleteRuns(runIds) {
+  var ids = {};
+  (runIds || []).forEach(function (id) { ids[String(id)] = true; });
+  var sh = sheet_();
+  var last = sh.getLastRow();
+  if (last < 2) { Logger.log('Nothing to delete.'); return 0; }
+  var vals = sh.getRange(2, 1, last - 1, 8).getValues();
+  var n = 0;
+  vals.forEach(function (r) { if (ids[String(r[1])]) n++; });
+  Logger.log('previewDeleteRuns: ' + n + ' row(s) across ' + Object.keys(ids).length + ' run id(s) would be removed. ' + (last - 1 - n) + ' row(s) would remain.');
+  return n;
+}
+
+/* Delete every answer row belonging to the given run ids.
+   Takes a backup tab first. Pass the ids as an array of strings, e.g.
+     deleteRuns(['3f2c...','9ab1...'])
+   Rows are removed bottom-up so the indexes stay valid. */
+function deleteRuns(runIds) {
+  var ids = {};
+  (runIds || []).forEach(function (id) { ids[String(id)] = true; });
+  if (!Object.keys(ids).length) { Logger.log('deleteRuns: no run ids given, nothing done.'); return 0; }
+  var backup = backupResponses_();
+  var sh = sheet_();
+  var last = sh.getLastRow();
+  var vals = sh.getRange(2, 1, last - 1, 8).getValues();
+  var targets = [];
+  for (var i = 0; i < vals.length; i++) {
+    if (ids[String(vals[i][1])]) targets.push(i + 2); // sheet row number
+  }
+  for (var j = targets.length - 1; j >= 0; j--) sh.deleteRow(targets[j]);
+  Logger.log('deleteRuns: removed ' + targets.length + ' row(s). Backup tab: ' + backup);
+  return targets.length;
+}
+
+/* Convenience: delete every run that started strictly before a cutoff.
+   Dates are yyyy-MM-dd in the spreadsheet's time zone.
+     previewDeleteBefore('2026-09-14')   // look first
+     deleteBefore('2026-09-14')          // then act
+   Use this only if you are sure no student practice sits in that window;
+   otherwise pick run ids from listRuns() and use deleteRuns(). */
+function previewDeleteBefore(cutoff) {
+  return previewDeleteRuns(runsBefore_(cutoff));
+}
+
+function deleteBefore(cutoff) {
+  return deleteRuns(runsBefore_(cutoff));
+}
+
+function runsBefore_(cutoff) {
+  var tz = SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone();
+  var edge = new Date(cutoff + 'T00:00:00');
+  var out = [];
+  listRuns().forEach(function (r) {
+    if (new Date(r.when) < edge) out.push(r.id);
+  });
+  Logger.log('runsBefore_(' + cutoff + '): ' + out.length + ' run(s) match (tz ' + tz + ').');
+  return out;
+}
