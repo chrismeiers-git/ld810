@@ -1123,9 +1123,13 @@ function Builder({
       flexWrap: "wrap"
     }
   }, /*#__PURE__*/React.createElement(Btn, {
-    onClick: () => onGoLive(sel),
+    onClick: () => onGoLive(sel, false),
     disabled: sel.length === 0
-  }, "Run this live in class"), /*#__PURE__*/React.createElement("span", {
+  }, "Run this live in class"), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    onClick: () => onGoLive(sel, true),
+    disabled: sel.length === 0
+  }, "Test run \u2014 nothing recorded"), /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: 14.5,
       color: C.ink2,
@@ -1423,10 +1427,35 @@ function Stats({
   }, view.unknown, " recorded item", view.unknown === 1 ? "" : "s", " is no longer in bank.json, so it was retired or renamed after those answers were given.")));
 }
 
+/* Shows whether the SERVER agreed this is a test run. st.test comes back from
+   the Apps Script; an older deployment simply omits it, in which case answers
+   are still being written and the instructor needs to know loudly. */
+function TestBanner({
+  test,
+  st
+}) {
+  if (!test) return null;
+  const confirmed = !!(st && st.test === true);
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: `1px solid ${confirmed ? C.teal : C.red}`,
+      background: confirmed ? "#E6F2F0" : C.redLight,
+      color: confirmed ? "#0B5248" : C.redDark,
+      borderRadius: 2,
+      padding: "10px 14px",
+      margin: "0 0 16px",
+      fontSize: 14.5,
+      lineHeight: 1.5,
+      maxWidth: "62ch"
+    }
+  }, confirmed ? /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", null, "Test run \u2014 nothing is being recorded."), " Students can join and the bars update as normal, but no answer reaches the results sheet.") : /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", null, "Heads up: answers ARE still being recorded."), " You asked for a test run, but the Apps Script did not confirm it \u2014 it is still the older deployment. Redeploy it (see README) or end this session."));
+}
+
 /* ---------- live session: instructor ---------- */
 
 function LiveConsole({
   items,
+  test,
   onExit
 }) {
   const [st, setSt] = useState(null);
@@ -1444,7 +1473,8 @@ function LiveConsole({
       const r = await api({
         op: "live_start",
         items: items.map(i => i.i),
-        label: "LD 810"
+        test: !!test,
+        label: test ? "LD 810 \u2014 test run" : "LD 810"
       });
       if (gone) return;
       if (r.ok) setSt(r.state);else setErr(r.error || "Could not start the session.");
@@ -1488,7 +1518,10 @@ function LiveConsole({
   const item = st && st.idx >= 0 ? items[st.idx] : null;
   const last = st && st.idx >= items.length - 1;
   if (err) {
-    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(TestBanner, {
+    test: test,
+    st: st
+  }), /*#__PURE__*/React.createElement("div", {
       style: {
         borderLeft: `3px solid ${C.red}`,
         paddingLeft: 18,
@@ -1519,7 +1552,10 @@ function LiveConsole({
 
   /* lobby */
   if (st.idx < 0) {
-    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Pill, null, "Live · lobby"), /*#__PURE__*/React.createElement("h2", {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(TestBanner, {
+      test: test,
+      st: st
+    }), /*#__PURE__*/React.createElement(Pill, null, test ? "Test · lobby" : "Live · lobby"), /*#__PURE__*/React.createElement("h2", {
       style: {
         fontSize: 32,
         fontWeight: 700,
@@ -1566,7 +1602,9 @@ function LiveConsole({
       flexWrap: "wrap",
       gap: 10
     }
-  }, /*#__PURE__*/React.createElement(Pill, null, "Question ", st.idx + 1, " of ", items.length), /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement(Pill, {
+    tone: test ? "grey" : undefined
+  }, test ? "TEST \u00b7 Q" : "Question ", st.idx + 1, " of ", items.length), /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: 15,
       color: C.ink2,
@@ -1690,6 +1728,7 @@ function LiveConsole({
 function App() {
   const [view, setView] = useState("home");
   const [liveSet, setLiveSet] = useState([]);
+  const [liveTest, setLiveTest] = useState(false);
   return /*#__PURE__*/React.createElement("div", {
     style: {
       fontFamily: FONT,
@@ -1793,12 +1832,14 @@ function App() {
     }
   }, "Class results reads the same Google Sheet the student app writes to. Add questions by replacing bank.json — nothing here needs rebuilding."))), view === "build" && /*#__PURE__*/React.createElement(Builder, {
     onExit: () => setView("home"),
-    onGoLive: sel => {
+    onGoLive: (sel, test) => {
       setLiveSet(sel);
+      setLiveTest(!!test);
       setView("live");
     }
   }), view === "live" && /*#__PURE__*/React.createElement(LiveConsole, {
     items: liveSet,
+    test: liveTest,
     onExit: () => setView("build")
   }), view === "stats" && /*#__PURE__*/React.createElement(Stats, {
     onExit: () => setView("home")

@@ -45,7 +45,7 @@ function json_(obj) {
 function cache_() { return CacheService.getScriptCache(); }
 
 function blankState_() {
-  return { active: false, idx: -1, revealed: false, items: [], runId: '', label: '' };
+  return { active: false, idx: -1, revealed: false, items: [], runId: '', label: '', test: false };
 }
 
 function getState_() {
@@ -80,7 +80,8 @@ function publicState_(s) {
     revealed: !!s.revealed,
     items: s.items || [],
     n: (s.items || []).length,
-    label: s.label || ''
+    label: s.label || '',
+    test: !!s.test
   };
 }
 
@@ -123,7 +124,10 @@ function postLiveStart_(body) {
     active: true, idx: -1, revealed: false,
     items: items.map(String),
     runId: Utilities.getUuid(),
-    label: body.label || 'Live session'
+    label: body.label || 'Live session',
+    // A test session behaves exactly like a real one - students can join and
+    // the live bars still update - but nothing is written to the Sheet.
+    test: !!body.test
   });
   return json_({ ok: true, state: publicState_(s) });
 }
@@ -173,10 +177,14 @@ function postLiveAnswer_(body) {
     try { lock.releaseLock(); } catch (ignore) {}
   }
 
-  // durable copy, so live answers feed the same analytics pool as practice
-  try {
-    appendRows_([[new Date(), s.runId, itemId, correct, '', '', 'live', String(body.cohort || 'open')]]);
-  } catch (err) { /* tally is already in; never fail a student's submit over this */ }
+  // durable copy, so live answers feed the same analytics pool as practice.
+  // Skipped entirely for a test session: the tally above still drives the live
+  // display, but the Sheet never sees the row.
+  if (!s.test) {
+    try {
+      appendRows_([[new Date(), s.runId, itemId, correct, '', '', 'live', String(body.cohort || 'open')]]);
+    } catch (err) { /* tally is already in; never fail a student's submit over this */ }
+  }
 
   return json_({ ok: true });
 }

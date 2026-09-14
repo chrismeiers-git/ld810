@@ -1,42 +1,46 @@
 {
 "m": {
 "1": "Why Statistics for Leaders",
-"2": "Variables, Shape, Center & Spread",
-"3": "SPSS & JASP Orientation · Reliability & Validity",
-"4": "The Normal Curve and z-Scores",
-"5": "Confidence Intervals · Project Launch",
-"6": "Hypothesis Testing and Sampling Error",
-"7": "Which Test · t-Tests",
-"9": "ANOVA and Post-Hoc Comparisons",
-"10": "Correlation and Regression",
-"11": "Multiple Regression and Diagnostics",
-"12": "Factor Analysis"
+"2": "Variables and the Shape of Data",
+"3": "Center, Spread and a First Analysis",
+"4": "Reliability and Validity",
+"5": "SPSS and JASP Orientation",
+"6": "The Normal Curve and z-Scores",
+"7": "Confidence Intervals · Project Launch",
+"8": "Hypothesis Testing and Sampling Error",
+"9": "Which Test · t-Tests",
+"10": "ANOVA and Post-Hoc Comparisons",
+"11": "Correlation and Regression",
+"12": "Multiple Regression and Diagnostics",
+"13": "Factor Analysis · Dashboard Workshop"
 },
 "x": {
 "quiz1": [
 1,
 2,
 3,
-4
+4,
+6
 ],
 "exam1": [
 1,
 2,
 3,
 4,
-5,
-6,
-7
-],
-"quiz2": [
 6,
 7,
+8,
 9
 ],
-"exam2": [
+"quiz2": [
+8,
 9,
+10
+],
+"exam2": [
 10,
-11
+11,
+12
 ]
 },
 "themes": {
@@ -1165,7 +1169,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "In SPSS, Variable View is where you:",
 "o": [
@@ -1183,7 +1187,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "In SPSS, the results of an analysis appear in:",
 "o": [
@@ -1201,7 +1205,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "The most visible difference between JASP and SPSS is that JASP:",
 "o": [
@@ -1219,7 +1223,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "A colleague sends you a file with a .sav extension. Which statement is true?",
 "o": [
@@ -1237,7 +1241,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "What is the single most important thing statistical software will not do for you?",
 "o": [
@@ -1255,7 +1259,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "SPSS syntax is worth learning even if you prefer the menus because:",
 "o": [
@@ -1273,7 +1277,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "The SPSS free trial runs for:",
 "o": [
@@ -1291,7 +1295,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "You intend to complete one lab entirely in SPSS. The trial clock argues for:",
 "o": [
@@ -1309,7 +1313,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "JASP's main practical advantage for this course is that it:",
 "o": [
@@ -1327,7 +1331,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "Under this course's tool policy, across the four labs you must:",
 "o": [
@@ -1345,7 +1349,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "Running descriptive statistics on the same variable in SPSS and in JASP should produce:",
 "o": [
@@ -1363,7 +1367,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "Setting a variable's Measure to Scale in SPSS when the variable is actually nominal will:",
 "o": [
@@ -1381,7 +1385,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "In a lab write-up for this course, statistical output belongs:",
 "o": [
@@ -1399,7 +1403,7 @@
 "c": "authored",
 "t": "Software and output",
 "s": [
-3
+5
 ],
 "q": "The strongest reason to be able to work in both SPSS and JASP is that:",
 "o": [
@@ -1417,7 +1421,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Reliability refers to whether a measure:",
 "o": [
@@ -1435,7 +1439,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "A bathroom scale that reads twelve pounds heavy every single time is best described as:",
 "o": [
@@ -1453,7 +1457,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "A scale that gives a different reading every time you step on it, but averages out to your true weight, is:",
 "o": [
@@ -1471,7 +1475,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Cronbach's alpha estimates:",
 "o": [
@@ -1489,7 +1493,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "The conventional minimum alpha usually cited for a research scale is about:",
 "o": [
@@ -1507,7 +1511,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "A 15-item satisfaction scale returns alpha = .78. The most defensible reading is:",
 "o": [
@@ -1525,7 +1529,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "An eight-item scale returns alpha = .96. A reasonable concern is that:",
 "o": [
@@ -1543,7 +1547,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "The 'alpha if item deleted' column tells you:",
 "o": [
@@ -1561,7 +1565,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "An item shows a very low item-total correlation. This suggests that the item:",
 "o": [
@@ -1579,7 +1583,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Test-retest reliability is assessed by:",
 "o": [
@@ -1597,7 +1601,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Two chaplains independently score the same set of written moral reasoning responses. The relevant form of reliability is:",
 "o": [
@@ -1615,7 +1619,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Adding more items that measure the same construct well generally:",
 "o": [
@@ -1633,7 +1637,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Measurement error is best described as:",
 "o": [
@@ -1651,7 +1655,7 @@
 "c": "authored",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Why can a measure be highly reliable and still useless?",
 "o": [
@@ -1669,7 +1673,7 @@
 "c": "authored",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "Validity refers to whether a measure:",
 "o": [
@@ -1687,7 +1691,7 @@
 "c": "authored",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "Reading through a burnout questionnaire and judging whether the items look like they concern burnout is an assessment of:",
 "o": [
@@ -1705,7 +1709,7 @@
 "c": "authored",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "Content validity concerns whether:",
 "o": [
@@ -1723,7 +1727,7 @@
 "c": "authored",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "A new leadership scale correlates strongly with an established leadership measure given at the same time. This is evidence of:",
 "o": [
@@ -1741,7 +1745,7 @@
 "c": "authored",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "An admissions test is defended on the grounds that scores forecast first-year GPA. This is evidence of:",
 "o": [
@@ -1759,7 +1763,7 @@
 "c": "authored",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "Construct validity is the hardest form to establish because:",
 "o": [
@@ -1777,7 +1781,7 @@
 "c": "authored",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "A satisfaction survey whose items all look plausible but which ignores half of what satisfaction means has a problem with:",
 "o": [
@@ -1795,7 +1799,7 @@
 "c": "authored",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "Which statement about the relationship between reliability and validity is correct?",
 "o": [
@@ -1813,7 +1817,7 @@
 "c": "authored",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "A study uses the single item 'Are you a good leader?' as its only measure of leadership effectiveness. The clearest weakness is that:",
 "o": [
@@ -1831,7 +1835,7 @@
 "c": "authored",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "A course exam is criticized for testing recall of formulas when the stated objective is interpreting output. This is a failure of:",
 "o": [
@@ -1849,7 +1853,7 @@
 "c": "authored",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "Before running any analysis on a scale, the question that comes first is:",
 "o": [
@@ -1867,7 +1871,7 @@
 "c": "authored",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "A district measures 'school climate' using only the number of disciplinary referrals. The most serious objection is that:",
 "o": [
@@ -1885,7 +1889,7 @@
 "c": "exam",
 "t": "Applied",
 "s": [
-3
+4
 ],
 "q": "A test has a Cronbach's alpha of 0.85. This indicates the test has:",
 "o": [
@@ -1923,7 +1927,7 @@
 "c": "exam",
 "t": "Applied",
 "s": [
-2
+3
 ],
 "q": "For the data set: 8, 12, 15, 18, 20, 24, 30. What is the median?",
 "o": [
@@ -1942,8 +1946,8 @@
 "c": "exam",
 "t": "Effect size",
 "s": [
-7,
-9
+9,
+10
 ],
 "q": "The coefficient of determination (r²) represents ______.",
 "o": [
@@ -1962,7 +1966,7 @@
 "c": "exam",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "The independent variable in a t-test must be ______.",
 "o": [
@@ -1981,7 +1985,7 @@
 "c": "exam",
 "t": "Inference",
 "s": [
-6
+8
 ],
 "q": "If the p-value is .048 and alpha is set at .05, you should ______.",
 "o": [
@@ -1998,7 +2002,7 @@
 "c": "exam",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "The main difference between independent and paired t-tests is ______.",
 "o": [
@@ -2017,8 +2021,8 @@
 "c": "exam",
 "t": "Regression",
 "s": [
-10,
-11
+11,
+12
 ],
 "q": "In regression analysis, the intercept (b₀) represents ______.",
 "o": [
@@ -2037,7 +2041,7 @@
 "c": "exam",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "A negative correlation means that ______.",
 "o": [
@@ -2056,7 +2060,7 @@
 "c": "exam",
 "t": "Inference",
 "s": [
-6
+8
 ],
 "q": "Statistical power refers to ______.",
 "o": [
@@ -2075,7 +2079,7 @@
 "c": "exam",
 "t": "Assumptions and diagnostics",
 "s": [
-11
+12
 ],
 "q": "Which of the following is NOT an assumption of the independent samples t-test?",
 "o": [
@@ -2094,7 +2098,7 @@
 "c": "exam",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "The Pearson correlation coefficient (r) ranges from ______.",
 "o": [
@@ -2113,8 +2117,8 @@
 "c": "exam",
 "t": "Regression",
 "s": [
-10,
-11
+11,
+12
 ],
 "q": "In simple linear regression, if the slope is positive, as X increases, Y ______.",
 "o": [
@@ -2133,7 +2137,7 @@
 "c": "exam",
 "t": "Inference",
 "s": [
-6
+8
 ],
 "q": "The standard error of the mean ______ as sample size increases.",
 "o": [
@@ -2152,7 +2156,7 @@
 "c": "exam",
 "t": "Inference",
 "s": [
-6
+8
 ],
 "q": "A one-tailed test is used when ______.",
 "o": [
@@ -2171,7 +2175,7 @@
 "c": "exam",
 "t": "Applied",
 "s": [
-6
+8
 ],
 "q": "A result can be statistically significant but not practically significant when ______.",
 "o": [
@@ -2190,7 +2194,7 @@
 "c": "exam",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Which statement is correct about correlation and causation?",
 "o": [
@@ -2209,7 +2213,7 @@
 "c": "exam",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "In a scatterplot, if the points are tightly clustered around the regression line, this indicates ______.",
 "o": [
@@ -2228,7 +2232,7 @@
 "c": "exam",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Outliers in regression analysis ______.",
 "o": [
@@ -2247,8 +2251,8 @@
 "c": "exam",
 "t": "Regression",
 "s": [
-10,
-11
+11,
+12
 ],
 "q": "The main advantage of multiple regression over simple regression is ______.",
 "o": [
@@ -2267,7 +2271,7 @@
 "c": "exam",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "The primary purpose of ANOVA is to ______.",
 "o": [
@@ -2286,7 +2290,7 @@
 "c": "exam",
 "t": "Assumptions and diagnostics",
 "s": [
-11
+12
 ],
 "q": "If the assumption of normality is violated, you should consider ______.",
 "o": [
@@ -2305,8 +2309,8 @@
 "c": "exam",
 "t": "Regression",
 "s": [
-10,
-11
+11,
+12
 ],
 "q": "For a categorical variable with 5 categories, you need ______ dummy variables.",
 "o": [
@@ -2325,8 +2329,8 @@
 "c": "exam",
 "t": "Effect size",
 "s": [
-7,
-9
+9,
+10
 ],
 "q": "An R² of 0.45 in multiple regression means that ______.",
 "o": [
@@ -2345,7 +2349,7 @@
 "c": "exam",
 "t": "Inference",
 "s": [
-6
+8
 ],
 "q": "Increasing sample size generally ______ statistical power.",
 "o": [
@@ -2364,7 +2368,7 @@
 "c": "exam",
 "t": "Test selection",
 "s": [
-7
+9
 ],
 "q": "An HR analyst wants to predict employee salary based on years of experience, education level, and performance ratings. Which analysis is most appropriate?",
 "o": [
@@ -2383,7 +2387,7 @@
 "c": "exam",
 "t": "Test selection",
 "s": [
-7
+9
 ],
 "q": "A researcher wants to examine whether there is a significant difference in average income between male and female employees. Which test is appropriate?",
 "o": [
@@ -2402,7 +2406,7 @@
 "c": "exam",
 "t": "Test selection",
 "s": [
-7
+9
 ],
 "q": "A study investigates whether there is a relationship between hours of study and exam scores (both continuous variables). Which analysis should be used first?",
 "o": [
@@ -2421,7 +2425,7 @@
 "c": "exam",
 "t": "Test selection",
 "s": [
-7
+9
 ],
 "q": "A researcher compares the effectiveness of four different teaching methods on student achievement. Students are randomly assigned to one of the four methods. Which test is most appropriate?",
 "o": [
@@ -2440,7 +2444,7 @@
 "c": "exam",
 "t": "Test selection",
 "s": [
-7
+9
 ],
 "q": "A clinic measures patient weight before and after a 12-week diet program to determine if the program is effective. Which test should be used?",
 "o": [
@@ -2459,7 +2463,7 @@
 "c": "exam",
 "t": "Test selection",
 "s": [
-7
+9
 ],
 "q": "A university wants to predict student GPA using SAT scores, high school GPA, and number of AP courses taken. Which analysis is most appropriate?",
 "o": [
@@ -2478,7 +2482,7 @@
 "c": "exam",
 "t": "Test selection",
 "s": [
-7
+9
 ],
 "q": "A manager wants to examine the strength and direction of the relationship between employee age and years of work experience. Which analysis should be conducted?",
 "o": [
@@ -2497,7 +2501,7 @@
 "c": "exam",
 "t": "Applied",
 "s": [
-2
+3
 ],
 "q": "Sample A has a standard deviation of 6.5, while Sample B has a variance of 36. Which sample has a broader spread in the data?",
 "o": [
@@ -2516,7 +2520,7 @@
 "c": "exam",
 "t": "Applied",
 "s": [
-3
+4
 ],
 "q": "Which statement about reliability and validity is TRUE?",
 "o": [
@@ -2630,7 +2634,7 @@
 "c": "lecture",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "A department's nine faculty salaries cluster near $85,000, except the chair at $210,000. Which measure of center moves the most because of the chair?",
 "o": [
@@ -2649,7 +2653,7 @@
 "c": "lecture",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Reporting typical time-to-degree when a few students took 12+ years to finish, the most defensible measure of center is the:",
 "o": [
@@ -2668,7 +2672,7 @@
 "c": "lecture",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "If a distribution of exam scores is perfectly symmetric and unimodal, then the mean, median, and mode:",
 "o": [
@@ -2687,7 +2691,7 @@
 "c": "lecture",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "A hospital administrator is choosing how to summarize emergency-department wait times, which have a long right tail. The median is preferred because it:",
 "o": [
@@ -2706,7 +2710,7 @@
 "c": "lecture",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Two sections took the same quiz. Section A's variance is 4; Section B's is 25. What is the correct reading?",
 "o": [
@@ -2725,7 +2729,7 @@
 "c": "lecture",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "An SPSS output shows a variance of 49 for weekly study hours. The standard deviation is:",
 "o": [
@@ -2744,7 +2748,7 @@
 "c": "lecture",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Two campuses both average 18 days to fill a staff vacancy. Campus North has SD = 2 days; Campus South has SD = 11 days. Which statement is correct?",
 "o": [
@@ -2763,7 +2767,7 @@
 "c": "lecture",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "A colleague asks why you reported the standard deviation instead of the variance in a memo. The best reason is that the SD:",
 "o": [
@@ -2782,7 +2786,7 @@
 "c": "lecture",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "For a set of 200 tuition balances, Q1 = $1,200 and Q3 = $4,800. The interquartile range is:",
 "o": [
@@ -2801,7 +2805,7 @@
 "c": "lecture",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "In a data set of advising appointments per week, one advisor logs 61 while everyone else is between 8 and 19. The 61 is best described as:",
 "o": [
@@ -2820,7 +2824,7 @@
 "c": "lecture",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "A student's GRE Verbal z-score is +1.4. That means the student scored:",
 "o": [
@@ -2839,7 +2843,7 @@
 "c": "lecture",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "An applicant's z-score on an admissions test is exactly 0. Which is true?",
 "o": [
@@ -2858,7 +2862,7 @@
 "c": "lecture",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "A patient's z-score for blood pressure is −1.8. Which reading is correct?",
 "o": [
@@ -2877,7 +2881,7 @@
 "c": "lecture",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "After converting every raw exam score in a class to z-scores, the mean and standard deviation of the z-scores will be:",
 "o": [
@@ -2896,7 +2900,7 @@
 "c": "lecture",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "A nursing student is told her licensure practice score is at the 75th percentile. This means:",
 "o": [
@@ -2915,7 +2919,7 @@
 "c": "lecture",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "A colleague describes a variable as 'normally distributed.' You expect the histogram to be:",
 "o": [
@@ -2934,7 +2938,7 @@
 "c": "lecture",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Faculty course loads are approximately normal with mean 12 credits and SD 2. About what percent of faculty carry between 10 and 14 credits?",
 "o": [
@@ -2953,7 +2957,7 @@
 "c": "lecture",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Freshman ACT scores at a college are approximately normal with mean 24 and SD 3. Roughly 95% of students fall between:",
 "o": [
@@ -2972,7 +2976,7 @@
 "c": "lecture",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "In a standard normal distribution, a z-score of +1.96 cuts off roughly the top 2.5% of scores. A z of +1.96 therefore sits near the:",
 "o": [
@@ -2991,7 +2995,7 @@
 "c": "lecture",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "A budget analyst applies the 68–95–99.7 rule to monthly utility costs without checking the histogram. The rule is trustworthy only if the costs are:",
 "o": [
@@ -3010,7 +3014,7 @@
 "c": "lecture",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "A survey office draws many random samples of 200 alumni each and records each sample's mean donation. The Central Limit Theorem says the distribution of those sample means will be:",
 "o": [
@@ -3029,7 +3033,7 @@
 "c": "lecture",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "The standard error of the mean is best described as:",
 "o": [
@@ -3048,7 +3052,7 @@
 "c": "lecture",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "An institutional researcher increases a climate-survey sample from 100 to 400 respondents. Holding the SD constant, the standard error of the mean will:",
 "o": [
@@ -3067,7 +3071,7 @@
 "c": "lecture",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "A 'sampling distribution' is a distribution of:",
 "o": [
@@ -3086,7 +3090,7 @@
 "c": "lecture",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "Enrollment analysts worry that per-student credit hours are skewed. When is the sampling distribution of the mean still approximately normal?",
 "o": [
@@ -3105,7 +3109,7 @@
 "c": "lecture",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "A report states: 'Mean satisfaction = 3.8, 95% CI [3.6, 4.0].' The correct interpretation of the 95% is:",
 "o": [
@@ -3124,7 +3128,7 @@
 "c": "lecture",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "A provost asks for a 99% confidence interval instead of the 95% interval you reported. Holding everything else constant, the new interval will be:",
 "o": [
@@ -3143,7 +3147,7 @@
 "c": "lecture",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "A confidence interval around a sample mean gives you:",
 "o": [
@@ -3162,7 +3166,7 @@
 "c": "lecture",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A university adopts a costly retention program after a study rejected the null hypothesis — but the program actually has no effect. The study made a:",
 "o": [
@@ -3181,7 +3185,7 @@
 "c": "lecture",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A tutoring program genuinely improves grades, but the evaluation's small sample fails to reject the null hypothesis. This is a:",
 "o": [
@@ -3200,7 +3204,7 @@
 "c": "lecture",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A researcher sets α = .05 before running a study. The .05 is the maximum risk she accepts of:",
 "o": [
@@ -3219,7 +3223,7 @@
 "c": "lecture",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A grant reviewer says a proposed study has 'power of .80.' That means the study has an 80% chance of:",
 "o": [
@@ -3238,7 +3242,7 @@
 "c": "lecture",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "An analysis returns p = .03 with α set at .05. The decision is to:",
 "o": [
@@ -3257,7 +3261,7 @@
 "c": "lecture",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A colleague says 'p = .02 means there is a 2% chance the null hypothesis is true.' The accurate statement is that p = .02 means:",
 "o": [
@@ -3276,7 +3280,7 @@
 "c": "lecture",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A campus newspaper reports a 'statistically significant' 0.3-point difference in GPA between two dorms (n = 4,000). Statistical significance tells you:",
 "o": [
@@ -3295,7 +3299,7 @@
 "c": "lecture",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "After a significant t-test, a reviewer asks for the 'effect size.' She wants to know:",
 "o": [
@@ -3314,7 +3318,7 @@
 "c": "lecture",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A dean predicts that the new advising model will *increase* retention and states the hypothesis that way before collecting data. The appropriate test is:",
 "o": [
@@ -3333,7 +3337,7 @@
 "c": "lecture",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "In a study comparing two onboarding programs, the null hypothesis states that:",
 "o": [
@@ -3352,7 +3356,7 @@
 "c": "lecture",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "A department wants to know whether its 35 graduates' mean licensure score (82) differs from the published national mean (78). The right test is a(n):",
 "o": [
@@ -3371,7 +3375,7 @@
 "c": "lecture",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "An HR director compares mean engagement scores between staff who work remotely and staff who work on campus (different people in each group). The test is a(n):",
 "o": [
@@ -3390,7 +3394,7 @@
 "c": "lecture",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "The same 40 employees rate their burnout before and after a wellness program. The correct test is a(n):",
 "o": [
@@ -3409,7 +3413,7 @@
 "c": "lecture",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "A one-sample t-test on 25 students' scores has degrees of freedom equal to:",
 "o": [
@@ -3428,7 +3432,7 @@
 "c": "lecture",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "An independent-samples t-test compares 30 first-generation students with 34 continuing-generation students. Degrees of freedom (equal variances assumed) are:",
 "o": [
@@ -3447,7 +3451,7 @@
 "c": "lecture",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "You use a t-test rather than a z-test for a single-sample mean comparison because:",
 "o": [
@@ -3466,7 +3470,7 @@
 "c": "lecture",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "Levene's test in an independent-samples t-test output is checking the assumption that:",
 "o": [
@@ -3485,7 +3489,7 @@
 "c": "lecture",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "An evaluation reports 'd = 0.85' for the difference between two training methods. Cohen's d of 0.85 is conventionally considered a:",
 "o": [
@@ -3504,7 +3508,7 @@
 "c": "lecture",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "A paired-samples t-test on 28 pre/post pairs has degrees of freedom equal to:",
 "o": [
@@ -3523,7 +3527,7 @@
 "c": "lecture",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "A dean compares mean satisfaction across four colleges (different students in each). The appropriate test is:",
 "o": [
@@ -3542,7 +3546,7 @@
 "c": "lecture",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "The null hypothesis for a one-way ANOVA comparing three advising models states that:",
 "o": [
@@ -3561,7 +3565,7 @@
 "c": "lecture",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "The F-statistic in ANOVA is a ratio of:",
 "o": [
@@ -3580,7 +3584,7 @@
 "c": "lecture",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "A one-way ANOVA across five campuses is significant. To learn *which* campuses differ from each other, the next step is:",
 "o": [
@@ -3599,7 +3603,7 @@
 "c": "lecture",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "Instead of an ANOVA, an analyst runs six separate t-tests among four groups at α = .05. The main problem is that:",
 "o": [
@@ -3618,7 +3622,7 @@
 "c": "lecture",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "An ANOVA output reports η² = .12. This means:",
 "o": [
@@ -3637,7 +3641,7 @@
 "c": "lecture",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "In a two-way ANOVA of training type × campus, a significant interaction means:",
 "o": [
@@ -3656,7 +3660,7 @@
 "c": "lecture",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "Before trusting a one-way ANOVA, an analyst checks Levene's test. It is testing the assumption of:",
 "o": [
@@ -3675,7 +3679,7 @@
 "c": "lecture",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "A study reports r = .62 between hours of advising and first-year GPA. The correlation describes:",
 "o": [
@@ -3694,7 +3698,7 @@
 "c": "lecture",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Which of these correlations indicates the strongest relationship?",
 "o": [
@@ -3713,7 +3717,7 @@
 "c": "lecture",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "If r = .50 between study hours and exam score, the coefficient of determination (r²) tells you that:",
 "o": [
@@ -3732,7 +3736,7 @@
 "c": "lecture",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "A campus paper reports 'students who eat breakfast have higher GPAs' and concludes breakfast improves grades. The statistical objection is:",
 "o": [
@@ -3751,7 +3755,7 @@
 "c": "lecture",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "A researcher finds almost no correlation between SAT scores and GPA among students at a highly selective college (all SATs between 1450 and 1600). The likely explanation is:",
 "o": [
@@ -3770,7 +3774,7 @@
 "c": "lecture",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Ice-cream sales and campus emergency calls are positively correlated. A plausible third variable that drives both is:",
 "o": [
@@ -3789,7 +3793,7 @@
 "c": "lecture",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "A chaplain correlates soldiers' *rank ordering* of eight values with their ordinal cohesion rating. The appropriate coefficient is:",
 "o": [
@@ -3808,7 +3812,7 @@
 "c": "lecture",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "A financial-aid office wants to *predict* a student's unmet need from family income. The technique is:",
 "o": [
@@ -3827,7 +3831,7 @@
 "c": "lecture",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "In the equation Predicted GPA = 1.2 + 0.4(Study hours), the 0.4 means:",
 "o": [
@@ -3846,7 +3850,7 @@
 "c": "lecture",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "In Predicted salary = 38,000 + 2,100(Years of service), the 38,000 is the:",
 "o": [
@@ -3865,7 +3869,7 @@
 "c": "lecture",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "The 'least squares' regression line is the line that:",
 "o": [
@@ -3884,7 +3888,7 @@
 "c": "lecture",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "A student's actual GPA is 3.4 and the regression equation predicts 3.1. The residual is:",
 "o": [
@@ -3903,7 +3907,7 @@
 "c": "lecture",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "A model of retention was built on students with 0–15 credit hours of AP work. Using it to predict retention for a student with 40 AP credits is risky because it involves:",
 "o": [
@@ -3922,7 +3926,7 @@
 "c": "lecture",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "Two regression models predict time-to-degree. Model A has a standard error of estimate of 0.4 years; Model B has 1.3 years. Which predicts more accurately?",
 "o": [
@@ -3941,7 +3945,7 @@
 "c": "lecture",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "A multiple regression predicting first-year GPA from high-school GPA, test score, and hours worked reports R² = .38. This means:",
 "o": [
@@ -3960,7 +3964,7 @@
 "c": "lecture",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "Adding a fourth, useless predictor raised R² from .380 to .382. Which statistic is designed to penalize this kind of addition?",
 "o": [
@@ -3979,7 +3983,7 @@
 "c": "lecture",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "Two predictors in a model — 'credits attempted' and 'credits completed' — correlate at r = .96. The problem this creates is called:",
 "o": [
@@ -3998,7 +4002,7 @@
 "c": "lecture",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "An analyst checks the VIF column in SPSS regression output. VIF is diagnosing:",
 "o": [
@@ -4017,7 +4021,7 @@
 "c": "lecture",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "In a regression output, one predictor has B = 250 and another has B = 0.8, but their standardized beta weights are .21 and .34. To compare the *relative* importance of predictors measured in different units, use:",
 "o": [
@@ -4036,7 +4040,7 @@
 "c": "lecture",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "A residual plot fans out — small spread at low predicted values, large spread at high predicted values. The assumption being violated is:",
 "o": [
@@ -4055,7 +4059,7 @@
 "c": "lecture",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "To include a 'college' variable with four categories (Arts, Business, Education, Nursing) in a regression, you need how many dummy variables?",
 "o": [
@@ -4074,7 +4078,7 @@
 "c": "lecture",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "The overall F-test in a multiple regression output answers the question:",
 "o": [
@@ -4093,7 +4097,7 @@
 "c": "lecture",
 "t": "Factor analysis",
 "s": [
-12
+13
 ],
 "q": "A 40-item campus-climate survey is analyzed to see whether items cluster into a few underlying dimensions. The technique is:",
 "o": [
@@ -4112,7 +4116,7 @@
 "c": "lecture",
 "t": "Factor analysis",
 "s": [
-12
+13
 ],
 "q": "In a factor analysis output, an eigenvalue represents:",
 "o": [
@@ -4131,7 +4135,7 @@
 "c": "lecture",
 "t": "Factor analysis",
 "s": [
-12
+13
 ],
 "q": "A scree plot is used in factor analysis to help decide:",
 "o": [
@@ -4150,7 +4154,7 @@
 "c": "lecture",
 "t": "Factor analysis",
 "s": [
-12
+13
 ],
 "q": "An item has a loading of .78 on Factor 1 and .12 on Factor 2. The loading tells you:",
 "o": [
@@ -4169,7 +4173,7 @@
 "c": "lecture",
 "t": "Factor analysis",
 "s": [
-12
+13
 ],
 "q": "After extracting factors, an analyst applies a rotation. The purpose is to:",
 "o": [
@@ -4188,7 +4192,7 @@
 "c": "lecture",
 "t": "Factor analysis",
 "s": [
-12
+13
 ],
 "q": "Using the Kaiser criterion, an analyst retains factors with eigenvalues:",
 "o": [
@@ -6064,7 +6068,7 @@
 "c": "extra",
 "t": "Statistical software",
 "s": [
-3
+5
 ],
 "q": "Statistical software packages are useful because they ______.",
 "o": [
@@ -6084,7 +6088,7 @@
 "c": "pub",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Your current exam mean is 97.2. If you receive a 99 on the next exam, what will happen to your mean?",
 "o": [
@@ -6103,7 +6107,7 @@
 "c": "pub",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Market researchers sent out a survey to college students in Ohio to assess their preferences regarding three different brands of honey. When examining the average preference of the respondents, which measure of central tendency is most likely to be used to describe them?",
 "o": [
@@ -6122,7 +6126,7 @@
 "c": "pub",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Which measure of central tendency is used when you calculate the average of individual income and find many extreme scores?",
 "o": [
@@ -6141,7 +6145,7 @@
 "c": "pub",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Which of the following sets of data illustrates skew?",
 "o": [
@@ -6160,7 +6164,7 @@
 "c": "pub",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "What is the preferred measure of central tendency using the following data: $32,400; $42,500; $47,250; $49,570; $145,850?",
 "o": [
@@ -6179,7 +6183,7 @@
 "c": "pub",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "What is the preferred measure of central tendency using the following data: 23 Americans, 57 Mexicans, and 14 Canadians?",
 "o": [
@@ -6198,7 +6202,7 @@
 "c": "pub",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Which of the following sets of scores has the greatest variability?",
 "o": [
@@ -6217,7 +6221,7 @@
 "c": "pub",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Which of the following sets of scores has the least variability?",
 "o": [
@@ -6236,7 +6240,7 @@
 "c": "pub",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Which of the following sets of data has no variability?",
 "o": [
@@ -6255,7 +6259,7 @@
 "c": "pub",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "The variance of a group of scores is 4. What is the standard deviation?",
 "o": [
@@ -6274,7 +6278,7 @@
 "c": "pub",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "If you have a standard deviation of 5, your variance will be ______.",
 "o": [
@@ -6293,7 +6297,7 @@
 "c": "pub",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "If you have a variance of 9, your standard deviation will be ______.",
 "o": [
@@ -6350,7 +6354,7 @@
 "c": "pub",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "If the correlation between variables is 0.70 the percentage of the shared variance is ______.",
 "o": [
@@ -6369,7 +6373,7 @@
 "c": "pub",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "If the correlation between variables is 0.80, what is the coefficient of determination?",
 "o": [
@@ -6388,7 +6392,7 @@
 "c": "pub",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Which of the following is the strongest correlation?",
 "o": [
@@ -6407,7 +6411,7 @@
 "c": "pub",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "If the coefficient of determination between two variables is .81, what is the Pearson's correlation coefficient?",
 "o": [
@@ -6426,7 +6430,7 @@
 "c": "pub",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "\"The more oatmeal you eat, the lower your blood cholesterol level\" is an example of a ______.",
 "o": [
@@ -6445,7 +6449,7 @@
 "c": "pub",
 "t": "Reliability and validity",
 "s": [
-3
+4
 ],
 "q": "If I can say that my weekly statistics quiz fairly assesses the material covered, what source of validity evidence should I have collected?",
 "o": [
@@ -6464,7 +6468,7 @@
 "c": "pub",
 "t": "Reliability and validity",
 "s": [
-3
+4
 ],
 "q": "The EATS test (of culinary skills) has been shown to be correlated with being a fine chef 2 years after culinary school. This is an example of which type of validity?",
 "o": [
@@ -6483,7 +6487,7 @@
 "c": "pub",
 "t": "Reliability and validity",
 "s": [
-3
+4
 ],
 "q": "High-school class rank is highly correlated with college GPA. This is an example of what type of validity?",
 "o": [
@@ -6502,7 +6506,7 @@
 "c": "pub",
 "t": "Reliability and validity",
 "s": [
-3
+4
 ],
 "q": "Two trained professionals observe the behavior of children in a classroom. They each rate observed behaviors using the same form, and the number of items that were rated the same is calculated. This is an example of which type of reliability?",
 "o": [
@@ -6521,7 +6525,7 @@
 "c": "pub",
 "t": "Reliability and validity",
 "s": [
-3
+4
 ],
 "q": "If you want to know whether a test is reliable over time, what type of reliability do you use?",
 "o": [
@@ -6540,7 +6544,7 @@
 "c": "pub",
 "t": "Reliability and validity",
 "s": [
-3
+4
 ],
 "q": "If you want to know if the items on a test assess one and only one dimension, what type of reliability do you use?",
 "o": [
@@ -6559,7 +6563,7 @@
 "c": "pub",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "With a raw score of 85, a group mean of 75, and a standard deviation of 5, what is the z score?",
 "o": [
@@ -6578,7 +6582,7 @@
 "c": "pub",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "If a distribution has a mean of 100 and a standard deviation of 15, what value would be +2 standard deviations from the mean?",
 "o": [
@@ -6597,7 +6601,7 @@
 "c": "pub",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "What two scores would divide a normal distribution such that 64.26% of the general population falls within them if the mean is 100 and the standard deviation is 15?",
 "o": [
@@ -6616,7 +6620,7 @@
 "c": "pub",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "A distribution of scores in which almost the entire class scored very high, but a few students scored fairly low would be ______.",
 "o": [
@@ -6635,7 +6639,7 @@
 "c": "pub",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "A distribution of scores in which almost the entire class scored very low, but a few students scored fairly high would be ______.",
 "o": [
@@ -6654,7 +6658,7 @@
 "c": "pub",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "If you conclude that your findings yield a 1 in 20 chance that differences were not due to the hypothesized reason, what is the corresponding p value?",
 "o": [
@@ -6673,8 +6677,8 @@
 "c": "pub",
 "t": "Sampling and standard error",
 "s": [
-5,
-6
+7,
+8
 ],
 "q": "If you have a population standard deviation of 10 and a sample size of 4, what is your standard error of the mean?",
 "o": [
@@ -6693,8 +6697,8 @@
 "c": "pub",
 "t": "Sampling and standard error",
 "s": [
-5,
-6
+7,
+8
 ],
 "q": "In the statement, z = 1.42, p > 0.05, which of the following interpretations is TRUE?",
 "o": [
@@ -6713,8 +6717,8 @@
 "c": "pub",
 "t": "Sampling and standard error",
 "s": [
-5,
-6
+7,
+8
 ],
 "q": "In the statement z = 3.14, p < 0.05, which of the following interpretations is TRUE?",
 "o": [
@@ -6733,8 +6737,8 @@
 "c": "pub",
 "t": "Sampling and standard error",
 "s": [
-5,
-6
+7,
+8
 ],
 "q": "In a t-test, if the resultant t value is 2.72 and p < 0.05, what is the interpretation?",
 "o": [
@@ -6753,7 +6757,7 @@
 "c": "pub",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "If the number of participants in Group 1 = 32 and the number in Group 2 = 30, what is the associated degrees of freedom?",
 "o": [
@@ -6772,7 +6776,7 @@
 "c": "pub",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "What does the number 58 represent in the following: t(58) = 2.001, p < 0.05?",
 "o": [
@@ -6791,7 +6795,7 @@
 "c": "pub",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "A researcher wants to create an intervention to improve the well-being of first-semester graduate students, so she gives the professional school counseling students specific doses of rocky road ice cream and the mental health counseling students specific doses of licorice. To analyze the differences in well-being, she would use a(n) ______.",
 "o": [
@@ -6810,7 +6814,7 @@
 "c": "pub",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "A researcher wants to study the impact of pizza consumption on the happiness of college freshmen, sophomores, and juniors. What test statistic would the researcher need to use to evaluate the difference in effectiveness between the groups?",
 "o": [
@@ -6829,7 +6833,7 @@
 "c": "pub",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "How many subjects were examined based on the following: t(29) = 2.001, p < 0.05?",
 "o": [
@@ -6848,7 +6852,7 @@
 "c": "pub",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "Dr. Moo would like to find out if there was a significant difference between her patients' anxiety scores before and after they completed a yoga program. What is the appropriate test to run?",
 "o": [
@@ -6867,7 +6871,7 @@
 "c": "pub",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "Dr. Moo would like to find out if there was a significant difference between male and female patients' anxiety scores. What is the appropriate test to run?",
 "o": [
@@ -6886,7 +6890,7 @@
 "c": "pub",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "You run a t test and find that your results indicate that t(26) = 3.13, p < 0.05. Your decision is to ______.",
 "o": [
@@ -6905,7 +6909,7 @@
 "c": "pub",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "You run a t test and find that your results indicate that t(38) = 1.13, p > 0.05. You determine that you should ______.",
 "o": [
@@ -6924,7 +6928,7 @@
 "c": "pub",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "When interpreting F(2, 27) = 8.80, p < 0.05, how many groups were examined?",
 "o": [
@@ -6943,7 +6947,7 @@
 "c": "pub",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "When interpreting F(2, 27) = 8.80, p < 0.05, what is the total sample size examined?",
 "o": [
@@ -6962,7 +6966,7 @@
 "c": "pub",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "A researcher wants to create an intervention to improve the well-being of first-semester graduate students, so she gives one group of students specific doses of rocky road ice cream, the next group of students specific doses of licorice, and the third group of students specific doses of chewy fruit-flavored candies for their treatments. To analyze the differences in well-being between the types of treatment, she would use a(n) ______.",
 "o": [
@@ -6981,7 +6985,7 @@
 "c": "pub",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "If the correlation between two variables is 0.496, what is the coefficient of determination?",
 "o": [
@@ -7000,7 +7004,7 @@
 "c": "pub",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "When computing a correlation coefficient, if you have 27 degrees of freedom, your sample size must be ______.",
 "o": [
@@ -7019,7 +7023,7 @@
 "c": "pub",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "To examine the association between temperature and frozen yogurt sales, you hypothesize that higher temperatures will be associated with increased frozen yogurt sales. You have a ______.",
 "o": [
@@ -7038,7 +7042,7 @@
 "c": "pub",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "A researcher hypothesizes that there will be a positive relationship between couples' listening skills and length of marriage. The researcher has a ______.",
 "o": [
@@ -7057,7 +7061,7 @@
 "c": "pub",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "The correlation between the two variables of interest is 0.81, which is significant at the 0.0337 level. That means ______.",
 "o": [
@@ -7076,7 +7080,7 @@
 "c": "pub",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "Using the regression formula with a slope = 0.704 and an intercept = 0.719, what would the predicted college GPA be for a student whose current high school GPA = 3.2?",
 "o": [
@@ -7095,7 +7099,7 @@
 "c": "pub",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "Using the regression formula with a slope = 2,000 and an intercept = 15,000, what would the predicted income be for someone who has 16 years of education?",
 "o": [
@@ -7191,7 +7195,7 @@
 "th": "broncos",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Over 17 games the Broncos score 24, 21, 27, 10, 24, 31, 24, 17, 20, 24, 13, 28, 24, 21, 35, 24, 19 points. Which value is the mode?",
 "o": [
@@ -7210,7 +7214,7 @@
 "th": "broncos",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Two Broncos kickers each average 85% on field goals. Kicker A's game-by-game percentages have SD = 5; Kicker B's have SD = 22. A general manager who wants consistency should prefer:",
 "o": [
@@ -7229,7 +7233,7 @@
 "th": "broncos",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Broncos ticket resale prices for one game are mostly $90–$150, plus a few club seats at $1,800. Which measure best describes the 'typical' price a fan paid?",
 "o": [
@@ -7343,7 +7347,7 @@
 "th": "broncos",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Two scouts independently grade the same 50 draft prospects on a 1–10 scale and their grades correlate at .91. This is evidence of:",
 "o": [
@@ -7362,7 +7366,7 @@
 "th": "broncos",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "A hand-held stopwatch times a receiver's 40-yard dash at 4.52, 4.38, 4.61, and 4.45 seconds across four identical trials. The measurement problem is mainly one of:",
 "o": [
@@ -7381,7 +7385,7 @@
 "th": "broncos",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "The Broncos' front office uses a combine drill to predict NFL success and later finds it correlates .05 with career production. The drill lacks:",
 "o": [
@@ -7400,7 +7404,7 @@
 "th": "broncos",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "A 'leadership' survey given to Broncos rookies asks only about vocal loudness in the huddle. The most serious objection is:",
 "o": [
@@ -7419,7 +7423,7 @@
 "th": "broncos",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "NFL offensive linemen's weights are roughly normal with mean 315 lb and SD 12. A Broncos lineman at 339 lb has a z-score of:",
 "o": [
@@ -7438,7 +7442,7 @@
 "th": "broncos",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Using the same distribution (mean 315, SD 12), about what percent of linemen weigh between 303 and 327 lb?",
 "o": [
@@ -7457,7 +7461,7 @@
 "th": "broncos",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "A quarterback's passer rating in one game has a z-score of −2.3 relative to his season. This game was:",
 "o": [
@@ -7476,7 +7480,7 @@
 "th": "broncos",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "A fan poll samples 100 season-ticket holders about a new uniform; a second poll samples 1,600. Compared with the first, the second poll's standard error of the mean approval rating will be about:",
 "o": [
@@ -7495,7 +7499,7 @@
 "th": "broncos",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "A survey estimates 62% of Denver-area fans approve of the head coach, 95% CI [58%, 66%]. Which interpretation is correct?",
 "o": [
@@ -7514,7 +7518,7 @@
 "th": "broncos",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A blogger claims the Broncos win more often in home games at altitude. He sets up H0: home win rate = away win rate and finds p = .21. The correct conclusion:",
 "o": [
@@ -7533,7 +7537,7 @@
 "th": "broncos",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "The team cuts a kicker after a small-sample test 'shows' he is worse than average, but he goes on to a long, accurate career elsewhere. The decision reflected a:",
 "o": [
@@ -7552,7 +7556,7 @@
 "th": "broncos",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "An analyst reports that a new blocking scheme improves yards per carry by 0.02 with p < .001 across 40,000 plays. The best reaction is:",
 "o": [
@@ -7571,7 +7575,7 @@
 "th": "broncos",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "Compare the Broncos' mean points scored in home games versus away games in one season (different games in each group). The appropriate test is a(n):",
 "o": [
@@ -7590,7 +7594,7 @@
 "th": "broncos",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "Each of 22 Broncos players runs a conditioning test in August and again in December. To test whether times changed, use a(n):",
 "o": [
@@ -7609,7 +7613,7 @@
 "th": "broncos",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "The Broncos' 2025 mean of 26.1 points per game is tested against the league-wide mean of 22.8 using the 17 games as a sample. This is a(n):",
 "o": [
@@ -7628,7 +7632,7 @@
 "th": "broncos",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "A researcher compares mean yards after catch among Broncos receivers, tight ends, and running backs. The appropriate test is:",
 "o": [
@@ -7647,7 +7651,7 @@
 "th": "broncos",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "The ANOVA is significant, F(2, 147) = 6.4, p = .002. What can you conclude before running post-hoc tests?",
 "o": [
@@ -7666,7 +7670,7 @@
 "th": "broncos",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Across 20 seasons, Broncos time of possession and wins correlate at r = .58. Which is the safest statement?",
 "o": [
@@ -7685,7 +7689,7 @@
 "th": "broncos",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "Predicted wins = 2.5 + 0.35(Sacks). A team with 40 sacks is predicted to win:",
 "o": [
@@ -7704,7 +7708,7 @@
 "th": "broncos",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "A model predicts Broncos wins from turnover margin, sacks, and yards per play (R² = .61). Adding 'number of mascot appearances' raises R² to .612. The statistic that will barely move — or fall — is:",
 "o": [
@@ -7723,7 +7727,7 @@
 "th": "broncos",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "In the same model, 'total yards' and 'yards per play' correlate at r = .93. Including both creates:",
 "o": [
@@ -7742,7 +7746,7 @@
 "th": "broncos",
 "t": "Factor analysis",
 "s": [
-12
+13
 ],
 "q": "A 30-item fan-engagement survey is factor analyzed and items about ticket prices, parking, and concessions load together on one factor. That factor is best labeled:",
 "o": [
@@ -7856,7 +7860,7 @@
 "th": "taylor",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Track lengths on a 13-song album (minutes): 3.2, 3.5, 3.9, 4.1, 3.4, 3.8, 3.6, 4.0, 3.7, 3.3, 10.2, 3.5, 3.9. Which measure of center is most distorted by the 10-minute track?",
 "o": [
@@ -7875,7 +7879,7 @@
 "th": "taylor",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "For that same album, which summary would a critic use to describe the 'typical' track length without the 10-minute song dominating?",
 "o": [
@@ -7894,7 +7898,7 @@
 "th": "taylor",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Resale prices for two Eras Tour dates both have a median of $900. Date A has an IQR of $200; Date B has an IQR of $1,900. What does the IQR difference tell you?",
 "o": [
@@ -8008,7 +8012,7 @@
 "th": "taylor",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "A 'Swiftie devotion' scale is given to the same 200 fans twice, three weeks apart, and the scores correlate at .88. This supports:",
 "o": [
@@ -8027,7 +8031,7 @@
 "th": "taylor",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "The 12 items on the devotion scale have Cronbach's alpha = .91. This indicates:",
 "o": [
@@ -8046,7 +8050,7 @@
 "th": "taylor",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "The devotion scale is meant to measure fandom, but the items only ask about concert spending. The chief problem is:",
 "o": [
@@ -8065,7 +8069,7 @@
 "th": "taylor",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "Scores on the devotion scale correlate .70 with hours of Taylor Swift listening logged the following month. This is evidence of:",
 "o": [
@@ -8084,7 +8088,7 @@
 "th": "taylor",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Attendance across a 150-show tour is roughly normal with mean 62,000 and SD 8,000. A 78,000-seat stadium show has a z-score of:",
 "o": [
@@ -8103,7 +8107,7 @@
 "th": "taylor",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Using the same distribution, about what percent of shows drew between 54,000 and 70,000?",
 "o": [
@@ -8122,7 +8126,7 @@
 "th": "taylor",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "A show at the 97.5th percentile of attendance has a z-score of roughly:",
 "o": [
@@ -8141,7 +8145,7 @@
 "th": "taylor",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "A fan-club poll about a setlist change samples 400 fans; a rival poll samples 2,500. The larger poll's standard error of the mean will be smaller by a factor of about:",
 "o": [
@@ -8160,7 +8164,7 @@
 "th": "taylor",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "Mean age of Eras Tour attendees is estimated at 29.4, 95% CI [28.6, 30.2]. The correct reading:",
 "o": [
@@ -8179,7 +8183,7 @@
 "th": "taylor",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A researcher tests whether 'Taylor's Version' tracks are streamed more than the originals. H0 states:",
 "o": [
@@ -8198,7 +8202,7 @@
 "th": "taylor",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "The test returns p = .004 at α = .05. The decision is:",
 "o": [
@@ -8217,7 +8221,7 @@
 "th": "taylor",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A blog claims a surprise-song choice 'significantly' predicts merchandise sales based on 6 concerts. The most likely risk here is:",
 "o": [
@@ -8236,7 +8240,7 @@
 "th": "taylor",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "Compare mean ticket prices for stadium shows versus arena shows (different shows in each group). Use a(n):",
 "o": [
@@ -8255,7 +8259,7 @@
 "th": "taylor",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "For 30 songs, compare each song's original-version streams with its re-recorded-version streams. Use a(n):",
 "o": [
@@ -8274,7 +8278,7 @@
 "th": "taylor",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "The paired test yields t(29) = 3.4, p = .002, d = 0.62. The effect size is conventionally:",
 "o": [
@@ -8293,7 +8297,7 @@
 "th": "taylor",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "Compare mean fan-rated 'replayability' across four eras (Fearless, Red, 1989, Folklore) using different raters for each era. Use:",
 "o": [
@@ -8312,7 +8316,7 @@
 "th": "taylor",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "The ANOVA is significant with F(3, 396) = 5.1, p = .002. To find which eras differ, run:",
 "o": [
@@ -8331,7 +8335,7 @@
 "th": "taylor",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Across 50 cities, local radio play and ticket-resale price correlate at r = −.05. The best interpretation:",
 "o": [
@@ -8350,7 +8354,7 @@
 "th": "taylor",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Number of bracelets traded and hours spent in line correlate at r = .60. The coefficient of determination is:",
 "o": [
@@ -8369,7 +8373,7 @@
 "th": "taylor",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "Predicted merchandise spend = $45 + $12(Shows attended). A fan who has attended 4 shows is predicted to spend:",
 "o": [
@@ -8388,7 +8392,7 @@
 "th": "taylor",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "A model predicts a track's first-week streams from playlist adds, radio spins, and social mentions, R² = .52. This means:",
 "o": [
@@ -8407,7 +8411,7 @@
 "th": "taylor",
 "t": "Factor analysis",
 "s": [
-12
+13
 ],
 "q": "A 24-item fan survey is factor analyzed. Items about lyrics, storytelling, and bridges load on one factor; items about production and beats load on another. This pattern is called:",
 "o": [
@@ -8521,7 +8525,7 @@
 "th": "ai",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Response latencies (seconds) for 9 prompts: 1.1, 1.2, 1.0, 1.3, 1.1, 1.2, 1.4, 1.1, 14.8. Which measure of center best represents the typical latency?",
 "o": [
@@ -8540,7 +8544,7 @@
 "th": "ai",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Two models both average 84% on a coding benchmark. Model A's per-task accuracy has SD = 4; Model B's has SD = 21. For a production system that must be predictable, prefer:",
 "o": [
@@ -8559,7 +8563,7 @@
 "th": "ai",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Monthly AI-tool costs across 60 departments have mean $2,100 and median $650. This gap suggests:",
 "o": [
@@ -8673,7 +8677,7 @@
 "th": "ai",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "The same model is asked the same 200 factual questions on two different days and gets 178 identical answers. This is closest to which measurement idea?",
 "o": [
@@ -8692,7 +8696,7 @@
 "th": "ai",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Three human graders independently score 100 AI-written essays and their scores correlate at .45. The problem is weak:",
 "o": [
@@ -8711,7 +8715,7 @@
 "th": "ai",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "A model scores 97% on a benchmark, but the benchmark questions were in its training data. The score is best described as:",
 "o": [
@@ -8730,7 +8734,7 @@
 "th": "ai",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "An 'AI literacy' test for staff asks only about ChatGPT keyboard shortcuts. The most serious objection is poor:",
 "o": [
@@ -8749,7 +8753,7 @@
 "th": "ai",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Latency for a chatbot is roughly normal with mean 1.8 s and SD 0.3 s. A response taking 2.7 s has a z-score of:",
 "o": [
@@ -8768,7 +8772,7 @@
 "th": "ai",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Using that distribution, about what percent of responses arrive between 1.2 s and 2.4 s?",
 "o": [
@@ -8787,7 +8791,7 @@
 "th": "ai",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "A response with z = −1.0 on latency is:",
 "o": [
@@ -8806,7 +8810,7 @@
 "th": "ai",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "An evaluation team estimates a model's accuracy from 100 sampled prompts; a second team uses 900 prompts. The second estimate's standard error is smaller by a factor of about:",
 "o": [
@@ -8825,7 +8829,7 @@
 "th": "ai",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "A report states: accuracy = 83%, 95% CI [80%, 86%]. A competitor's model reports 85%, 95% CI [82%, 88%]. The safest conclusion:",
 "o": [
@@ -8844,7 +8848,7 @@
 "th": "ai",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A campus pilot claims an AI advising assistant 'significantly' raised registration rates, p = .049, based on 30 students. The most important follow-up question:",
 "o": [
@@ -8863,7 +8867,7 @@
 "th": "ai",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A department rolls out an AI grading tool after a study rejected H0 — but the tool actually makes no difference. The study committed a:",
 "o": [
@@ -8882,7 +8886,7 @@
 "th": "ai",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "An AI tutor truly helps, but the evaluation with 12 students fails to reject H0. This is a:",
 "o": [
@@ -8901,7 +8905,7 @@
 "th": "ai",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "Compare mean essay scores between students who used an AI writing assistant and students who did not (different students). Use a(n):",
 "o": [
@@ -8920,7 +8924,7 @@
 "th": "ai",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "Each of 40 staff members completes a data task twice — once without AI help and once with it. To compare completion times, use a(n):",
 "o": [
@@ -8939,7 +8943,7 @@
 "th": "ai",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "The paired test gives t(39) = 4.8, p < .001, d = 0.95. In words:",
 "o": [
@@ -8958,7 +8962,7 @@
 "th": "ai",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "Compare mean fact-check accuracy across four models on the same 500 questions, with each question graded once per model. Because the same items are scored across all models, the design is most like a:",
 "o": [
@@ -8977,7 +8981,7 @@
 "th": "ai",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "A one-way ANOVA comparing satisfaction across three AI tools is significant, F(2, 297) = 7.9, p < .001. Before post-hoc tests you can say:",
 "o": [
@@ -8996,7 +9000,7 @@
 "th": "ai",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Across 200 employees, hours of AI-tool use and self-rated productivity correlate at r = .41. Which claim is NOT supported?",
 "o": [
@@ -9015,7 +9019,7 @@
 "th": "ai",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Model size (parameters) and benchmark score correlate at r = .78 among 25 models. r² is approximately:",
 "o": [
@@ -9034,7 +9038,7 @@
 "th": "ai",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "Predicted monthly cost = $400 + $0.02(Prompts). A department sending 50,000 prompts is predicted to cost:",
 "o": [
@@ -9053,7 +9057,7 @@
 "th": "ai",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "A model predicts benchmark score from parameter count, training tokens, and compute budget. Parameter count and compute correlate at r = .95. The diagnostic to check is:",
 "o": [
@@ -9072,7 +9076,7 @@
 "th": "ai",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "Adding 'release month' as a fourth predictor raises R² from .70 to .701. Adjusted R² will most likely:",
 "o": [
@@ -9091,7 +9095,7 @@
 "th": "ai",
 "t": "Factor analysis",
 "s": [
-12
+13
 ],
 "q": "A 20-item staff survey on AI attitudes is factor analyzed. Items about job loss, surveillance, and error risk load together; items about time savings and creativity load on a second factor. Reasonable factor labels:",
 "o": [
@@ -9205,7 +9209,7 @@
 "th": "kay",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Shift lengths this week: 12, 12, 13, 12.5, 12, 26. The 26 was 'a scheduling anomaly.' Which measure of centre is most affected by the anomaly?",
 "o": [
@@ -9224,7 +9228,7 @@
 "th": "kay",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Ward-round durations: mostly 45–60 minutes, plus one that lasted three hours because a consultant found a whiteboard. To report a 'typical' round, use the:",
 "o": [
@@ -9243,7 +9247,7 @@
 "th": "kay",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Two wards both average 4.2 hours from arrival to bed. Ward A has SD = 0.4 h; Ward B has SD = 3.1 h. The honest interpretation:",
 "o": [
@@ -9262,7 +9266,7 @@
 "th": "kay",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Friday. The vending machine has dispensed 0, 0, 0, 0, 1, 0, 0 items this week when paid. The modal outcome is:",
 "o": [
@@ -9357,7 +9361,7 @@
 "th": "kay",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Two nurses independently score the same 60 patients on a falls-risk checklist; scores agree 96% of the time. This demonstrates good:",
 "o": [
@@ -9376,7 +9380,7 @@
 "th": "kay",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "The ward blood-pressure cuff reads 150/95, then 118/76, then 141/88 on the same calm patient within two minutes. The cuff has poor:",
 "o": [
@@ -9395,7 +9399,7 @@
 "th": "kay",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "A bathroom scale in the doctors' mess reads exactly 3 kg heavy every single time. It is:",
 "o": [
@@ -9414,7 +9418,7 @@
 "th": "kay",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "A 'staff wellbeing' survey consists of one item: 'Have you cried in a cupboard this week?' The main problem is:",
 "o": [
@@ -9433,7 +9437,7 @@
 "th": "kay",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "A triage score is designed to predict which patients deteriorate. Six months of data show it correlates .68 with actual deterioration. This is evidence of:",
 "o": [
@@ -9452,7 +9456,7 @@
 "th": "kay",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Adult resting heart rates in the clinic are roughly normal with mean 72 and SD 10. A patient at 92 bpm has a z-score of:",
 "o": [
@@ -9471,7 +9475,7 @@
 "th": "kay",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Using that distribution, about what proportion of patients have resting heart rates between 62 and 82?",
 "o": [
@@ -9490,7 +9494,7 @@
 "th": "kay",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Thursday. My own resting heart rate mid-shift has a z-score of +3.1 relative to the clinic population. That puts it in roughly the top:",
 "o": [
@@ -9509,7 +9513,7 @@
 "th": "kay",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "A trust surveys 50 patients about food quality; the regional audit surveys 5,000. The regional estimate's standard error is smaller by a factor of about:",
 "o": [
@@ -9528,7 +9532,7 @@
 "th": "kay",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "Mean time-to-antibiotics for sepsis is reported as 52 minutes, 95% CI [47, 57]. The correct interpretation:",
 "o": [
@@ -9547,7 +9551,7 @@
 "th": "kay",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A new discharge checklist is trialled. H0: readmission rate is unchanged. The analysis returns p = .18. The correct write-up:",
 "o": [
@@ -9566,7 +9570,7 @@
 "th": "kay",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A hospital adopts a costly new rota because a small study rejected H0 — but the rota actually changes nothing except everyone's sleep. The study made a:",
 "o": [
@@ -9585,7 +9589,7 @@
 "th": "kay",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A hand-hygiene intervention genuinely cuts infections, but the pilot with 15 staff fails to reject H0. This is a:",
 "o": [
@@ -9604,7 +9608,7 @@
 "th": "kay",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A trust-wide study of 90,000 visits finds a new sign 'significantly' shortens waits by 40 seconds, p < .001. The grown-up response is:",
 "o": [
@@ -9623,7 +9627,7 @@
 "th": "kay",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "Compare mean handover length on night shifts versus day shifts (different handovers in each group). Use a(n):",
 "o": [
@@ -9642,7 +9646,7 @@
 "th": "kay",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "The same 28 junior doctors take a wellbeing survey before and after a 'resilience training' afternoon they were not paid for. Use a(n):",
 "o": [
@@ -9661,7 +9665,7 @@
 "th": "kay",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "That paired test yields t(27) = 0.4, p = .69, d = 0.08. In words:",
 "o": [
@@ -9680,7 +9684,7 @@
 "th": "kay",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "Compare mean time-to-first-review across three referral routes (GP, A&E, clinic). Use:",
 "o": [
@@ -9699,7 +9703,7 @@
 "th": "kay",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "F(2, 237) = 9.1, p < .001. Before post-hoc tests, you may conclude:",
 "o": [
@@ -9718,7 +9722,7 @@
 "th": "kay",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Across 40 wards, staffing level and patient falls correlate at r = −.55. The defensible statement:",
 "o": [
@@ -9737,7 +9741,7 @@
 "th": "kay",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "Predicted wait (min) = 35 + 4.5(Patients ahead of you). With 20 patients ahead, the predicted wait is:",
 "o": [
@@ -9756,7 +9760,7 @@
 "th": "kay",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "A model predicts length of stay from age, number of conditions, and 'number of forms completed.' The last two correlate at r = .94. The diagnostic to run:",
 "o": [
@@ -9775,7 +9779,7 @@
 "th": "kay",
 "t": "Factor analysis",
 "s": [
-12
+13
 ],
 "q": "A 25-item staff survey is factor analysed. Items on rota chaos, unpaid overtime, and skipped meals load on one factor; items on teamwork and meaning load on another. Reasonable labels:",
 "o": [
@@ -9889,7 +9893,7 @@
 "th": "highered",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Email reply times from nine faculty (hours): 2, 3, 3, 4, 5, 6, 8, 12, 340. Which measure of center is least distorted by the sabbatical colleague?",
 "o": [
@@ -9908,7 +9912,7 @@
 "th": "highered",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Two departments both average 4.3 on course evaluations. Department A has SD = 0.2; Department B has SD = 1.4. What does this tell the dean?",
 "o": [
@@ -9927,7 +9931,7 @@
 "th": "highered",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Committee meeting lengths are scheduled for 60 minutes and actually run 60, 60, 60, 60, 60, 60, 175. The mode and median are both 60; the mean is:",
 "o": [
@@ -10041,7 +10045,7 @@
 "th": "highered",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Two faculty independently score 80 capstone papers with the same rubric and agree 94% of the time. This is strong:",
 "o": [
@@ -10060,7 +10064,7 @@
 "th": "highered",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "A 15-item 'sense of belonging' scale has Cronbach's alpha = .89. This indicates:",
 "o": [
@@ -10079,7 +10083,7 @@
 "th": "highered",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "The parking-permit scanner reads the same permit as valid, invalid, valid, invalid on four consecutive swipes. The scanner has poor:",
 "o": [
@@ -10098,7 +10102,7 @@
 "th": "highered",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "A 'teaching effectiveness' measure consists solely of whether the instructor posted grades within 48 hours. The main objection is:",
 "o": [
@@ -10117,7 +10121,7 @@
 "th": "highered",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "An admissions index correlates .55 with first-year GPA two semesters later. This supports the index's:",
 "o": [
@@ -10136,7 +10140,7 @@
 "th": "highered",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Faculty office-hour attendance per week is roughly normal with mean 6 students and SD 2. An instructor who sees 10 students has a z-score of:",
 "o": [
@@ -10155,7 +10159,7 @@
 "th": "highered",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Using that distribution, about what percent of instructors see between 4 and 8 students per week?",
 "o": [
@@ -10174,7 +10178,7 @@
 "th": "highered",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "A student's placement-test z-score is −0.5. She scored:",
 "o": [
@@ -10193,7 +10197,7 @@
 "th": "highered",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "The campus climate survey goes from 200 respondents to 1,800. The standard error of the mean will shrink by a factor of about:",
 "o": [
@@ -10212,7 +10216,7 @@
 "th": "highered",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "Mean student debt at graduation is reported as $24,800, 95% CI [$23,100, $26,500]. Correct interpretation:",
 "o": [
@@ -10231,7 +10235,7 @@
 "th": "highered",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A new first-year seminar is evaluated. H0: retention is unchanged. The result is p = .31. The correct sentence for the board report:",
 "o": [
@@ -10250,7 +10254,7 @@
 "th": "highered",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A university funds a $2M advising platform after a pilot rejected H0 — but the platform truly has no effect. The pilot committed a:",
 "o": [
@@ -10269,7 +10273,7 @@
 "th": "highered",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "Peer tutoring truly helps, but the study with 14 students fails to reject H0. This is a:",
 "o": [
@@ -10288,7 +10292,7 @@
 "th": "highered",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A 60,000-record study finds that changing the LMS banner color 'significantly' raised logins by 0.3%, p < .001. The wise reading:",
 "o": [
@@ -10307,7 +10311,7 @@
 "th": "highered",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "Compare mean final grades between an online section and an in-person section of the same course (different students). Use a(n):",
 "o": [
@@ -10326,7 +10330,7 @@
 "th": "highered",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "The same 35 advisors rate their workload before and after a new scheduling tool. Use a(n):",
 "o": [
@@ -10345,7 +10349,7 @@
 "th": "highered",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "A department's 42 graduates average 81 on a licensure exam; the national mean is 78. To test the difference, use a(n):",
 "o": [
@@ -10364,7 +10368,7 @@
 "th": "highered",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "Compare mean time-to-degree across four colleges (different students in each). Use:",
 "o": [
@@ -10383,7 +10387,7 @@
 "th": "highered",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "F(3, 1196) = 4.2, p = .006 for the time-to-degree ANOVA. Before post-hocs, you can conclude:",
 "o": [
@@ -10402,7 +10406,7 @@
 "th": "highered",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Across 300 students, hours in the library and GPA correlate at r = .35. Which is NOT supported?",
 "o": [
@@ -10421,7 +10425,7 @@
 "th": "highered",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Among honors students (all GPAs 3.7–4.0), SAT and GPA correlate at r = .04. The likely explanation:",
 "o": [
@@ -10440,7 +10444,7 @@
 "th": "highered",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "Predicted first-year GPA = 0.9 + 0.6(High-school GPA). A student with a 3.5 high-school GPA is predicted to earn:",
 "o": [
@@ -10459,7 +10463,7 @@
 "th": "highered",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "A retention model uses high-school GPA, first-term GPA, credits attempted, and credits earned. The last two correlate at r = .97. The diagnostic to run is:",
 "o": [
@@ -10478,7 +10482,7 @@
 "th": "highered",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "Adding 'number of campus emails opened' raises R² from .44 to .441. Adjusted R² will most likely:",
 "o": [
@@ -10497,7 +10501,7 @@
 "th": "highered",
 "t": "Factor analysis",
 "s": [
-12
+13
 ],
 "q": "A 30-item faculty-satisfaction survey is factor analyzed. Items about pay, workload, and parking load together; items about autonomy and colleagues load on a second factor. Reasonable labels:",
 "o": [
@@ -10611,7 +10615,7 @@
 "th": "skc",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Dom Dwyer's 22 goals in 2014 is the club's single-season record. If a striker's five season totals are 4, 6, 22, 7, and 5, which measure of center is most inflated by the record year?",
 "o": [
@@ -10630,7 +10634,7 @@
 "th": "skc",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Sporting KC won the U.S. Open Cup in 2004, 2012, 2015, and 2017. What is the median of those four years?",
 "o": [
@@ -10649,7 +10653,7 @@
 "th": "skc",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Two forwards both average 9 goals per season. One has a standard deviation of 2 goals, the other 8. What does the difference tell a sporting director?",
 "o": [
@@ -10668,7 +10672,7 @@
 "th": "skc",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "A match-day report lists the variance of announced attendance as 2,250,000. The standard deviation is:",
 "o": [
@@ -10782,7 +10786,7 @@
 "th": "skc",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Two academy scouts independently grade the same 60 youth players on a 1–10 scale, and their grades correlate at .89. This is evidence of good:",
 "o": [
@@ -10801,7 +10805,7 @@
 "th": "skc",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "A GPS vest reports 9.1 km, 7.4 km, and 10.3 km of running for the same recorded training session when the file is processed three times. The measurement problem is one of:",
 "o": [
@@ -10820,7 +10824,7 @@
 "th": "skc",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "A club rates \"defensive quality\" using nothing but each player's tackle count. The most serious objection is:",
 "o": [
@@ -10839,7 +10843,7 @@
 "th": "skc",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Announced attendance at Children's Mercy Park is roughly normal with a mean of 19,000 and a standard deviation of 1,500. A crowd of 22,000 has a z-score of:",
 "o": [
@@ -10858,7 +10862,7 @@
 "th": "skc",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Using that same distribution (mean 19,000, SD 1,500), about what percent of matches draw between 17,500 and 20,500?",
 "o": [
@@ -10877,7 +10881,7 @@
 "th": "skc",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "A season-ticket survey about kickoff times samples 100 members; a follow-up samples 900. Compared with the first, the second survey's standard error of the mean is about:",
 "o": [
@@ -10896,7 +10900,7 @@
 "th": "skc",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "A supporter survey estimates mean satisfaction at 4.2 of 5, 95% CI [4.0, 4.4]. Which interpretation is correct?",
 "o": [
@@ -10915,7 +10919,7 @@
 "th": "skc",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "An analyst tests whether Sporting KC score more at home than away. H0 states that:",
 "o": [
@@ -10934,7 +10938,7 @@
 "th": "skc",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "The club signs an expensive forward after a 9-match study \"showed\" he significantly outperforms the incumbent — but in truth there is no difference between them. The study made a:",
 "o": [
@@ -10953,7 +10957,7 @@
 "th": "skc",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "To compare mean goals scored in home matches versus away matches across one season (different matches in each group), the appropriate test is a(n):",
 "o": [
@@ -10972,7 +10976,7 @@
 "th": "skc",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "The same 24 players complete a sprint test in preseason and again in July. To test whether times changed, use a(n):",
 "o": [
@@ -10991,7 +10995,7 @@
 "th": "skc",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "An analyst compares mean minutes played across three position groups — defenders, midfielders, and forwards. The appropriate test is:",
 "o": [
@@ -11010,7 +11014,7 @@
 "th": "skc",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Across 20 seasons, possession share and points earned correlate at r = .42. Which claim is NOT supported?",
 "o": [
@@ -11029,7 +11033,7 @@
 "th": "skc",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "A model gives Predicted points = 12 + 1.8(Wins). For a season with 15 wins, the predicted points total is:",
 "o": [
@@ -11048,7 +11052,7 @@
 "th": "skc",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "A model predicts points from goals scored, goals conceded, and expected goals. Goals scored and expected goals correlate at r = .94. The diagnostic to check is:",
 "o": [
@@ -11067,7 +11071,7 @@
 "th": "skc",
 "t": "Factor analysis",
 "s": [
-12
+13
 ],
 "q": "A 28-item supporter survey is factor analyzed. Items about parking, ticket price, and concession lines load on one factor; items about atmosphere, the supporters' section, and matchday tradition load on another. Reasonable labels for the two factors:",
 "o": [
@@ -11211,7 +11215,7 @@
 "c": "news",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Pew's four age-group figures for concern about AI are 55%, 51%, 47%, and 59%. Their simple average is 53%, but Pew reports 52% for all adults. Why the difference?",
 "o": [
@@ -11232,7 +11236,7 @@
 "c": "news",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Using those same four age-group percentages — 55, 51, 47, 59 — what is the range?",
 "o": [
@@ -11253,7 +11257,7 @@
 "c": "news",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "Pew's shares expecting AI to mean fewer jobs were 73% (18–29), 74% (30–49), 72% (50–64), and 63% (65+). What is the median of those four values?",
 "o": [
@@ -11274,7 +11278,7 @@
 "c": "news",
 "t": "Center and spread",
 "s": [
-2
+3
 ],
 "q": "One Reuters/Ipsos poll of 4,505 adults reports a margin of error of ±1.5 points; another of 1,166 adults reports ±2.9. Which poll's estimates are more tightly bounded, and why?",
 "o": [
@@ -11421,7 +11425,7 @@
 "c": "news",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Two Reuters/Ipsos polls fielded weeks apart both put presidential approval in the mid-30s. Taken together, that consistency is closest to evidence of:",
 "o": [
@@ -11442,7 +11446,7 @@
 "c": "news",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Pew's figures come from the American Trends Panel, where the same people are surveyed repeatedly. What measurement risk does that design introduce?",
 "o": [
@@ -11463,7 +11467,7 @@
 "c": "news",
 "t": "Reliability",
 "s": [
-3
+4
 ],
 "q": "Before believing that AI concern \"rose 15 points since 2021,\" what has to be true of the two surveys?",
 "o": [
@@ -11484,7 +11488,7 @@
 "c": "news",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "Forty-eight percent of respondents named \"cost of living\" as their most important midterm issue. Before accepting that number, the first question to ask is:",
 "o": [
@@ -11505,7 +11509,7 @@
 "c": "news",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "A Reuters/Ipsos release reported approval at 34% among all adults and 37% among registered voters. Using the all-adults figure to forecast an election result is a problem of:",
 "o": [
@@ -11526,7 +11530,7 @@
 "c": "news",
 "t": "Validity",
 "s": [
-3
+4
 ],
 "q": "Fifty-five percent of respondents said they would oppose a data center within 10 miles of their home. Treating that as a forecast of actual opposition at a future hearing assumes:",
 "o": [
@@ -11547,7 +11551,7 @@
 "c": "news",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "A poll reports a margin of error of \"±1.5 percentage points at the 95% confidence level.\" Which z-value is doing the work behind that 95%?",
 "o": [
@@ -11568,7 +11572,7 @@
 "c": "news",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "A poll of 1,166 adults reports a 95% margin of error of ±2.9 points, so its standard error is roughly 1.5 points. A result landing 3 points away from the true value is about how many standard errors out?",
 "o": [
@@ -11589,7 +11593,7 @@
 "c": "news",
 "t": "Normal curve",
 "s": [
-4
+6
 ],
 "q": "Applying the 68–95–99.7 rule to a poll estimate with a standard error of 1.5 points, about 68% of samples like this one would land within:",
 "o": [
@@ -11610,7 +11614,7 @@
 "c": "news",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "One Reuters/Ipsos poll (n = 4,505) reports ±1.5 points; another (n = 1,166) reports ±2.9. The larger sample is about 3.9 times bigger but the margin of error is only about half as wide. Why?",
 "o": [
@@ -11631,7 +11635,7 @@
 "c": "news",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "A newsroom wants to cut a poll's ±2.9-point margin of error to about ±1.45. Roughly what must happen to the sample size?",
 "o": [
@@ -11652,7 +11656,7 @@
 "c": "news",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "Two Reuters/Ipsos polls sampled 1,269 and 1,271 adults and reported margins of error of ±2.9 and ±2.8 points. What should you conclude from the 0.1-point difference?",
 "o": [
@@ -11673,7 +11677,7 @@
 "c": "news",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "A poll of 4,505 adults reports ±1.5 points for the whole sample. A reporter quotes a figure for one subgroup and applies the same ±1.5. What is wrong?",
 "o": [
@@ -11694,7 +11698,7 @@
 "c": "news",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "The jobs report's +162,000 comes from a survey of employers, not from counting every job in the country. What follows?",
 "o": [
@@ -11715,7 +11719,7 @@
 "c": "news",
 "t": "Sampling and standard error",
 "s": [
-5
+7
 ],
 "q": "BLS revises prior months' payroll estimates as more employer reports arrive. Statistically, what do those revisions illustrate?",
 "o": [
@@ -11736,7 +11740,7 @@
 "c": "news",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "BLS states that the 90% confidence interval for the monthly change in total nonfarm employment is about ±122,000. For August 2026's reported +162,000, that interval runs from:",
 "o": [
@@ -11757,7 +11761,7 @@
 "c": "news",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "That interval for August 2026 (+40,000 to +284,000) does not include zero. The defensible reading is:",
 "o": [
@@ -11778,7 +11782,7 @@
 "c": "news",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "Suppose a month's payroll estimate came in at +90,000, with the same ±122,000 interval. A headline reading \"the economy added jobs\" would be overstating things because:",
 "o": [
@@ -11799,7 +11803,7 @@
 "c": "news",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "The unemployment rate was \"unchanged at 4.1 percent,\" and BLS puts the confidence interval for a monthly change in the rate at about ±0.3 point. A reported month-to-month move of 0.1 point should therefore be treated as:",
 "o": [
@@ -11820,7 +11824,7 @@
 "c": "news",
 "t": "Confidence intervals",
 "s": [
-5
+7
 ],
 "q": "A poll reports 48% with a margin of error of ±1.5 points \"at the 95% confidence level.\" What does the 95% describe?",
 "o": [
@@ -11841,7 +11845,7 @@
 "c": "news",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "Reuters/Ipsos put Democrats at 35% and Republicans at 27% on handling the cost of living, in a poll with a ±1.5-point margin of error. The 8-point gap is:",
 "o": [
@@ -11862,7 +11866,7 @@
 "c": "news",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "A commentator says two poll figures \"differ\" whenever they are more than one margin of error apart. What is the flaw?",
 "o": [
@@ -11883,7 +11887,7 @@
 "c": "news",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "The share naming the economy as the country's most important problem was 20% in April, up from 16% in March, in polls with margins of error near ±2.9 points. The honest conclusion is:",
 "o": [
@@ -11904,7 +11908,7 @@
 "c": "news",
 "t": "Hypothesis testing",
 "s": [
-6
+8
 ],
 "q": "Approval reads 34% in one month's poll and 35% in the next. A headline announces a \"rebound.\" The statistical objection is:",
 "o": [
@@ -11925,7 +11929,7 @@
 "c": "news",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "A researcher has each respondent's 0–10 AI-concern rating and wants to compare the mean for adults 18–29 with the mean for adults 65+ (different people in each group). The appropriate test is a(n):",
 "o": [
@@ -11946,7 +11950,7 @@
 "c": "news",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "Because the American Trends Panel re-interviews the same people, a researcher can compare each panelist's 2021 rating with that same panelist's 2026 rating. The appropriate test is a(n):",
 "o": [
@@ -11967,7 +11971,7 @@
 "c": "news",
 "t": "t-tests",
 "s": [
-7
+9
 ],
 "q": "An analyst wants to test whether this month's mean concern score in a single sample differs from a published national benchmark. The appropriate test is a(n):",
 "o": [
@@ -11988,7 +11992,7 @@
 "c": "news",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "To compare mean AI-concern scores across all four of Pew's age groups at once, the appropriate test is:",
 "o": [
@@ -12009,7 +12013,7 @@
 "c": "news",
 "t": "ANOVA",
 "s": [
-9
+10
 ],
 "q": "That ANOVA comes back significant. Looking at the four figures — 55%, 51%, 47%, 59% — what does the F-test alone let you say?",
 "o": [
@@ -12030,7 +12034,7 @@
 "c": "news",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "In one Reuters/Ipsos poll, 74% said the cost of living was on the wrong track and 73% disapproved of the president's handling of it. Across many months these two series move together almost in lockstep. The safest reading is:",
 "o": [
@@ -12051,7 +12055,7 @@
 "c": "news",
 "t": "Correlation",
 "s": [
-10
+11
 ],
 "q": "Suppose monthly \"wrong track\" percentages and presidential approval correlate at r = −.70 across three years of Reuters/Ipsos polls. The coefficient of determination is:",
 "o": [
@@ -12072,7 +12076,7 @@
 "c": "news",
 "t": "Regression",
 "s": [
-10
+11
 ],
 "q": "A model built on monthly payroll changes between +120,000 and +180,000 is used to predict what happens in a month with a change of +600,000. The problem is:",
 "o": [
@@ -12093,7 +12097,7 @@
 "c": "news",
 "t": "Multiple regression",
 "s": [
-11
+12
 ],
 "q": "A model predicts presidential approval from \"cost-of-living pessimism\" and \"inflation disapproval\" — two poll items that track each other closely, at 74% and 73% in the same survey. The diagnostic to run is:",
 "o": [
@@ -12114,7 +12118,7 @@
 "c": "news",
 "t": "Factor analysis",
 "s": [
-12
+13
 ],
 "q": "A long Reuters/Ipsos battery is factor analyzed. Items on grocery prices, rent, and gas costs load on one factor; items on corruption and trust in institutions load on another. The sensible interpretation is:",
 "o": [
@@ -12129,6 +12133,906 @@
 "outlet": "Reuters/Ipsos",
 "d": "Jul–Aug 2026",
 "url": "https://www.ipsos.com/en-us/reutersipsos-august-2026-poll"
+},
+{
+"i": "S01-01",
+"c": "authored",
+"t": "Statistics for leaders",
+"s": [
+1
+],
+"q": "A dean tells you she doesn't need statistics because she has twenty years of good judgment. The strongest reply is that statistics:",
+"o": [
+"Replaces judgment with objective answers",
+"Tells you when your judgment is being fooled by noise, and when it isn't",
+"Is only needed for published research",
+"Matters only if you supervise analysts"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-02",
+"c": "authored",
+"t": "Statistics for leaders",
+"s": [
+1
+],
+"q": "This course treats statistics primarily as:",
+"o": [
+"A math requirement to be survived",
+"A leadership skill for judging evidence before acting on it",
+"A software certification",
+"A publishing credential"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-03",
+"c": "authored",
+"t": "Statistics for leaders",
+"s": [
+1
+],
+"q": "An unfamiliar number lands in front of you in a meeting. The first move of a statistically literate leader is to:",
+"o": [
+"Ask where it came from and how it was produced",
+"Check whether it is bigger than last year's",
+"Ask who else has seen it",
+"Accept it if it came from the official dashboard"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-04",
+"c": "authored",
+"t": "Statistics for leaders",
+"s": [
+1
+],
+"q": "Numbers often win arguments in meetings even when the evidence behind them is weak. The main reason is that:",
+"o": [
+"Numbers are always more accurate than impressions",
+"A precise-looking figure signals authority, and few people ask how it was made",
+"Most leaders are good at arithmetic",
+"Numbers are harder to fake than stories"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-05",
+"c": "authored",
+"t": "Statistics for leaders",
+"s": [
+1
+],
+"q": "A leader who cannot run a t-test but reliably asks where a number came from is:",
+"o": [
+"Doing the part that catches most bad decisions",
+"Contributing nothing until she learns the math",
+"Better off deferring entirely to the analyst",
+"Only useful in small organizations"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-06",
+"c": "authored",
+"t": "Statistics for leaders",
+"s": [
+1
+],
+"q": "What distinguishes a \"data-informed\" decision from a \"data-driven\" one?",
+"o": [
+"Data-informed decisions ignore the numbers",
+"They are the same thing",
+"Data-informed treats evidence as one input alongside values, context and cost",
+"Data-driven decisions require a larger sample"
+],
+"a": [
+2
+]
+},
+{
+"i": "S01-07",
+"c": "authored",
+"t": "Statistics for leaders",
+"s": [
+1
+],
+"q": "A cabinet approves a costly program based on a figure nobody questioned, and it later turns out the figure counted a different population than everyone assumed. The failure was primarily one of:",
+"o": [
+"Arithmetic",
+"Software",
+"Process — no one asked how the number was produced",
+"Sample size"
+],
+"a": [
+2
+]
+},
+{
+"i": "S01-08",
+"c": "authored",
+"t": "Statistics for leaders",
+"s": [
+1
+],
+"q": "Which number is most actionable for a leader?",
+"o": [
+"A large number with an impressive-sounding source",
+"A number whose definition, source and comparison group you can state",
+"A number that confirms the direction you already favor",
+"A number reported to two decimal places"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-09",
+"c": "authored",
+"t": "Statistics for leaders",
+"s": [
+1
+],
+"q": "In a leadership meeting, statistics is mostly used to answer which underlying question?",
+"o": [
+"Is this difference big enough, and real enough, to act on?",
+"Which formula applies here?",
+"Who produced this report?",
+"Can we present this to the board?"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-10",
+"c": "authored",
+"t": "Statistics for leaders",
+"s": [
+1
+],
+"q": "Who in an organization is usually best positioned to catch a misleading statistic?",
+"o": [
+"The analyst who built it",
+"The person who knows the context well enough to notice the number does not match reality",
+"The executive with final authority",
+"The external auditor"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-11",
+"c": "authored",
+"t": "Claims and evidence",
+"s": [
+1
+],
+"q": "At the Big Tree State retreat someone says, \"Satisfaction is up. I can feel it on campus.\" As stated, this is:",
+"o": [
+"A checkable statistical claim",
+"An impression — there is no measure, no comparison and no time frame",
+"Evidence of improvement",
+"A description of a population"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-12",
+"c": "authored",
+"t": "Claims and evidence",
+"s": [
+1
+],
+"q": "Another retreat claim: \"Our first-generation students are struggling — retention is 71% versus 78%.\" What makes this one checkable?",
+"o": [
+"It names a measure and a comparison, so you can ask what was counted and over what period",
+"It contains a percentage",
+"It concerns students",
+"It was said by a senior leader"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-13",
+"c": "authored",
+"t": "Claims and evidence",
+"s": [
+1
+],
+"q": "Third retreat claim: \"The new advising model works; the pilot group had better grades.\" The hidden move in this sentence is:",
+"o": [
+"Reporting grades at all",
+"Treating a difference between two groups as proof that the model caused it",
+"Using the word pilot",
+"Comparing to last year"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-14",
+"c": "authored",
+"t": "Claims and evidence",
+"s": [
+1
+],
+"q": "Of the three retreat claims, which could you begin checking with records the university already keeps?",
+"o": [
+"The satisfaction claim",
+"The retention claim",
+"Neither — all three need new data collection",
+"All three equally"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-15",
+"c": "authored",
+"t": "Claims and evidence",
+"s": [
+1
+],
+"q": "To turn an opinion into a checkable claim, what has to be added?",
+"o": [
+"A confident tone and a senior sponsor",
+"A measure, a comparison, and a population and time frame",
+"A larger budget",
+"A statistical test"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-16",
+"c": "authored",
+"t": "Claims and evidence",
+"s": [
+1
+],
+"q": "\"Everyone knows morale is down.\" What specifically makes this unusable as evidence?",
+"o": [
+"Morale cannot be measured by anyone",
+"Nothing is defined — who was asked, how morale was measured, or compared to when",
+"It is probably false",
+"It uses the word everyone"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-17",
+"c": "authored",
+"t": "Claims and evidence",
+"s": [
+1
+],
+"q": "A colleague says \"the data shows our program works,\" and you get exactly one question before the meeting ends. The most useful question is:",
+"o": [
+"How many people were in the study?",
+"What software did you use?",
+"Compared to what — and what would counting as \"works\" look like?",
+"Has this been peer reviewed?"
+],
+"a": [
+2
+]
+},
+{
+"i": "S01-18",
+"c": "authored",
+"t": "Claims and evidence",
+"s": [
+1
+],
+"q": "A claim containing a number is not automatically evidence, because:",
+"o": [
+"Numbers are usually wrong",
+"The number may measure something other than what the claim asserts",
+"Numbers require a statistical test to mean anything",
+"Only percentages count as evidence"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-19",
+"c": "authored",
+"t": "Claims and evidence",
+"s": [
+1
+],
+"q": "\"Applications fell 12% this year\" versus \"Applications fell 12% because of the tuition increase.\" The second statement adds:",
+"o": [
+"Precision",
+"An explanation, which needs far more evidence than the description did",
+"A larger sample",
+"A confidence interval"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-20",
+"c": "authored",
+"t": "Claims and evidence",
+"s": [
+1
+],
+"q": "A press release announces \"our best semester ever.\" Before believing it you most need to know:",
+"o": [
+"Best by what measure, and compared with which prior semesters",
+"Who wrote the release",
+"Whether enrollment is up nationally",
+"The exact enrollment figure"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-21",
+"c": "authored",
+"t": "Claims and evidence",
+"s": [
+1
+],
+"q": "A vice president supports a policy with a vivid story about one student. The story is:",
+"o": [
+"Worthless and should be ignored",
+"Useful for understanding the mechanism, but it cannot tell you how common the situation is",
+"Equivalent to survey data from one respondent, so statistically valid",
+"Stronger than data because it is concrete"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-22",
+"c": "authored",
+"t": "Claims and evidence",
+"s": [
+1
+],
+"q": "Which rewrite turns \"our advising is excellent\" into something testable?",
+"o": [
+"\"Our advising is truly excellent.\"",
+"\"Most people agree our advising is excellent.\"",
+"\"Students who met an advisor twice or more last year re-enrolled at a higher rate than those who met one or fewer.\"",
+"\"Advising excellence is a core value.\""
+],
+"a": [
+2
+]
+},
+{
+"i": "S01-23",
+"c": "authored",
+"t": "The three questions",
+"s": [
+1
+],
+"q": "This course teaches three questions to ask of any number. They are:",
+"o": [
+"Who said it? Is it big? Do I like it?",
+"Where did it come from? How sure are we? What would change my mind?",
+"Is it significant? Is it valid? Is it reliable?",
+"What is the mean, the median and the mode?"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-24",
+"c": "authored",
+"t": "The three questions",
+"s": [
+1
+],
+"q": "\"Where did it come from?\" is fundamentally a question about:",
+"o": [
+"How the data were produced, and who was and wasn't counted",
+"Which department owns the dashboard",
+"Whether the figure is current",
+"The software used"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-25",
+"c": "authored",
+"t": "The three questions",
+"s": [
+1
+],
+"q": "\"How sure are we?\" is fundamentally a question about:",
+"o": [
+"The confidence of the person presenting",
+"Whether the result would look the same if you collected the data again",
+"Whether the number is large",
+"How long the analysis took"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-26",
+"c": "authored",
+"t": "The three questions",
+"s": [
+1
+],
+"q": "\"What would change my mind?\" asks you to:",
+"o": [
+"Remain permanently undecided",
+"Name in advance the evidence that would count against your position",
+"Find data supporting your view",
+"Defer to whoever has the most data"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-27",
+"c": "authored",
+"t": "The three questions",
+"s": [
+1
+],
+"q": "Applying \"where did it come from?\" to the 71% versus 78% retention gap, the sharpest follow-up is:",
+"o": [
+"Who is counted as first-generation, and how is retention defined?",
+"Is 7 points a lot?",
+"Which dean reported it?",
+"Was this run in SPSS or JASP?"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-28",
+"c": "authored",
+"t": "The three questions",
+"s": [
+1
+],
+"q": "Applying \"how sure are we?\" to that same retention gap means asking:",
+"o": [
+"Whether the gap would still appear in another year or another cohort",
+"Whether the dean believes it",
+"Whether 71% is below the national average",
+"Whether the report was formatted correctly"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-29",
+"c": "authored",
+"t": "The three questions",
+"s": [
+1
+],
+"q": "Why is naming what would change your mind *before* seeing results valuable?",
+"o": [
+"It speeds up the analysis",
+"It stops you from rewriting the standard of proof after the fact to protect a conclusion",
+"It is required by APA style",
+"It guarantees the result will be significant"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-30",
+"c": "authored",
+"t": "The three questions",
+"s": [
+1
+],
+"q": "A leader who cannot say what evidence would change her mind is:",
+"o": [
+"Demonstrating admirable conviction",
+"Holding a position that data cannot inform — the claim has stopped being empirical",
+"Following the scientific method",
+"Using inferential rather than descriptive reasoning"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-31",
+"c": "authored",
+"t": "The three questions",
+"s": [
+1
+],
+"q": "A report compares this year with one unusually bad prior year and declares dramatic improvement. Which of the three questions catches this?",
+"o": [
+"Where did it come from — the comparison window is part of how the number was produced",
+"How sure are we",
+"What would change my mind",
+"None; this is not a statistical problem"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-32",
+"c": "authored",
+"t": "The three questions",
+"s": [
+1
+],
+"q": "Why does \"where did it come from?\" come first?",
+"o": [
+"It is the easiest to answer",
+"If the number measures the wrong thing, how precisely it was measured no longer matters",
+"It is required before running any test",
+"The other two are optional"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-33",
+"c": "authored",
+"t": "Descriptive vs inferential",
+"s": [
+1
+],
+"q": "You report the mean GPA of all 412 students enrolled in a program. That is:",
+"o": [
+"Descriptive — you have every member of the group you are describing",
+"Inferential",
+"Neither",
+"Inferential, because GPA varies"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-34",
+"c": "authored",
+"t": "Descriptive vs inferential",
+"s": [
+1
+],
+"q": "You survey 200 of 4,000 students and use the result to say something about all 4,000. That is:",
+"o": [
+"Descriptive",
+"Inferential — you are reasoning beyond the people you actually measured",
+"A census",
+"Invalid by definition"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-35",
+"c": "authored",
+"t": "Descriptive vs inferential",
+"s": [
+1
+],
+"q": "The difference between descriptive and inferential statistics, in one sentence:",
+"o": [
+"Descriptive uses percentages; inferential uses decimals",
+"Descriptive summarizes the group you measured; inferential reasons from that group to a larger one",
+"Descriptive is for small groups; inferential for large ones",
+"Descriptive is done by hand; inferential by software"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-36",
+"c": "authored",
+"t": "Descriptive vs inferential",
+"s": [
+1
+],
+"q": "Which of the two depends on assumptions about how people were selected?",
+"o": [
+"Descriptive",
+"Inferential",
+"Both equally",
+"Neither"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-37",
+"c": "authored",
+"t": "Descriptive vs inferential",
+"s": [
+1
+],
+"q": "HR reports the average tenure of every current employee. This is:",
+"o": [
+"Descriptive — it is a census of the group in question",
+"Inferential, because employees leave",
+"Inferential, because tenure is continuous",
+"Not a statistic"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-38",
+"c": "authored",
+"t": "Descriptive vs inferential",
+"s": [
+1
+],
+"q": "Which kind of statistic necessarily comes with uncertainty attached?",
+"o": [
+"Descriptive",
+"Inferential",
+"Both, always",
+"Neither"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-39",
+"c": "authored",
+"t": "Descriptive vs inferential",
+"s": [
+1
+],
+"q": "A dashboard showing last month's exact help desk ticket counts is:",
+"o": [
+"Descriptive",
+"Inferential",
+"A prediction",
+"A hypothesis test"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-40",
+"c": "authored",
+"t": "Descriptive vs inferential",
+"s": [
+1
+],
+"q": "Both kinds of statistics are useful. The common mistake is:",
+"o": [
+"Using descriptive statistics at all",
+"Reporting a descriptive summary of a self-selected group as if it described everyone",
+"Using inferential statistics on large samples",
+"Reporting a mean"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-41",
+"c": "authored",
+"t": "Population and sample",
+"s": [
+1
+],
+"q": "In statistics, a \"population\" is:",
+"o": [
+"Everyone in the country",
+"The entire group you want to draw a conclusion about",
+"Any group larger than 1,000",
+"The people who responded"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-42",
+"c": "authored",
+"t": "Population and sample",
+"s": [
+1
+],
+"q": "A sample is:",
+"o": [
+"A subset of the population, used to learn something about it",
+"Always exactly 10% of the population",
+"The people who volunteered",
+"A pilot program"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-43",
+"c": "authored",
+"t": "Population and sample",
+"s": [
+1
+],
+"q": "A value computed from a sample is a statistic; the corresponding value for the whole population is:",
+"o": [
+"A parameter",
+"A variable",
+"A constant",
+"An estimate"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-44",
+"c": "authored",
+"t": "Population and sample",
+"s": [
+1
+],
+"q": "\"All students enrolled at Big Tree State in fall 2026\" is best described as:",
+"o": [
+"A sample",
+"A population, if that is the group you want to conclude about",
+"A parameter",
+"A variable"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-45",
+"c": "authored",
+"t": "Population and sample",
+"s": [
+1
+],
+"q": "Why sample at all, rather than measure everyone?",
+"o": [
+"Samples are more accurate than censuses",
+"Measuring everyone is often impossible or too costly, and a well-drawn sample answers the question well enough",
+"Statistics only works on samples",
+"Populations cannot be measured"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-46",
+"c": "authored",
+"t": "Population and sample",
+"s": [
+1
+],
+"q": "A satisfaction survey goes out to all staff and the 9% who felt strongly enough to answer report low satisfaction. The safest reading is:",
+"o": [
+"Staff satisfaction is low",
+"The number describes the people who chose to respond, who may differ systematically from those who didn't",
+"The sample is large enough to generalize",
+"Satisfaction is high among non-respondents"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-47",
+"c": "authored",
+"t": "What statistics cannot do",
+"s": [
+1
+],
+"q": "Statistics can tell you a great deal, but it cannot tell you:",
+"o": [
+"What the numbers are",
+"Whether a goal is worth pursuing in the first place",
+"How much variation exists",
+"Whether two groups differ"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-48",
+"c": "authored",
+"t": "What statistics cannot do",
+"s": [
+1
+],
+"q": "Does the software decide which analysis is appropriate?",
+"o": [
+"Yes, modern tools select the correct test automatically",
+"No — tools compute; you choose the question, the test and the interpretation",
+"Only SPSS does",
+"Only for large datasets"
+],
+"a": [
+1
+]
+},
+{
+"i": "S01-49",
+"c": "authored",
+"t": "What statistics cannot do",
+"s": [
+1
+],
+"q": "Later in the term you will meet results described as \"statistically significant.\" That phrase will not tell you:",
+"o": [
+"Whether the difference is large enough to be worth acting on",
+"Whether a calculation was performed",
+"What was compared",
+"How many groups there were"
+],
+"a": [
+0
+]
+},
+{
+"i": "S01-50",
+"c": "authored",
+"t": "What statistics cannot do",
+"s": [
+1
+],
+"q": "One thing this course explicitly will not settle is:",
+"o": [
+"Whether you are \"a stats person\" — that category is mostly self-inflicted",
+"How to read a table",
+"What a sample is",
+"Which software to use"
+],
+"a": [
+0
+]
 }
 ],
 "skins": {
