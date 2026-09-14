@@ -387,7 +387,10 @@ async function loadSummary(cohort) {
 
 /* ---------- filtering ---------- */
 
-const PRESETS = [["quiz1", "Quiz 1"], ["exam1", "Exam 1"], ["quiz2", "Quiz 2"], ["exam2", "Exam 2"]];
+/* The four Lab Foundations Checks are the course's quizzes (there is no separate
+   quiz track), so they are what students get as one-click pools. Each maps to
+   its lab's focus in bank.json -> x; the long labels live in bank.json -> presets. */
+const PRESETS = [["lab1", "Lab 1 Check"], ["lab2", "Lab 2 Check"], ["lab3", "Lab 3 Check"], ["lab4", "Lab 4 Check"], ["exam1", "Exam 1"], ["exam2", "Exam 2"]];
 const emptyFilter = {
   sessions: [],
   topics: [],

@@ -432,7 +432,10 @@ async function loadSummary(cohort) {
 
 /* ---------- filtering ---------- */
 
-const PRESETS = [["quiz1", "Quiz 1"], ["exam1", "Exam 1"], ["quiz2", "Quiz 2"], ["exam2", "Exam 2"]];
+/* The four Lab Foundations Checks are the course's quizzes (there is no separate
+   quiz track), so they are what students get as one-click pools. Each maps to
+   its lab's focus in bank.json -> x; the long labels live in bank.json -> presets. */
+const PRESETS = [["lab1", "Lab 1 Check"], ["lab2", "Lab 2 Check"], ["lab3", "Lab 3 Check"], ["lab4", "Lab 4 Check"], ["exam1", "Exam 1"], ["exam2", "Exam 2"]];
 const emptyFilter = {
   sessions: [],
   topics: [],
@@ -512,6 +515,7 @@ function Facets({
     key: k,
     kind: "ghost",
     size: "sm",
+    title: (BANK.presets || {})[k] || label,
     onClick: () => setF({
       ...emptyFilter,
       sessions: BANK.x[k] || []
@@ -1355,7 +1359,7 @@ function Practice({
       marginTop: 14,
       maxWidth: "70ch"
     }
-  }, "Reported figures from ", q.outlet, q.d ? `, ${q.d}` : "", ". ", /*#__PURE__*/React.createElement("a", {
+  }, "Reported figures from ", q.outlet, q.d ? `, ${q.d}` : "", q.sourced ? ` (sourced ${q.sourced})` : "", ". ", /*#__PURE__*/React.createElement("a", {
     href: q.url,
     target: "_blank",
     rel: "noopener noreferrer",
@@ -2009,7 +2013,7 @@ function App() {
       maxWidth: "58ch",
       margin: "0 0 34px"
     }
-  }, corePool().length, " questions across all twelve sessions, plus ", BANK.items.length - corePool().length, " good-to-know extras. Combine any sessions and topics you want, pick a themed set, set your own clock, and go as many times as you like. Nothing here is graded and no answer is attached to your name."), /*#__PURE__*/React.createElement("div", {
+  }, corePool().length, " questions across all thirteen sessions, plus ", BANK.items.length - corePool().length, " good-to-know extras. Combine any sessions and topics you want, pick a themed set, set your own clock, and go as many times as you like. Nothing here is graded and no answer is attached to your name."), /*#__PURE__*/React.createElement("div", {
     style: {
       borderLeft: `3px solid ${C.red}`,
       padding: "14px 18px",
@@ -2170,7 +2174,7 @@ function App() {
       margin: 0,
       maxWidth: "62ch"
     }
-  }, /*#__PURE__*/React.createElement("li", null, "Use the Exam buttons to pull only the sessions an assessment actually covers."), /*#__PURE__*/React.createElement("li", null, "Untimed first, to learn the material. Timed later, to rehearse the conditions."), /*#__PURE__*/React.createElement("li", null, "The questions you miss are listed at the end. That list is the study guide."), /*#__PURE__*/React.createElement("li", null, "Themed sets are for fun — but keep in mind they are educational too: same concepts, same sessions, just different scenery."), /*#__PURE__*/React.createElement("li", null, "“Good to know” is extra reading from the chapters we skip — never on a quiz or exam unless I announce it."))), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("li", null, "The Lab Check buttons pull exactly the sessions that lab\u2019s Foundations Check covers. The Exam buttons do the same for the two exams."), /*#__PURE__*/React.createElement("li", null, "Untimed first, to learn the material. Timed later, to rehearse the conditions."), /*#__PURE__*/React.createElement("li", null, "The questions you miss are listed at the end. That list is the study guide."), /*#__PURE__*/React.createElement("li", null, "Themed sets are for fun — but keep in mind they are educational too: same concepts, same sessions, just different scenery."), /*#__PURE__*/React.createElement("li", null, "“Good to know” is extra reading from the chapters we skip — never on a quiz or exam unless I announce it."))), /*#__PURE__*/React.createElement("div", {
     style: {
       borderTop: `1px solid ${C.line}`,
       marginTop: 32,
