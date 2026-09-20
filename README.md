@@ -15,7 +15,7 @@ data into visualizations that support leadership decisions.
 | `bank.json` | The question pool, session map, exam presets, themed-set labels, skins and credits. The only file that changes when questions change. |
 | `console.html` | Instructor console - live in-class polling and class results. |
 | `Code.gs` | Google Apps Script behind the results endpoint; writes practice runs to the results Sheet. Deploy in Apps Script, not from here. |
-| `config.example.json` | Template for `config.json` (endpoint + cohort password). Copy it, fill it in; the real file is gitignored. |
+| `config.example.json` | Template for `config.json` (endpoint + cohort name/label). Copy it, fill it in. |
 
 ## Question tiers (`c` field on every item)
 
@@ -115,6 +115,10 @@ listAccess()
 
 Roles: `student` = class link and class reporting · `viewer` = public reporting
 only · `instructor` = both.
+
+A `student` or `instructor` email is also what unlocks the "LD 810 practice"
+card on the class link — there is no separate class password anymore. A
+`viewer` address is refused there, same as it is for the class reporting view.
 
 **What this is and is not.** It keeps the roster private and lets you add and
 revoke people. It is not authentication: anyone who knows a listed address

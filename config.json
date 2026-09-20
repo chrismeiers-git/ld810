@@ -2,6 +2,5 @@
   "endpoint": "https://script.google.com/macros/s/AKfycby5G5LyMEBoN5A-DoiO6yI88NGYgiVj-nebuybWZClEfdnprPQrwwUdFQ1pRipotODt/exec",
   "cohortName": "LD810",
   "cohortLabel": "LD 810",
-  "cohortPassword": "badpie",
-  "_note": "endpoint must end in /exec, never /dev. cohortPassword is visible to anyone who views source \u2014 it tags results and gates the class-results view, it is not security. Change it here only; no need to touch the HTML."
+  "_note": "endpoint must end in /exec, never /dev. Class practice is unlocked by email against the roster now, not a password — see grantAccess()/grantMany() in Code.gs."
 }
