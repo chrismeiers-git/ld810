@@ -42,6 +42,11 @@ let COHORT_NAME = "LD810";
 let COHORT_LABEL = "LD 810";
 let COHORT_PASSWORD = "";
 const COHORT_STORE = "ld810_cohort";
+
+/* Every question carries both addresses. The instructor console leads with
+   the personal address; the student app leads with the St. Martin's one.
+   config.json -> reportEmails overrides the list without touching the HTML. */
+let REPORT_EMAILS = ["chrismeiers@gmail.com", "cmeiers@stmartin.edu"];
 function savedCohort() {
   try {
     return window.localStorage.getItem(COHORT_STORE) || "";
@@ -627,6 +632,8 @@ function Loader({
           if (j.cohortName) COHORT_NAME = String(j.cohortName);
           if (j.cohortLabel) COHORT_LABEL = String(j.cohortLabel);
           if (j.cohortPassword) COHORT_PASSWORD = String(j.cohortPassword);
+          if (Array.isArray(j.reportEmails) && j.reportEmails.length) REPORT_EMAILS = j.reportEmails.map(String);
+          else if (j.reportEmails && typeof j.reportEmails === "object") REPORT_EMAILS = [j.reportEmails.open, j.reportEmails.class].filter(Boolean).map(String);
         }
       } catch (e) {/* no config.json — endpointProblem stays "unset" */}
       try {
@@ -857,46 +864,10 @@ function Builder({
       margin: 0,
       color: C.ink
     }
-  }, "Build a quiz"), /*#__PURE__*/React.createElement(Rule, null)), /*#__PURE__*/React.createElement(Btn, {
+  }, "Build a Zoom quiz"), /*#__PURE__*/React.createElement(Rule, null)), /*#__PURE__*/React.createElement(Btn, {
     kind: "ghost",
     onClick: onExit
-  }, "Back")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: C.wash,
-      border: `1px solid ${C.line}`,
-      borderRadius: 2,
-      padding: 18,
-      margin: "26px 0 4px",
-      display: "flex",
-      gap: 16,
-      alignItems: "center",
-      flexWrap: "wrap"
-    }
-  }, /*#__PURE__*/React.createElement(Btn, {
-    onClick: () => onGoLive(sel, false, false),
-    disabled: sel.length === 0
-  }, "Run this live in class"), /*#__PURE__*/React.createElement(Btn, {
-    kind: "ghost",
-    onClick: () => onGoLive(sel, false, true),
-    disabled: sel.length === 0
-  }, "Open session \u2014 guests welcome"), /*#__PURE__*/React.createElement(Btn, {
-    kind: "ghost",
-    onClick: () => onGoLive(sel, true, false),
-    disabled: sel.length === 0
-  }, "Test run \u2014 nothing recorded"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 14.5,
-      color: C.ink2,
-      lineHeight: 1.5,
-      maxWidth: "44ch"
-    }
-  }, "You control the pace, students answer on their own devices, and the bars update as answers land. Use the tabs below instead if you want to load it into Zoom.")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      borderTop: `1px solid ${C.line}`,
-      marginBottom: 22,
-      paddingTop: 4
-    }
-  }), /*#__PURE__*/React.createElement(Facets, {
+  }, "Back")), /*#__PURE__*/React.createElement(Facets, {
     f: f,
     setF: setF,
     showSearch: true,
@@ -1182,6 +1153,36 @@ function Builder({
     }
   }, "Remove"))), /*#__PURE__*/React.createElement("div", {
     style: {
+      background: C.wash,
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      padding: 18,
+      margin: "26px 0 4px",
+      display: "flex",
+      gap: 16,
+      alignItems: "center",
+      flexWrap: "wrap"
+    }
+  }, /*#__PURE__*/React.createElement(Btn, {
+    onClick: () => onGoLive(sel, false, false),
+    disabled: sel.length === 0
+  }, "Run this live in class"), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    onClick: () => onGoLive(sel, false, true),
+    disabled: sel.length === 0
+  }, "Open session \u2014 guests welcome"), /*#__PURE__*/React.createElement(Btn, {
+    kind: "ghost",
+    onClick: () => onGoLive(sel, true, false),
+    disabled: sel.length === 0
+  }, "Test run \u2014 nothing recorded"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14.5,
+      color: C.ink2,
+      lineHeight: 1.5,
+      maxWidth: "44ch"
+    }
+  }, "You control the pace, students answer on their own devices, and the bars update as answers land. Use the tabs below instead if you want to load it into Zoom.")), /*#__PURE__*/React.createElement("div", {
+    style: {
       display: "flex",
       gap: 4,
       margin: "28px 0 16px",
@@ -1299,48 +1300,650 @@ function Breakdown({
   }, g.pct, "% · ", g.tries)))));
 }
 
+/* ---------- results: loading ----------
+
+   `mode=detail` is the newer Apps Script route. It returns one compact
+   record per run (day, sessions, timer, cohort) and one per answer, which
+   is what the group and trend views need. If the deployment is older the
+   console falls back to `mode=summary`, which still supports everything
+   that depends only on item tallies. */
+
+async function loadDetail(cohort) {
+  if (!live()) return {
+    offline: true
+  };
+  try {
+    const q = cohort ? `&cohort=${encodeURIComponent(cohort)}` : "";
+    const r = await fetch(`${ENDPOINT}?mode=detail${q}&t=${Date.now()}`);
+    if (!r.ok) return {
+      error: `The results endpoint returned ${r.status}.`
+    };
+    const j = await r.json();
+    if (!j || !Array.isArray(j.rows) || !Array.isArray(j.runs)) return {
+      legacy: true,
+      error: j && j.error ? j.error : null
+    };
+    return j;
+  } catch (e) {
+    return {
+      error: "Could not reach the results endpoint."
+    };
+  }
+}
+
+/* ---------- results: grouping ----------
+
+   Two different questions get asked of the same sheet, so both are answered.
+
+   BY CONTENT — every answer to an item tagged to a session inside that
+   group, however the student got there. Items sitting in two groups (a
+   session 1-4 item is Lab 1 Check material and Exam 1 material) count in
+   both, which is correct: it is the same material.
+
+   BY WHAT THEY RAN — the run's own session filter, matched against the
+   preset definitions in bank.json. A student who hand-picks exactly the
+   sessions of a preset lands in that preset's row, which is fair. */
+
+const RUN_EXTRA = {
+  live: "Live in class",
+  whole: "Whole pool (no filter)",
+  custom: "Custom session picks"
+};
+function presetLabel(k) {
+  const p = PRESETS.find(x => x[0] === k);
+  return p ? p[1] : RUN_EXTRA[k] || k;
+}
+function presetTitle(k) {
+  return (BANK.presets || {})[k] || presetLabel(k);
+}
+function sessionKey(list) {
+  return (list || []).map(Number).filter(n => n).sort((a, b) => a - b).join("|");
+}
+function runGroup(sessionsStr, timer) {
+  if (String(timer || "").toLowerCase() === "live") return "live";
+  const s = sessionKey(String(sessionsStr || "").split("|"));
+  if (!s) return "whole";
+  for (const [k] of PRESETS) if (sessionKey(BANK.x[k] || []) === s) return k;
+  return "custom";
+}
+
+/* Monday of the week a yyyy-mm-dd day falls in. Practice clusters around
+   class nights and due dates, so a weekly bucket reads far better than a
+   daily one over a semester; the day view stays available for a single week. */
+function weekStart(day) {
+  const d = new Date(day + "T12:00:00");
+  if (isNaN(d)) return day;
+  const back = (d.getDay() + 6) % 7;
+  d.setDate(d.getDate() - back);
+  return d.toISOString().slice(0, 10);
+}
+function shortDay(day) {
+  const d = new Date(day + "T12:00:00");
+  if (isNaN(d)) return day;
+  return d.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric"
+  });
+}
+function pctColor(p) {
+  return p < 50 ? C.red : p < 75 ? C.gold : C.teal;
+}
+function pctOf(t) {
+  return t && t.n ? Math.round(t.right / t.n * 100) : 0;
+}
+
+/* ---------- report a question ----------
+   Both addresses on every question, student app and console alike. Order
+   only decides which one reads first. config.json -> reportEmails can
+   change either without touching this file. */
+
+function reportBody(item, extra) {
+  const L = [];
+  L.push("Question id: " + (item.i || "?"));
+  L.push("Topic: " + (item.t || "-"));
+  L.push("Session(s): " + ((item.s || []).join(", ") || "-"));
+  L.push("");
+  L.push(item.q || "");
+  (item.o || []).forEach((o, n) => L.push("   " + (LETTERS[n] || "?").toUpperCase() + ") " + o));
+  (extra || []).forEach(line => L.push(line));
+  L.push("");
+  L.push("What looks wrong, or what I want to ask:");
+  L.push("");
+  return L.join("\n");
+}
+function reportHref(email, item, extra) {
+  return "mailto:" + email + "?subject=" + encodeURIComponent("LD 810 practice question " + (item.i || "")) + "&body=" + encodeURIComponent(reportBody(item, extra));
+}
+function ReportLink({
+  item,
+  extra,
+  lead,
+  size
+}) {
+  if (!item) return null;
+  const list = REPORT_EMAILS.length ? REPORT_EMAILS : ["chrismeiers@gmail.com"];
+  return /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: size || 12.5,
+      color: C.ink3,
+      lineHeight: 1.6,
+      margin: "8px 0 0",
+      maxWidth: "70ch"
+    }
+  }, lead || "Think this one is wrong, or want to ask about it? Email ", list.map((e, i, arr) => /*#__PURE__*/React.createElement("span", {
+    key: e
+  }, /*#__PURE__*/React.createElement("a", {
+    href: reportHref(e, item, extra),
+    style: {
+      color: C.red
+    }
+  }, e), i < arr.length - 1 ? " or " : "")), " \u2014 the question travels with the message.");
+}
+
+/* ---------- small charts ---------- */
+
+function MiniBar({
+  pct,
+  width
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: width ? "none" : 1,
+      width: width || "auto",
+      height: 12,
+      background: C.wash,
+      minWidth: 40
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 12,
+      width: `${pct}%`,
+      background: pctColor(pct)
+    }
+  }));
+}
+
+/* One line per scope, % correct across the buckets. Nulls break the line
+   rather than pretending a week with no practice scored zero. */
+function TrendChart({
+  buckets,
+  lines,
+  height
+}) {
+  const W = 560,
+    H = height || 150,
+    padL = 30,
+    padR = 8,
+    padT = 10,
+    padB = 22;
+  const n = buckets.length;
+  const x = i => n <= 1 ? padL + (W - padL - padR) / 2 : padL + i * (W - padL - padR) / (n - 1);
+  const y = v => padT + (100 - v) / 100 * (H - padT - padB);
+  const seg = vals => {
+    const out = [];
+    let cur = [];
+    vals.forEach((v, i) => {
+      if (v === null || v === undefined) {
+        if (cur.length) out.push(cur);
+        cur = [];
+      } else cur.push([x(i), y(v)]);
+    });
+    if (cur.length) out.push(cur);
+    return out;
+  };
+  return /*#__PURE__*/React.createElement("svg", {
+    viewBox: `0 0 ${W} ${H}`,
+    style: {
+      width: "100%",
+      height: "auto",
+      display: "block"
+    },
+    role: "img"
+  }, [0, 50, 100].map(g => /*#__PURE__*/React.createElement("g", {
+    key: g
+  }, /*#__PURE__*/React.createElement("line", {
+    x1: padL,
+    x2: W - padR,
+    y1: y(g),
+    y2: y(g),
+    stroke: C.line,
+    strokeWidth: 1
+  }), /*#__PURE__*/React.createElement("text", {
+    x: 0,
+    y: y(g) + 4,
+    fontSize: 10,
+    fill: C.ink3
+  }, g))), buckets.map((b, i) => i % Math.ceil(n / 6 || 1) === 0 || i === n - 1 ? /*#__PURE__*/React.createElement("text", {
+    key: b,
+    x: x(i),
+    y: H - 6,
+    fontSize: 10,
+    fill: C.ink3,
+    textAnchor: i === 0 ? "start" : i === n - 1 ? "end" : "middle"
+  }, shortDay(b)) : null), lines.map(ln => /*#__PURE__*/React.createElement("g", {
+    key: ln.label
+  }, seg(ln.vals).map((s, k) => /*#__PURE__*/React.createElement("polyline", {
+    key: k,
+    points: s.map(p => p.join(",")).join(" "),
+    fill: "none",
+    stroke: ln.color,
+    strokeWidth: ln.dash ? 2 : 2.5,
+    strokeDasharray: ln.dash ? "5 4" : undefined,
+    strokeLinejoin: "round",
+    strokeLinecap: "round"
+  })), ln.vals.map((v, i) => v === null || v === undefined ? null : /*#__PURE__*/React.createElement("circle", {
+    key: i,
+    cx: x(i),
+    cy: y(v),
+    r: 3,
+    fill: ln.color
+  })))));
+}
+
+function Legend({
+  lines
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 16,
+      flexWrap: "wrap",
+      marginTop: 4
+    }
+  }, lines.map(ln => /*#__PURE__*/React.createElement("span", {
+    key: ln.label,
+    style: {
+      fontSize: 12.5,
+      color: C.ink2,
+      display: "flex",
+      alignItems: "center",
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      width: 16,
+      height: 3,
+      background: ln.color,
+      display: "inline-block",
+      opacity: ln.dash ? 0.65 : 1
+    }
+  }), ln.label)));
+}
+
+/* ---------- the exam / lab table ---------- */
+
+function GroupTable({
+  title,
+  note,
+  rows,
+  scopes,
+  compare
+}) {
+  const live_ = rows.filter(r => scopes.some(s => (r.stats[s.key] || {}).n));
+  if (!live_.length) return null;
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 34
+    }
+  }, /*#__PURE__*/React.createElement("h4", {
+    style: {
+      fontSize: 16,
+      fontWeight: 700,
+      color: C.ink,
+      margin: "0 0 4px"
+    }
+  }, title), note ? /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13,
+      color: C.ink3,
+      lineHeight: 1.5,
+      margin: "0 0 12px",
+      maxWidth: "64ch"
+    }
+  }, note) : null, live_.map(r => {
+    const first = r.stats[scopes[0].key] || {
+      n: 0
+    };
+    const second = compare ? r.stats[scopes[1].key] || {
+      n: 0
+    } : null;
+    const gap = second && second.n && first.n ? pctOf(second) - pctOf(first) : null;
+    return /*#__PURE__*/React.createElement("div", {
+      key: r.key,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 12,
+        marginBottom: 8,
+        flexWrap: "wrap"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 14,
+        color: C.ink2,
+        width: 175,
+        flexShrink: 0,
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap"
+      },
+      title: r.title || r.label
+    }, r.label), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1,
+        minWidth: 150,
+        display: "flex",
+        flexDirection: "column",
+        gap: 3
+      }
+    }, scopes.map(s => {
+      const t = r.stats[s.key] || {
+        n: 0,
+        right: 0
+      };
+      return /*#__PURE__*/React.createElement("div", {
+        key: s.key,
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 10
+        }
+      }, compare ? /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 11.5,
+          color: C.ink3,
+          width: 62,
+          flexShrink: 0
+        }
+      }, s.label) : null, /*#__PURE__*/React.createElement(MiniBar, {
+        pct: pctOf(t)
+      }), /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 13,
+          color: t.n ? C.ink2 : C.ink3,
+          width: 92,
+          flexShrink: 0,
+          textAlign: "right"
+        }
+      }, t.n ? `${pctOf(t)}% · ${t.n}` : "no answers"));
+    })), compare ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 13,
+        fontWeight: 600,
+        width: 96,
+        flexShrink: 0,
+        textAlign: "right",
+        color: gap === null ? C.ink3 : gap > 0 ? C.teal : gap < 0 ? C.red : C.ink2
+      },
+      title: "LD 810 minus everyone, in percentage points"
+    }, gap === null ? "\u2014" : `${gap > 0 ? "+" : ""}${gap} pts`) : null);
+  }));
+}
+
+/* ---------- class results ---------- */
+
 function Stats({
   onExit
 }) {
-  const [sum, setSum] = useState(null);
+  const [det, setDet] = useState(null);
+  const [legacy, setLegacy] = useState(null);
   const [who, setWho] = useState("all");
-  const load = c => {
-    setSum(null);
-    loadSummary(c === "all" ? "" : c).then(setSum);
+  const [grain, setGrain] = useState("week");
+  const [basis, setBasis] = useState("content");
+  const load = () => {
+    setDet(null);
+    setLegacy(null);
+    loadDetail("").then(async d => {
+      if (d && d.legacy) {
+        const [all, cls] = await Promise.all([loadSummary(""), loadSummary(COHORT_NAME)]);
+        setLegacy({
+          all,
+          cls
+        });
+        setDet(all);
+      } else setDet(d);
+    });
   };
   useEffect(() => {
-    load(who);
-  }, [who]);
+    load();
+  }, []);
+
+  /* One pass over the rows builds every tally the page needs. Scope keys:
+     all = everything in the sheet, class = LD 810 rows, open = the rest. */
   const view = useMemo(() => {
-    if (!sum || !Array.isArray(sum.items)) return null;
+    if (!det || det.offline || det.error && !det.rows) return null;
     const byId = Object.fromEntries(BANK.items.map(i => [i.i, i]));
-    const rows = sum.items.map(r => ({
-      ...r,
-      pct: r.n ? Math.round(r.right / r.n * 100) : 0,
-      item: byId[r.id]
-    })).filter(r => r.item);
-    const group = (keyOf, labelOf) => {
-      const m = {};
-      rows.forEach(r => {
-        const k = keyOf(r);
-        if (!k) return;
-        if (!m[k]) m[k] = [];
-        m[k].push(r);
+    const blank = () => ({
+      n: 0,
+      right: 0
+    });
+    const add = (t, ok) => {
+      t.n += 1;
+      t.right += ok;
+    };
+    const scopesOf = coh => coh === COHORT_NAME.toLowerCase() ? ["all", "class"] : ["all", "open"];
+
+    /* legacy path: item tallies only, from two summary calls */
+    if (legacy) {
+      const items = {};
+      const put = (list, scope) => (list || []).forEach(r => {
+        if (!items[r.id]) items[r.id] = {
+          all: blank(),
+          class: blank(),
+          open: blank()
+        };
+        items[r.id][scope] = {
+          n: r.n,
+          right: r.right
+        };
       });
-      return Object.keys(m).map(k => ({
-        key: k,
-        label: labelOf(k),
-        rows: m[k]
-      }));
+      put((legacy.all || {}).items, "all");
+      put((legacy.cls || {}).items, "class");
+      Object.keys(items).forEach(id => {
+        items[id].open = {
+          n: items[id].all.n - items[id].class.n,
+          right: items[id].all.right - items[id].class.right
+        };
+      });
+      const contentL = {};
+      Object.keys(items).forEach(id => {
+        const item = byId[id];
+        if (!item) return;
+        PRESETS.forEach(([k]) => {
+          if (!(item.s || []).some(n => (BANK.x[k] || []).includes(n))) return;
+          if (!contentL[k]) contentL[k] = {
+            all: blank(),
+            class: blank(),
+            open: blank()
+          };
+          ["all", "class", "open"].forEach(sc => {
+            contentL[k][sc].n += items[id][sc].n;
+            contentL[k][sc].right += items[id][sc].right;
+          });
+        });
+      });
+      return {
+        items,
+        byId,
+        content: contentL,
+        runsN: (legacy.all || {}).runs || 0,
+        answers: (legacy.all || {}).answers || 0,
+        cohorts: (legacy.all || {}).cohorts || [],
+        buckets: [],
+        trend: {},
+        runGroups: null,
+        noRuns: true
+      };
+    }
+
+    const items = {};
+    const contentSeen = {};
+    const runG = {};
+    const trend = {};
+    const bucketSet = {};
+    const runsBy = {
+      all: {},
+      class: {},
+      open: {}
     };
+    const grainKey = d => grain === "day" ? d : weekStart(d);
+    const touch = (store, key, bucket, scope, ok) => {
+      if (!store[key]) store[key] = {};
+      if (!store[key][bucket]) store[key][bucket] = {
+        all: blank(),
+        class: blank(),
+        open: blank()
+      };
+      add(store[key][bucket][scope], ok);
+    };
+    det.rows.forEach(([id, ok, ri]) => {
+      const run = det.runs[ri];
+      if (!run) return;
+      const [day, sess, timer, coh] = run;
+      const scopes = scopesOf(String(coh || "open").toLowerCase());
+      const bucket = grainKey(day);
+      bucketSet[bucket] = true;
+      const item = byId[id];
+      const g = runGroup(sess, timer);
+      scopes.forEach(s => {
+        runsBy[s][ri] = true;
+        if (!items[id]) items[id] = {
+          all: blank(),
+          class: blank(),
+          open: blank()
+        };
+        add(items[id][s], ok);
+        // by what they ran
+        if (!runG[g]) runG[g] = {
+          all: blank(),
+          class: blank(),
+          open: blank()
+        };
+        add(runG[g][s], ok);
+        touch(trend, "run:" + g, bucket, s, ok);
+        // by content
+        if (item) {
+          PRESETS.forEach(([k]) => {
+            if ((item.s || []).some(n => (BANK.x[k] || []).includes(n))) {
+              if (!contentSeen[k]) contentSeen[k] = {
+                all: blank(),
+                class: blank(),
+                open: blank()
+              };
+              add(contentSeen[k][s], ok);
+              touch(trend, "content:" + k, bucket, s, ok);
+            }
+          });
+          touch(trend, "overall", bucket, s, ok);
+        }
+      });
+    });
     return {
-      rows,
-      unknown: sum.items.length - rows.length,
-      hardest: [...rows].filter(r => r.n >= 2).sort((a, b) => a.pct - b.pct).slice(0, 15),
-      topics: group(r => r.item.t, k => k),
-      themes: group(r => r.item.th, k => (BANK.themes || {})[k] || k)
+      items,
+      byId,
+      content: contentSeen,
+      runGroups: runG,
+      trend,
+      buckets: Object.keys(bucketSet).sort(),
+      runsN: Object.keys(runsBy.all).length,
+      runsClass: Object.keys(runsBy.class).length,
+      answers: det.rows.length,
+      cohorts: det.cohorts || [],
+      truncated: det.truncated,
+      skipped: det.skipped
     };
-  }, [sum]);
+  }, [det, legacy, grain]);
+
+  /* the scope currently on screen, and whether we are comparing */
+  const compare = who === "all";
+  const scopes = compare ? [{
+    key: "all",
+    label: "Everyone",
+    color: C.ink3
+  }, {
+    key: "class",
+    label: COHORT_LABEL,
+    color: C.red
+  }] : who === COHORT_NAME ? [{
+    key: "class",
+    label: COHORT_LABEL,
+    color: C.red
+  }] : [{
+    key: "open",
+    label: "Open practice",
+    color: C.teal
+  }];
+  const one = scopes[scopes.length - 1].key;
+
+  /* the existing item-level sections read one scope at a time */
+  const rows = useMemo(() => {
+    if (!view) return [];
+    return Object.keys(view.items).map(id => {
+      const t = view.items[id][one] || {
+        n: 0,
+        right: 0
+      };
+      return {
+        id,
+        n: t.n,
+        right: t.right,
+        pct: pctOf(t),
+        item: view.byId[id]
+      };
+    }).filter(r => r.item && r.n > 0);
+  }, [view, one]);
+  const group = (keyOf, labelOf) => {
+    const m = {};
+    rows.forEach(r => {
+      const k = keyOf(r);
+      if (!k) return;
+      if (!m[k]) m[k] = [];
+      m[k].push(r);
+    });
+    return Object.keys(m).map(k => ({
+      key: k,
+      label: labelOf(k),
+      rows: m[k]
+    }));
+  };
+  const hardest = [...rows].filter(r => r.n >= 2).sort((a, b) => a.pct - b.pct).slice(0, 15);
+  const unknown = view ? Object.keys(view.items).length - rows.length : 0;
+
+  /* group rows for the two tables */
+  const tableRows = src => PRESETS.map(([k, label]) => ({
+    key: k,
+    label,
+    title: presetTitle(k),
+    stats: (src || {})[k] || {}
+  }));
+  const runRows = view && view.runGroups ? [...PRESETS.map(([k, label]) => ({
+    key: k,
+    label,
+    title: presetTitle(k),
+    stats: view.runGroups[k] || {}
+  })), ...["live", "whole", "custom"].map(k => ({
+    key: k,
+    label: RUN_EXTRA[k],
+    title: RUN_EXTRA[k],
+    stats: view.runGroups[k] || {}
+  }))] : [];
+
+  /* trend lines for one group key */
+  const linesFor = key => {
+    if (!view || !view.trend[key]) return null;
+    const b = view.trend[key];
+    const ls = scopes.map(s => ({
+      label: s.label,
+      color: s.color,
+      dash: s.key === "all" && compare,
+      vals: view.buckets.map(bk => {
+        const t = b[bk] && b[bk][s.key];
+        return t && t.n >= 3 ? pctOf(t) : null;
+      })
+    }));
+    return ls.some(l => l.vals.some(v => v !== null)) ? ls : null;
+  };
+  const trendKeys = PRESETS.map(([k, label]) => [(basis === "content" ? "content:" : "run:") + k, label]);
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
@@ -1369,24 +1972,24 @@ function Stats({
     }
   }, /*#__PURE__*/React.createElement("option", {
     value: "all"
-  }, "Everyone"), /*#__PURE__*/React.createElement("option", {
+  }, "Everyone vs ", COHORT_LABEL), /*#__PURE__*/React.createElement("option", {
     value: COHORT_NAME
   }, COHORT_LABEL, " only"), /*#__PURE__*/React.createElement("option", {
     value: "open"
   }, "Open practice only")), /*#__PURE__*/React.createElement(Btn, {
     kind: "ghost",
     size: "sm",
-    onClick: () => load(who)
+    onClick: load
   }, "Refresh"), /*#__PURE__*/React.createElement(Btn, {
     kind: "ghost",
     size: "sm",
     onClick: onExit
-  }, "Back"))), !sum && /*#__PURE__*/React.createElement("p", {
+  }, "Back"))), !det && /*#__PURE__*/React.createElement("p", {
     style: {
       color: C.ink3,
       fontSize: 16
     }
-  }, "Reading the results sheet…"), sum && sum.offline && /*#__PURE__*/React.createElement("div", {
+  }, "Reading the results sheet\u2026"), det && det.offline && /*#__PURE__*/React.createElement("div", {
     style: {
       borderLeft: `3px solid ${C.gold}`,
       paddingLeft: 18,
@@ -1399,7 +2002,7 @@ function Stats({
       lineHeight: 1.6,
       marginTop: 0
     }
-  }, "No results endpoint is configured. Open this file, put your Apps Script URL in the ENDPOINT line near the top, and re-upload it.")), sum && sum.error && /*#__PURE__*/React.createElement("div", {
+  }, "No results endpoint is configured. Put your Apps Script URL in config.json, next to this file.")), det && det.error && !det.rows && /*#__PURE__*/React.createElement("div", {
     style: {
       borderLeft: `3px solid ${C.red}`,
       paddingLeft: 18,
@@ -1412,7 +2015,21 @@ function Stats({
       lineHeight: 1.6,
       marginTop: 0
     }
-  }, sum.error, " Check that the Apps Script deployment runs as you, with access set to anyone, and that the URL ends in /exec.")), view && view.rows.length === 0 && !sum.error && /*#__PURE__*/React.createElement("div", {
+  }, det.error, " Check that the Apps Script deployment runs as you, with access set to anyone, and that the URL ends in /exec.")), legacy && /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderLeft: `3px solid ${C.gold}`,
+      paddingLeft: 18,
+      maxWidth: "66ch",
+      marginBottom: 26
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.ink2,
+      fontSize: 15,
+      lineHeight: 1.6,
+      margin: 0
+    }
+  }, "This deployment is running the older Apps Script, which returns item tallies only. Exam and lab grouping by content still works below, and so does the ", COHORT_LABEL, " comparison. ", /*#__PURE__*/React.createElement("strong", null, "What students actually ran, and everything over time, needs the updated Code.gs"), " \u2014 paste it in, then Deploy \u203a Manage deployments \u203a pencil \u203a New version, so the /exec URL stays the same.")), view && rows.length === 0 && /*#__PURE__*/React.createElement("div", {
     style: {
       borderLeft: `3px solid ${C.gold}`,
       paddingLeft: 18,
@@ -1425,14 +2042,16 @@ function Stats({
       lineHeight: 1.6,
       marginTop: 0
     }
-  }, "Connected, but nothing recorded yet. Once students run a few practice sets this fills with the items they're missing most, which is the list worth spending class time on.")), view && view.rows.length > 0 && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  }, "Connected, but nothing recorded in this view yet. Once students run a few practice sets this fills with the items they're missing most, which is the list worth spending class time on.")), view && rows.length > 0 && /*#__PURE__*/React.createElement("div", null,
+  /* headline numbers */
+  /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 48,
-      marginBottom: 38,
+      marginBottom: 30,
       flexWrap: "wrap"
     }
-  }, [[sum.runs || 0, "practice sets"], [sum.answers || 0, "answers"], [view.rows.length, "items attempted"]].map(([v, l], k) => /*#__PURE__*/React.createElement("div", {
+  }, [[view.runsN || 0, "practice sets"], [view.answers || 0, "answers"], [rows.length, "items attempted"], [compare && view.runsClass !== undefined ? view.runsClass : null, `${COHORT_LABEL} sets`]].filter(p => p[0] !== null).map(([v, l], k) => /*#__PURE__*/React.createElement("div", {
     key: k
   }, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -1447,26 +2066,174 @@ function Stats({
       color: C.ink3,
       marginTop: 5
     }
-  }, l)))), Array.isArray(sum.cohorts) && sum.cohorts.length > 1 && /*#__PURE__*/React.createElement("p", {
+  }, l)))), Array.isArray(view.cohorts) && view.cohorts.length > 1 && /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 14,
       color: C.ink3,
-      marginTop: -22,
+      marginTop: -18,
+      marginBottom: 30
+    }
+  }, "In the sheet overall: ", view.cohorts.map(c => `${c.name} ${c.answers}`).join(" \u00b7 ")), view.truncated && /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13,
+      color: C.ink3,
+      marginTop: -20,
+      marginBottom: 28
+    }
+  }, "Showing the most recent 60,000 answers; ", view.skipped, " older ones are not in this view."),
+  /* ---- exams and lab checks ---- */
+  /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 19,
+      fontWeight: 700,
+      color: C.ink,
+      marginBottom: 5
+    }
+  }, "By exam and lab check"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13.5,
+      color: C.ink3,
+      lineHeight: 1.5,
+      margin: "0 0 18px",
+      maxWidth: "66ch"
+    }
+  }, "The same answers read two ways. ", compare ? `Each group shows everyone in the sheet against ${COHORT_LABEL}, and the gap in percentage points \u2014 positive means the class is ahead of the open practice crowd.` : "Switch the selector above to compare the class against everyone."), /*#__PURE__*/React.createElement(GroupTable, {
+    title: "By content",
+    note: "Every answer to an item tagged to a session in that group, however the student got there. A session 1\u20134 item counts in both Lab 1 Check and Exam 1, because it is the same material.",
+    rows: tableRows(view.content),
+    scopes: scopes,
+    compare: compare
+  }), view.runGroups ? /*#__PURE__*/React.createElement(GroupTable, {
+    title: "By what they ran",
+    note: "The set the student actually launched, matched to its preset by the sessions it covered. Custom picks and whole-pool runs are listed separately, and live in-class questions are their own row.",
+    rows: runRows,
+    scopes: scopes,
+    compare: compare
+  }) : null,
+  /* ---- over time ---- */
+  /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "baseline",
+      flexWrap: "wrap",
+      gap: 10,
+      marginTop: 10
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 19,
+      fontWeight: 700,
+      color: C.ink,
+      margin: 0
+    }
+  }, "How it is changing"), view.noRuns ? null : /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement(Select, {
+    value: basis,
+    onChange: setBasis,
+    style: {
+      minWidth: 140
+    }
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "content"
+  }, "By content"), /*#__PURE__*/React.createElement("option", {
+    value: "run"
+  }, "By what they ran")), /*#__PURE__*/React.createElement(Select, {
+    value: grain,
+    onChange: setGrain,
+    style: {
+      minWidth: 110
+    }
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "week"
+  }, "By week"), /*#__PURE__*/React.createElement("option", {
+    value: "day"
+  }, "By day")))), view.noRuns ? /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 14,
+      color: C.ink3,
+      maxWidth: "62ch",
+      marginTop: 6
+    }
+  }, "Not available on the older Apps Script \u2014 the summary route does not return the timestamp.") : /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13.5,
+      color: C.ink3,
+      lineHeight: 1.5,
+      margin: "6px 0 16px",
+      maxWidth: "66ch"
+    }
+  }, "Percent correct per ", grain === "day" ? "day" : "week", ", one panel per group. A bucket with fewer than three answers is left out rather than drawn as a spike, so gaps in a line mean quiet weeks, not bad ones."), linesFor("overall") ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 26,
+      maxWidth: 620
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      fontWeight: 700,
+      color: C.ink,
+      marginBottom: 2
+    }
+  }, "Everything"), /*#__PURE__*/React.createElement(TrendChart, {
+    buckets: view.buckets,
+    lines: linesFor("overall"),
+    height: 160
+  }), /*#__PURE__*/React.createElement(Legend, {
+    lines: linesFor("overall")
+  })) : null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: 26,
       marginBottom: 34
     }
-  }, "In the sheet overall: ", sum.cohorts.map(c => `${c.name} ${c.answers}`).join(" · ")), /*#__PURE__*/React.createElement("h3", {
+  }, trendKeys.map(([key, label]) => {
+    const ls = linesFor(key);
+    return /*#__PURE__*/React.createElement("div", {
+      key: key,
+      style: {
+        flex: "1 1 280px",
+        minWidth: 260,
+        maxWidth: 420
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 14.5,
+        fontWeight: 700,
+        color: C.ink,
+        marginBottom: 2
+      }
+    }, label), ls ? /*#__PURE__*/React.createElement(TrendChart, {
+      buckets: view.buckets,
+      lines: ls,
+      height: 140
+    }) : /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 13,
+        color: C.ink3,
+        margin: "8px 0 0"
+      }
+    }, "Not enough practice here yet to draw a line."));
+  }))),
+  /* ---- the existing sections ---- */
+  /*#__PURE__*/React.createElement("h3", {
     style: {
       fontSize: 19,
       fontWeight: 700,
       color: C.ink,
       marginBottom: 14
     }
-  }, "By session"), /*#__PURE__*/React.createElement("div", {
+  }, "By session", compare ? ` \u2014 ${COHORT_LABEL}` : ""), /*#__PURE__*/React.createElement("div", {
     style: {
       marginBottom: 38
     }
   }, SESSIONS.map(n => {
-    const rs = view.rows.filter(r => r.item.s.includes(n));
+    const rs = rows.filter(r => r.item.s.includes(n));
     if (!rs.length) return null;
     const tries = rs.reduce((a, b) => a + b.n, 0);
     const pct = Math.round(rs.reduce((a, b) => a + b.right, 0) / tries * 100);
@@ -1488,20 +2255,9 @@ function Stats({
         textOverflow: "ellipsis",
         whiteSpace: "nowrap"
       }
-    }, n, ". ", BANK.m[n]), /*#__PURE__*/React.createElement("div", {
-      style: {
-        flex: 1,
-        height: 14,
-        background: C.wash,
-        minWidth: 60
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        height: 14,
-        width: `${pct}%`,
-        background: pct < 50 ? C.red : pct < 75 ? C.gold : C.teal
-      }
-    })), /*#__PURE__*/React.createElement("span", {
+    }, n, ". ", BANK.m[n]), /*#__PURE__*/React.createElement(MiniBar, {
+      pct: pct
+    }), /*#__PURE__*/React.createElement("span", {
       style: {
         fontSize: 13.5,
         color: C.ink2,
@@ -1509,15 +2265,15 @@ function Stats({
         flexShrink: 0,
         textAlign: "right"
       }
-    }, pct, "% · ", tries));
+    }, pct, "% \u00b7 ", tries));
   })), /*#__PURE__*/React.createElement(Breakdown, {
-    title: "By topic — hardest first",
+    title: "By topic \u2014 hardest first",
     note: "Grouped by the concept each item tests, not by the week it was taught. A topic sitting in the red across several sessions is the one worth re-teaching.",
-    groups: view.topics
+    groups: group(r => r.item.t, k => k)
   }), /*#__PURE__*/React.createElement(Breakdown, {
-    title: "By themed set — hardest first",
+    title: "By themed set \u2014 hardest first",
     note: "Only items from the themed sets. Useful for spotting a set that is landing badly, and for noticing when the scenery is carrying more of the difficulty than the statistics.",
-    groups: view.themes
+    groups: group(r => r.item.th, k => (BANK.themes || {})[k] || k)
   }), /*#__PURE__*/React.createElement("h3", {
     style: {
       fontSize: 19,
@@ -1525,7 +2281,7 @@ function Stats({
       color: C.ink,
       marginBottom: 16
     }
-  }, "Lowest scoring items"), view.hardest.map(r => /*#__PURE__*/React.createElement("div", {
+  }, "Lowest scoring items"), hardest.map(r => /*#__PURE__*/React.createElement("div", {
     key: r.id,
     style: {
       display: "flex",
@@ -1545,7 +2301,7 @@ function Stats({
       fontSize: 21,
       fontWeight: 700,
       lineHeight: 1,
-      color: r.pct < 50 ? C.red : r.pct < 75 ? C.gold : C.teal
+      color: pctColor(r.pct)
     }
   }, r.pct, "%"), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -1569,13 +2325,17 @@ function Stats({
       color: C.ink3,
       marginTop: 4
     }
-  }, r.item.t)))), view.unknown > 0 && /*#__PURE__*/React.createElement("p", {
+  }, r.item.i, " \u00b7 ", r.item.t), /*#__PURE__*/React.createElement(ReportLink, {
+    item: r.item,
+    lead: "Flag or ask about this one: ",
+    extra: ["", "Keyed answer: " + (r.item.a || []).map(n => (LETTERS[n] || "?").toUpperCase()).join(", "), `Class performance at the time of writing: ${r.pct}% correct over ${r.n} tries.`]
+  })))), unknown > 0 && /*#__PURE__*/React.createElement("p", {
     style: {
       fontSize: 13.5,
       color: C.ink3,
       marginTop: 20
     }
-  }, view.unknown, " recorded item", view.unknown === 1 ? "" : "s", " is no longer in bank.json, so it was retired or renamed after those answers were given.")));
+  }, unknown, " recorded item", unknown === 1 ? "" : "s", " is no longer in bank.json, so it was retired or renamed after those answers were given.")));
 }
 
 /* Shows whether the SERVER agreed this is a test run. st.test comes back from
@@ -1599,7 +2359,7 @@ function GuestBanner({
       lineHeight: 1.5,
       maxWidth: "72ch"
     }
-  }, confirmed ? /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", null, "Open session \u2014 anyone can join."), " The card on the main page invites guests in without needing to be on the class roster. They can put in a first name or stay anonymous, and their answers are tagged as guests so they never touch the LD 810 numbers.") : /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", null, "Heads up: this is running as a class session."), " You asked for an open session, but the Apps Script did not confirm it \u2014 it is still the older deployment. Redeploy it (see README) or end this session."));
+  }, confirmed ? /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", null, "Open session \u2014 anyone can join."), " The card on the main page invites guests in without the class password. They can put in a first name or stay anonymous, and their answers are tagged as guests so they never touch the LD 810 numbers.") : /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", null, "Heads up: this is running as a class session."), " You asked for an open session, but the Apps Script did not confirm it \u2014 it is still the older deployment. Redeploy it (see README) or end this session."));
 }
 
 function TestBanner({
@@ -1634,7 +2394,8 @@ function LiveConsole({
   const [st, setSt] = useState(null);
   const [tally, setTally] = useState({
     counts: {},
-    total: 0
+    total: 0,
+    right: 0
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(null);
@@ -1660,13 +2421,21 @@ function LiveConsole({
       });
     };
   }, []);
+  /* usePoll keeps the callback from the render that switched polling on, so
+     it would keep asking for that question's tally forever. Read the current
+     question from a ref instead. */
+  const idxRef = useRef(-1);
+  idxRef.current = st ? st.idx : -1;
   usePoll(async () => {
-    if (!st) return;
-    const r = await getLive(`_tally&idx=${st.idx}`);
-    if (r && !r.error) {
+    const idx = idxRef.current;
+    if (idx < 0) return;
+    const r = await getLive(`_tally&idx=${idx}`);
+    if (idx !== idxRef.current) return; // host moved on mid-request
+    if (r && !r.error && Number(r.idx) === idx) {
       setTally({
         counts: r.counts || {},
-        total: r.total || 0
+        total: r.total || 0,
+        right: r.right || 0
       });
       if (r.state) setSt(prev => ({
         ...prev,
@@ -1684,7 +2453,8 @@ function LiveConsole({
       setSt(r.state);
       setTally({
         counts: {},
-        total: 0
+        total: 0,
+        right: 0
       });
     } else setErr(r.error || "That didn't go through.");
     setBusy(false);
@@ -1774,6 +2544,8 @@ function LiveConsole({
     }, "Cancel session")));
   }
   const max = Math.max(1, ...Object.values(tally.counts || {}).map(Number));
+  const correctN = item ? (item.a || []).reduce((s, i) => s + Number((tally.counts || {})[i] || 0), 0) : 0;
+  const correctPct = tally.total ? Math.round(correctN / tally.total * 100) : 0;
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
@@ -1784,13 +2556,25 @@ function LiveConsole({
     }
   }, /*#__PURE__*/React.createElement(Pill, {
     tone: test ? "grey" : undefined
-  }, test ? "TEST \u00b7 Q" : "Question ", st.idx + 1, " of ", items.length), /*#__PURE__*/React.createElement("span", {
+  }, test ? "TEST \u00b7 Q" : "Question ", st.idx + 1, " of ", items.length), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 14
+    }
+  }, /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: 15,
       color: C.ink2,
       fontWeight: 600
     }
-  }, tally.total, " response", tally.total === 1 ? "" : "s", " in")), /*#__PURE__*/React.createElement("h2", {
+  }, tally.total, " response", tally.total === 1 ? "" : "s", " in"), st.revealed && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 15,
+      fontWeight: 700,
+      color: pctColor(correctPct)
+    }
+  }, correctPct, "% got it right"))), /*#__PURE__*/React.createElement("h2", {
     style: {
       fontSize: 27,
       fontWeight: 700,
