@@ -56,6 +56,68 @@ const NORECORD = (() => {
 let COHORT_NAME = "LD810";
 let COHORT_LABEL = "LD 810";
 const COHORT_STORE = "ld810_cohort";
+
+/* Every question carries both addresses. Students in the class see the
+   St. Martin's one first; open-practice users see the personal one first.
+   Either can be changed in config.json -> reportEmails without touching
+   this file. */
+let REPORT_EMAILS = {
+  class: "cmeiers@stmartin.edu",
+  open: "chrismeiers@gmail.com"
+};
+function reportList() {
+  const a = REPORT_EMAILS.class,
+    b = REPORT_EMAILS.open;
+  return (savedCohort() ? [a, b] : [b, a]).filter(Boolean);
+}
+function reportBody(item, extra) {
+  const L = [];
+  L.push("Question id: " + (item.i || "?"));
+  L.push("Topic: " + (item.t || "-"));
+  L.push("Session(s): " + ((item.s || []).join(", ") || "-"));
+  L.push("");
+  L.push(item.q || "");
+  (item.o || []).forEach((o, n) => L.push("   " + (LETTERS[n] || "?").toUpperCase() + ") " + o));
+  (extra || []).forEach(line => L.push(line));
+  L.push("");
+  L.push("What I think is wrong, or what I want to ask:");
+  L.push("");
+  return L.join("\n");
+}
+function reportHref(email, item, extra) {
+  return "mailto:" + email + "?subject=" + encodeURIComponent("LD 810 practice question " + (item.i || "")) + "&body=" + encodeURIComponent(reportBody(item, extra));
+}
+/* The question, its options and whatever the student picked ride along in
+   the body, so a report arrives with enough in it to act on. */
+function ReportLink({
+  item,
+  picked,
+  lead
+}) {
+  if (!item) return null;
+  const extra = [];
+  if (picked !== undefined && picked !== null) {
+    extra.push("");
+    extra.push("I answered: " + (picked === -1 ? "ran out of time" : (LETTERS[picked] || "?").toUpperCase() + ") " + ((item.o || [])[picked] || "")));
+    extra.push("The app marked correct: " + (item.a || []).map(n => (LETTERS[n] || "?").toUpperCase()).join(", "));
+  }
+  return /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 12.5,
+      color: C.ink3,
+      lineHeight: 1.6,
+      marginTop: 12,
+      maxWidth: "70ch"
+    }
+  }, lead || "Think this question is wrong, or want to ask about it? Email ", reportList().map((e, i, arr) => /*#__PURE__*/React.createElement("span", {
+    key: e
+  }, /*#__PURE__*/React.createElement("a", {
+    href: reportHref(e, item, extra),
+    style: {
+      color: C.red
+    }
+  }, e), i < arr.length - 1 ? " or " : "")), " \u2014 the question comes with the message, so you don't have to describe it.");
+}
 const NAME_STORE = "ld810_player_name";
 
 /* ---------- access ----------
@@ -71,8 +133,21 @@ const CLASS_MODE = (() => {
   try {
     const p = new URLSearchParams(window.location.search);
     const v = (p.get("class") || "").toLowerCase();
-    if (v === "1" || v === "true" || v === "ld810") return true;
+    if (v === "1" || v === "true" || v === "ld810" || v === "direct") return true;
     return window.location.hash.toLowerCase().indexOf("class") !== -1;
+  } catch (e) {
+    return false;
+  }
+})();
+
+/* class=direct is the same class link, but skips the home page entirely —
+   straight to the email box (or straight into practice if this device is
+   already unlocked). Used by the /quizapp short link. */
+const SKIP_HOME = (() => {
+  try {
+    const p = new URLSearchParams(window.location.search);
+    if ((p.get("class") || "").toLowerCase() === "direct") return true;
+    return window.location.hash.toLowerCase().indexOf("direct") !== -1;
   } catch (e) {
     return false;
   }
@@ -817,6 +892,7 @@ function Loader({
           setEndpoint(j.endpoint);
           if (j.cohortName) COHORT_NAME = String(j.cohortName);
           if (j.cohortLabel) COHORT_LABEL = String(j.cohortLabel);
+          if (j.reportEmails && typeof j.reportEmails === "object" && !Array.isArray(j.reportEmails)) REPORT_EMAILS = Object.assign({}, REPORT_EMAILS, j.reportEmails);
         }
       } catch (e) {/* no config.json — endpointProblem stays "unset" */}
       try {
@@ -1404,10 +1480,7 @@ function Practice({
   const pool = useMemo(() => filterItems(f), [f]);
   const secs = Math.max(5, Math.min(3600, Number(tVal) || 0));
   const running = deck && at < deck.length;
-  /* when the item now on screen was first shown, for response_time_sec */
-  const shownRef = React.useRef(Date.now());
   const start = () => {
-    shownRef.current = Date.now();
     const shuffled = [...pool].sort(() => Math.random() - 0.5);
     const n = len === "all" ? shuffled.length : Math.min(Number(len), shuffled.length);
     setDeck(shuffled.slice(0, n));
@@ -1434,11 +1507,7 @@ function Practice({
     const q = deck[at];
     const entry = {
       id: q.i,
-      correct: idx !== null && q.a.includes(idx) ? 1 : 0,
-      pos: log.length + 1,
-      choice: idx === null || idx === undefined || idx < 0 ? -1 : idx + 1,
-      ms: Math.max(0, Date.now() - shownRef.current),
-      at: new Date().toISOString()
+      correct: idx !== null && q.a.includes(idx) ? 1 : 0
     };
     const nextLog = [...log, entry];
     setLog(nextLog);
@@ -1454,7 +1523,6 @@ function Practice({
     if (at + 1 < deck.length) {
       setAt(at + 1);
       setPicked(null);
-      shownRef.current = Date.now();
       if (tMode === "perq") setLeft(secs);
       return;
     }
@@ -1483,11 +1551,7 @@ function Practice({
       const q = deck[at];
       const finalLog = picked === null ? [...log, {
         id: q.i,
-        correct: 0,
-        pos: log.length + 1,
-        choice: -1,
-        ms: Math.max(0, Date.now() - shownRef.current),
-        at: new Date().toISOString()
+        correct: 0
       }] : log;
       finish(finalLog);
     }
@@ -1671,7 +1735,10 @@ function Practice({
         marginTop: 5,
         fontWeight: 600
       }
-    }, m.item.a.map(ai => m.item.o[ai]).join(" · "))))), saved === null && NORECORD && /*#__PURE__*/React.createElement("div", {
+    }, m.item.a.map(ai => m.item.o[ai]).join(" · ")), /*#__PURE__*/React.createElement(ReportLink, {
+      item: m.item,
+      lead: "Disagree with this one, or want to ask about it? Email "
+    })))), saved === null && NORECORD && /*#__PURE__*/React.createElement("div", {
       style: {
         border: `1px solid ${C.teal}`,
         background: "#EAF4F2",
@@ -1866,7 +1933,10 @@ function Practice({
       marginTop: 14,
       maxWidth: "70ch"
     }
-  }, q.src.replace(/\*/g, "")), /*#__PURE__*/React.createElement("div", {
+  }, q.src.replace(/\*/g, "")), done && /*#__PURE__*/React.createElement(ReportLink, {
+    item: q,
+    picked: picked
+  }), /*#__PURE__*/React.createElement("div", {
     style: {
       borderTop: `1px solid ${C.line}`,
       marginTop: 40,
@@ -1917,33 +1987,77 @@ function LiveBanner({
     ? `Tap to join — ${st.n} question${st.n === 1 ? "" : "s"}, paced by the host. No class password, no sign-up.`
     : `Tap to join — ${st.n} question${st.n === 1 ? "" : "s"}, paced by your instructor.`));
 }
+/* One answer per question, and it survives a refresh: picks are kept per
+   session (keyed on its question list + label) in this browser. */
+const LIVE_PICK_STORE = "ld810_live_picks";
+function liveSessionKey(s) {
+  return (s.label || "") + "|" + (s.items || []).join(",");
+}
+function livePickFor(s, idx) {
+  try {
+    const raw = JSON.parse(window.localStorage.getItem(LIVE_PICK_STORE) || "null");
+    if (raw && raw.key === liveSessionKey(s) && raw.picks && typeof raw.picks[idx] === "number") return raw.picks[idx];
+  } catch (e) {}
+  return null;
+}
+function storeLivePick(s, idx, choice) {
+  try {
+    const key = liveSessionKey(s);
+    let raw = JSON.parse(window.localStorage.getItem(LIVE_PICK_STORE) || "null");
+    if (!raw || raw.key !== key) raw = { key, picks: {} };
+    raw.picks[idx] = choice;
+    window.localStorage.setItem(LIVE_PICK_STORE, JSON.stringify(raw));
+  } catch (e) {}
+}
 function LiveStudent({
   onExit
 }) {
   const [st, setSt] = useState(null);
   const [picked, setPicked] = useState(null);
-  const [sentIdx, setSentIdx] = useState(-1);
   const [log, setLog] = useState({});
   const [name, setName] = useState(savedName());
   const [nameDone, setNameDone] = useState(false);
+  const [roomTally, setRoomTally] = useState(null);
+  /* Refs, not state: usePoll keeps the first render's callback, so anything it
+     reads has to live in a ref or it goes stale (that stale read is what used
+     to clear the pick every two seconds and let students answer again). */
+  const seenIdx = useRef(null);
+  const lockRef = useRef(false);
   usePoll(async () => {
     const s = await getLive();
     setSt(s);
-    if (s && typeof s.idx === "number" && s.idx !== sentIdx) setPicked(null);
+    /* lobby or ended: forget old picks so a rerun of the same set starts clean */
+    if (s && !s.offline && !s.error && (!s.active || s.idx < 0)) {
+      try {
+        window.localStorage.removeItem(LIVE_PICK_STORE);
+      } catch (e) {}
+    }
+    if (s && typeof s.idx === "number" && s.idx !== seenIdx.current) {
+      seenIdx.current = s.idx;
+      const prior = s.active && s.idx >= 0 ? livePickFor(s, s.idx) : null;
+      setPicked(prior);
+      lockRef.current = prior !== null;
+      setRoomTally(null);
+    }
+    /* once the host reveals, pull the room's result for this question */
+    if (s && s.active && s.revealed && s.idx >= 0 && live()) {
+      try {
+        const r = await fetch(`${ENDPOINT}?mode=live_tally&idx=${s.idx}&t=${Date.now()}`);
+        const t = await r.json();
+        if (t && t.idx === s.idx) setRoomTally(t);
+      } catch (e) {/* percentage is a nice-to-have; never break the screen */}
+    }
   }, 2000, true);
   const item = useMemo(() => {
     if (!st || !st.active || st.idx < 0) return null;
     const id = st.items[st.idx];
     return BANK.items.find(i => i.i === id) || null;
   }, [st && st.idx, st && st.active]);
-  const liveRef = React.useRef({ idx: -1, t: Date.now() });
-  if (st && liveRef.current.idx !== st.idx) {
-    liveRef.current = { idx: st.idx, t: Date.now() };
-  }
   const submit = async choice => {
-    if (picked !== null || !item) return;
+    if (lockRef.current || picked !== null || !item || st.revealed) return;
+    lockRef.current = true;
     setPicked(choice);
-    setSentIdx(st.idx);
+    storeLivePick(st, st.idx, choice);
     const correct = item.a.includes(choice) ? 1 : 0;
     setLog({
       ...log,
@@ -1955,7 +2069,6 @@ function LiveStudent({
       id: item.i,
       choice,
       correct,
-      ms: Math.max(0, Date.now() - liveRef.current.t),
       cohort: savedCohort() || "open",
       name: st && st.guest ? name : ""
     });
@@ -2128,6 +2241,10 @@ function LiveStudent({
   }
   const answered = picked !== null;
   const showAnswer = st.revealed;
+  const locked = answered || showAnswer;
+  const roomN = roomTally ? Number(roomTally.total || 0) : 0;
+  const roomRight = roomTally ? (item.a || []).reduce((a, i) => a + Number((roomTally.counts || {})[i] || 0), 0) : 0;
+  const roomPct = roomN ? Math.round(roomRight / roomN * 100) : 0;
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
@@ -2174,32 +2291,68 @@ function LiveStudent({
       bg = C.wash;
       bd = C.ink3;
     }
+    /* after reveal: this option's share of the room, drawn as a fill */
+    const optN = showAnswer && roomTally ? Number((roomTally.counts || {})[i] || 0) : 0;
+    const optPct = showAnswer && roomN ? Math.round(optN / roomN * 100) : 0;
+    const fill = isRight ? "rgba(0,128,112,0.16)" : "rgba(120,120,120,0.14)";
+    const face = showAnswer && roomTally ? `linear-gradient(to right, ${fill} ${optPct}%, ${bg} ${optPct}%)` : bg;
     return /*#__PURE__*/React.createElement("button", {
       key: i,
       onClick: () => submit(i),
-      disabled: answered,
+      disabled: locked,
+      "aria-pressed": i === picked,
       style: {
         textAlign: "left",
         fontFamily: FONT,
         fontSize: 16.5,
         lineHeight: 1.45,
         padding: "15px 16px",
-        background: bg,
+        background: face,
         border: `1px solid ${bd}`,
         borderRadius: 2,
         color: fg,
-        cursor: answered ? "default" : "pointer",
+        cursor: locked ? "default" : "pointer",
         display: "flex",
         gap: 13,
-        fontWeight: showAnswer && isRight ? 600 : 400
+        alignItems: "baseline",
+        opacity: 1,
+        fontWeight: showAnswer && isRight || i === picked ? 600 : 400,
+        boxShadow: i === picked ? `inset 4px 0 0 ${showAnswer ? isRight ? C.teal : C.red : C.ink}` : "none"
       }
     }, /*#__PURE__*/React.createElement("span", {
       style: {
-        color: showAnswer && isRight ? C.teal : C.ink3,
+        color: showAnswer && isRight ? C.teal : i === picked ? C.ink : C.ink3,
         fontWeight: 700,
         flexShrink: 0
       }
-    }, LETTERS[i]), /*#__PURE__*/React.createElement("span", null, opt));
+    }, LETTERS[i]), /*#__PURE__*/React.createElement("span", {
+      style: {
+        flex: 1
+      }
+    }, opt), i === picked && /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 13,
+        fontWeight: 700,
+        color: showAnswer ? isRight ? C.teal : C.redDark : C.ink2,
+        flexShrink: 0,
+        whiteSpace: "nowrap"
+      }
+    }, "Your answer"), showAnswer && roomTally && /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 14,
+        fontWeight: 700,
+        color: isRight ? C.teal : C.ink2,
+        flexShrink: 0,
+        minWidth: 64,
+        textAlign: "right",
+        fontVariantNumeric: "tabular-nums"
+      }
+    }, optPct, "%", /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontWeight: 400,
+        color: C.ink3
+      }
+    }, " \u00b7 ", optN)));
   })), showAnswer && /*#__PURE__*/React.createElement("p", {
     style: {
       marginTop: 22,
@@ -2207,7 +2360,17 @@ function LiveStudent({
       fontWeight: 600,
       color: answered ? item.a.includes(picked) ? C.teal : C.ink2 : C.ink3
     }
-  }, answered ? item.a.includes(picked) ? "You got it." : "The correct answer is highlighted." : "You didn't answer this one."), !answered && !showAnswer && /*#__PURE__*/React.createElement("p", {
+  }, answered ? item.a.includes(picked) ? "You got it." : "The correct answer is highlighted." : "You didn't answer this one."), showAnswer && /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 8,
+      fontSize: 15.5,
+      color: C.ink2
+    }
+  }, !roomTally ? "Loading the room's results\u2026" : roomN ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("strong", {
+    style: {
+      color: C.ink
+    }
+  }, roomPct, "%"), " of the room got it right (", roomRight, " of ", roomN, ")") : "No one answered this one."), !answered && !showAnswer && /*#__PURE__*/React.createElement("p", {
     style: {
       marginTop: 22,
       fontSize: 15,
@@ -2515,7 +2678,10 @@ function ClassResults({
 /* ---------- shell ---------- */
 
 function App() {
-  const [view, setView] = useState("home");
+  const [view, setView] = useState(() => {
+    if (!SKIP_HOME) return "home";
+    return savedCohort() === COHORT_NAME ? "practice810" : "gate";
+  });
   const [cohort, setCohort] = useState(savedCohort());
   const inClass = cohort === COHORT_NAME;
   const [linkCopied, setLinkCopied] = useState(false);
@@ -2669,7 +2835,7 @@ function App() {
     }
   }, COHORT_LABEL, " practice"), inClass ? /*#__PURE__*/React.createElement(Pill, null, "Unlocked") : /*#__PURE__*/React.createElement(Pill, {
     tone: "grey"
-  }, "Password")), /*#__PURE__*/React.createElement("div", {
+  }, "Email check")), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 15.5,
       color: C.ink2,
@@ -2677,7 +2843,7 @@ function App() {
       lineHeight: 1.5,
       maxWidth: "58ch"
     }
-  }, inClass ? "Your practice counts toward the class pool. Pick any mix of sessions and topics, set your own clock." : "For students currently enrolled in LD 810 only. Enter the class password once on this device and your practice counts toward the class pool. Not in the class? Use the open practice below — same questions.")), /*#__PURE__*/React.createElement("button", {
+  }, inClass ? "Your practice counts toward the class pool. Pick any mix of sessions and topics, set your own clock." : "For students currently enrolled in LD 810 only. Enter your class email once on this device and your practice counts toward the class pool. Not in the class? Use the open practice below — same questions.")), /*#__PURE__*/React.createElement("button", {
     onClick: () => setView("practiceOpen"),
     style: {
       textAlign: "left",
