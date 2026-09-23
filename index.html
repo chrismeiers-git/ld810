@@ -1988,26 +1988,249 @@ function LiveBanner({
     : `Tap to join — ${st.n} question${st.n === 1 ? "" : "s"}, paced by your instructor.`));
 }
 /* One answer per question, and it survives a refresh: picks are kept per
-   session (keyed on its question list + label) in this browser. */
+   session in this browser, along with the session's question list, so the
+   end-of-session review can be rebuilt after a reload. Keyed on the run id
+   when the endpoint sends one, otherwise on label + question list. */
 const LIVE_PICK_STORE = "ld810_live_picks";
 function liveSessionKey(s) {
-  return (s.label || "") + "|" + (s.items || []).join(",");
+  return s.runId ? "run:" + s.runId : (s.label || "") + "|" + (s.items || []).join(",");
+}
+function readLiveStore() {
+  try {
+    return JSON.parse(window.localStorage.getItem(LIVE_PICK_STORE) || "null");
+  } catch (e) {
+    return null;
+  }
+}
+function writeLiveStore(raw) {
+  try {
+    window.localStorage.setItem(LIVE_PICK_STORE, JSON.stringify(raw));
+  } catch (e) {}
+}
+function clearLiveStore() {
+  try {
+    window.localStorage.removeItem(LIVE_PICK_STORE);
+  } catch (e) {}
 }
 function livePickFor(s, idx) {
-  try {
-    const raw = JSON.parse(window.localStorage.getItem(LIVE_PICK_STORE) || "null");
-    if (raw && raw.key === liveSessionKey(s) && raw.picks && typeof raw.picks[idx] === "number") return raw.picks[idx];
-  } catch (e) {}
+  const raw = readLiveStore();
+  if (raw && raw.key === liveSessionKey(s) && raw.picks && typeof raw.picks[idx] === "number") return raw.picks[idx];
   return null;
 }
 function storeLivePick(s, idx, choice) {
-  try {
-    const key = liveSessionKey(s);
-    let raw = JSON.parse(window.localStorage.getItem(LIVE_PICK_STORE) || "null");
-    if (!raw || raw.key !== key) raw = { key, picks: {} };
-    raw.picks[idx] = choice;
-    window.localStorage.setItem(LIVE_PICK_STORE, JSON.stringify(raw));
-  } catch (e) {}
+  const key = liveSessionKey(s);
+  let raw = readLiveStore();
+  if (!raw || raw.key !== key) raw = {
+    key,
+    label: s.label || "",
+    items: (s.items || []).slice(),
+    when: new Date().toISOString(),
+    picks: {}
+  };
+  raw.picks[idx] = choice;
+  writeLiveStore(raw);
+}
+/* Mark the stored session finished (the host ended it). Kept until the next
+   session's lobby so the student can come back to the review after a reload. */
+function markLiveStoreEnded() {
+  const raw = readLiveStore();
+  if (raw && !raw.ended) {
+    raw.ended = true;
+    writeLiveStore(raw);
+  }
+}
+/* Score the stored session against the bank: one row per question in the run. */
+function liveReview(raw) {
+  if (!raw || !raw.items || !raw.items.length) return null;
+  const rows = raw.items.map((id, idx) => {
+    const item = BANK.items.find(i => i.i === id) || null;
+    const pick = raw.picks && typeof raw.picks[idx] === "number" ? raw.picks[idx] : null;
+    return {
+      idx,
+      item,
+      pick,
+      answered: pick !== null && pick >= 0,
+      correct: !!(item && pick !== null && item.a.includes(pick))
+    };
+  }).filter(r => r.item);
+  const answered = rows.filter(r => r.answered).length;
+  const right = rows.filter(r => r.correct).length;
+  return {
+    rows,
+    answered,
+    right,
+    n: rows.length,
+    pct: answered ? Math.round(right / answered * 100) : 0,
+    label: raw.label || "Live session",
+    when: raw.when || null
+  };
+}
+/* End-of-session review for a student. Same shape as the practice summary:
+   score, percentage, then every question with their pick and the right answer. */
+function LiveReview({
+  rev,
+  onExit,
+  fromHome
+}) {
+  if (!rev) {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+      style: {
+        fontSize: 28,
+        fontWeight: 700,
+        margin: 0,
+        color: C.ink
+      }
+    }, "That's the end of the questions"), /*#__PURE__*/React.createElement(Rule, null), /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 17,
+        color: C.ink2,
+        marginTop: 0,
+        lineHeight: 1.6,
+        maxWidth: "56ch"
+      }
+    }, "No live session is running right now, and this browser has no answers saved from the last one."), /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginTop: 26
+      }
+    }, /*#__PURE__*/React.createElement(Btn, {
+      onClick: onExit
+    }, "Back to practice")));
+  }
+  const pct = rev.pct;
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Pill, null, fromHome ? "Your last live session" : "Live session over"), /*#__PURE__*/React.createElement("h2", {
+    style: {
+      fontSize: 30,
+      fontWeight: 700,
+      margin: "14px 0 0",
+      color: C.ink
+    }
+  }, rev.right, " of ", rev.answered, " correct"), /*#__PURE__*/React.createElement(Rule, null), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 62,
+      fontWeight: 700,
+      lineHeight: 1,
+      color: pct >= 80 ? C.teal : pct >= 60 ? C.gold : C.red
+    }
+  }, rev.answered ? pct + "%" : "—"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 15.5,
+      color: C.ink2,
+      lineHeight: 1.6,
+      marginTop: 14,
+      maxWidth: "60ch"
+    }
+  }, rev.label, rev.when ? ` · ${new Date(rev.when).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric"
+  })}` : "", ". ", rev.answered < rev.n ? `You answered ${rev.answered} of the ${rev.n} questions. ` : "", "Nothing here is tied to your name; this review lives only in this browser."), /*#__PURE__*/React.createElement("h3", {
+    style: {
+      fontSize: 17,
+      fontWeight: 700,
+      color: C.ink,
+      margin: "34px 0 14px"
+    }
+  }, "Question by question"), rev.rows.map(r => {
+    const tone = !r.answered ? C.gold : r.correct ? C.teal : C.red;
+    const verdict = !r.answered ? "Not answered" : r.correct ? "Correct" : "Missed";
+    return /*#__PURE__*/React.createElement("div", {
+      key: r.idx,
+      style: {
+        borderLeft: `3px solid ${tone}`,
+        paddingLeft: 14,
+        marginBottom: 22
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        gap: 10,
+        alignItems: "baseline",
+        marginBottom: 4
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 13,
+        fontWeight: 700,
+        color: tone,
+        textTransform: "uppercase",
+        letterSpacing: 0.4
+      }
+    }, verdict), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 13,
+        color: C.ink3
+      }
+    }, "Question ", r.idx + 1, " · ", r.item.t)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        color: C.ink,
+        fontSize: 15,
+        lineHeight: 1.5
+      }
+    }, r.item.q), r.answered && !r.correct && /*#__PURE__*/React.createElement("div", {
+      style: {
+        color: C.redDark,
+        fontSize: 15,
+        marginTop: 6
+      }
+    }, "Your answer: ", /*#__PURE__*/React.createElement("strong", null, (LETTERS[r.pick] || "?").toUpperCase(), ". ", r.item.o[r.pick])), /*#__PURE__*/React.createElement("div", {
+      style: {
+        color: C.teal,
+        fontSize: 15,
+        marginTop: 5,
+        fontWeight: 600
+      }
+    }, r.correct ? "You picked " : "Correct answer: ", r.item.a.map(ai => `${(LETTERS[ai] || "?").toUpperCase()}. ${r.item.o[ai]}`).join(" · ")), /*#__PURE__*/React.createElement(ReportLink, {
+      item: r.item,
+      picked: r.answered ? r.pick : undefined,
+      lead: "Disagree with this one, or want to ask about it? Email "
+    }));
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: `1px solid ${C.line}`,
+      marginTop: 30,
+      paddingTop: 18
+    }
+  }, /*#__PURE__*/React.createElement(Btn, {
+    onClick: onExit
+  }, "Back to practice")));
+}
+
+/* Home-page card: after a live session ends, the review stays reachable from
+   the front page until the next session's lobby clears it. */
+function LastLiveCard({
+  onOpen
+}) {
+  const [st, setSt] = useState(null);
+  usePoll(async () => setSt(await getLive()), 4000, true);
+  const rev = useMemo(() => liveReview(readLiveStore()), [st && st.active]);
+  if (!rev || !rev.answered) return null;
+  if (st && st.active) return null;
+  return /*#__PURE__*/React.createElement("button", {
+    onClick: onOpen,
+    style: {
+      display: "block",
+      width: "100%",
+      textAlign: "left",
+      cursor: "pointer",
+      fontFamily: FONT,
+      background: C.wash,
+      border: `1px solid ${C.line}`,
+      borderRadius: 2,
+      padding: "16px 20px",
+      marginBottom: 30
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 17,
+      fontWeight: 700,
+      color: C.ink
+    }
+  }, "Your last live session: ", rev.right, " of ", rev.answered, " correct"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      color: C.ink2,
+      marginTop: 4
+    }
+  }, "Tap to see each question, what you picked, and the right answer. Saved only in this browser."));
 }
 function LiveStudent({
   onExit
@@ -2026,11 +2249,15 @@ function LiveStudent({
   usePoll(async () => {
     const s = await getLive();
     setSt(s);
-    /* lobby or ended: forget old picks so a rerun of the same set starts clean */
-    if (s && !s.offline && !s.error && (!s.active || s.idx < 0)) {
-      try {
-        window.localStorage.removeItem(LIVE_PICK_STORE);
-      } catch (e) {}
+    if (s && !s.offline && !s.error) {
+      if (s.active && s.idx < 0) {
+        /* lobby: a different session, or a rerun of one already finished,
+           starts clean; the same session mid-flight keeps its picks */
+        const raw = readLiveStore();
+        if (raw && (raw.key !== liveSessionKey(s) || raw.ended)) clearLiveStore();
+      } else if (!s.active) {
+        markLiveStoreEnded();
+      }
     }
     if (s && typeof s.idx === "number" && s.idx !== seenIdx.current) {
       seenIdx.current = s.idx;
@@ -2105,37 +2332,14 @@ function LiveStudent({
     }, "Back")));
   }
 
-  /* session ended */
+  /* session ended: full review, rebuilt from this browser's stored picks so it
+     survives a reload. Answers are shown here for every question in the run. */
   if (!st.active) {
-    const answered = Object.keys(log).length;
-    const right = Object.values(log).filter(Boolean).length;
-    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
-      style: {
-        fontSize: 28,
-        fontWeight: 700,
-        margin: 0,
-        color: C.ink
-      }
-    }, "That's the end of the questions"), /*#__PURE__*/React.createElement(Rule, null), answered > 0 ? /*#__PURE__*/React.createElement("p", {
-      style: {
-        fontSize: 18,
-        color: C.ink2,
-        lineHeight: 1.6,
-        marginTop: 0
-      }
-    }, "You answered ", answered, " and got ", right, " right. Nothing was recorded against your name.") : /*#__PURE__*/React.createElement("p", {
-      style: {
-        fontSize: 17,
-        color: C.ink2,
-        marginTop: 0
-      }
-    }, "No live session is running right now."), /*#__PURE__*/React.createElement("div", {
-      style: {
-        marginTop: 26
-      }
-    }, /*#__PURE__*/React.createElement(Btn, {
-      onClick: onExit
-    }, "Back to practice")));
+    const rev = liveReview(readLiveStore());
+    return /*#__PURE__*/React.createElement(LiveReview, {
+      rev: rev,
+      onExit: onExit
+    });
   }
 
   /* waiting room */
@@ -2258,7 +2462,7 @@ function LiveStudent({
       color: C.teal,
       fontWeight: 600
     }
-  }, "Answer recorded")), /*#__PURE__*/React.createElement("h2", {
+  }, "Locked in \u00b7 waiting for the reveal")), /*#__PURE__*/React.createElement("h2", {
     style: {
       fontSize: 25,
       fontWeight: 700,
@@ -2353,14 +2557,29 @@ function LiveStudent({
         color: C.ink3
       }
     }, " \u00b7 ", optN)));
-  })), showAnswer && /*#__PURE__*/React.createElement("p", {
+  })), showAnswer && /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 22,
-      fontSize: 15.5,
-      fontWeight: 600,
-      color: answered ? item.a.includes(picked) ? C.teal : C.ink2 : C.ink3
+      padding: "14px 18px",
+      borderRadius: 2,
+      border: `1px solid ${answered ? item.a.includes(picked) ? C.teal : C.red : C.gold}`,
+      background: answered ? item.a.includes(picked) ? "#E6F2F0" : C.redLight : C.wash,
+      maxWidth: "60ch"
     }
-  }, answered ? item.a.includes(picked) ? "You got it." : "The correct answer is highlighted." : "You didn't answer this one."), showAnswer && /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 19,
+      fontWeight: 700,
+      color: answered ? item.a.includes(picked) ? C.teal : C.redDark : C.ink
+    }
+  }, answered ? item.a.includes(picked) ? "Correct" : "Not this one" : "You didn't answer this one"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      color: C.ink2,
+      marginTop: 4,
+      lineHeight: 1.5
+    }
+  }, answered && item.a.includes(picked) ? `${(LETTERS[picked] || "?").toUpperCase()} was the answer.` : `The answer ${item.a.length > 1 ? "was" : "is"} ${item.a.map(ai => (LETTERS[ai] || "?").toUpperCase()).join(" or ")}${answered ? ` \u2014 you picked ${(LETTERS[picked] || "?").toUpperCase()}.` : "."}`)), showAnswer && /*#__PURE__*/React.createElement("p", {
     style: {
       marginTop: 8,
       fontSize: 15.5,
@@ -2805,6 +3024,8 @@ function App() {
     }
   }, " — ", (BANK.credits || {}).quote_by || "Karl Pearson"))), /*#__PURE__*/React.createElement(ClassModeBanner, null), /*#__PURE__*/React.createElement(NoRecordBanner, null), /*#__PURE__*/React.createElement(EndpointWarning, null), /*#__PURE__*/React.createElement(LiveBanner, {
     onJoin: () => setView("live")
+  }), /*#__PURE__*/React.createElement(LastLiveCard, {
+    onOpen: () => setView("livereview")
   }), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
@@ -3115,6 +3336,10 @@ function App() {
     cohort: "open",
     onExit: () => setView("home")
   }), view === "live" && /*#__PURE__*/React.createElement(LiveStudent, {
+    onExit: () => setView("home")
+  }), view === "livereview" && /*#__PURE__*/React.createElement(LiveReview, {
+    rev: liveReview(readLiveStore()),
+    fromHome: true,
     onExit: () => setView("home")
   }), view === "gate" && /*#__PURE__*/React.createElement(CohortGate, {
     onUnlock: () => {
