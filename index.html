@@ -1404,7 +1404,10 @@ function Practice({
   const pool = useMemo(() => filterItems(f), [f]);
   const secs = Math.max(5, Math.min(3600, Number(tVal) || 0));
   const running = deck && at < deck.length;
+  /* when the item now on screen was first shown, for response_time_sec */
+  const shownRef = React.useRef(Date.now());
   const start = () => {
+    shownRef.current = Date.now();
     const shuffled = [...pool].sort(() => Math.random() - 0.5);
     const n = len === "all" ? shuffled.length : Math.min(Number(len), shuffled.length);
     setDeck(shuffled.slice(0, n));
@@ -1431,7 +1434,11 @@ function Practice({
     const q = deck[at];
     const entry = {
       id: q.i,
-      correct: idx !== null && q.a.includes(idx) ? 1 : 0
+      correct: idx !== null && q.a.includes(idx) ? 1 : 0,
+      pos: log.length + 1,
+      choice: idx === null || idx === undefined || idx < 0 ? -1 : idx + 1,
+      ms: Math.max(0, Date.now() - shownRef.current),
+      at: new Date().toISOString()
     };
     const nextLog = [...log, entry];
     setLog(nextLog);
@@ -1447,6 +1454,7 @@ function Practice({
     if (at + 1 < deck.length) {
       setAt(at + 1);
       setPicked(null);
+      shownRef.current = Date.now();
       if (tMode === "perq") setLeft(secs);
       return;
     }
@@ -1475,7 +1483,11 @@ function Practice({
       const q = deck[at];
       const finalLog = picked === null ? [...log, {
         id: q.i,
-        correct: 0
+        correct: 0,
+        pos: log.length + 1,
+        choice: -1,
+        ms: Math.max(0, Date.now() - shownRef.current),
+        at: new Date().toISOString()
       }] : log;
       finish(finalLog);
     }
@@ -1924,6 +1936,10 @@ function LiveStudent({
     const id = st.items[st.idx];
     return BANK.items.find(i => i.i === id) || null;
   }, [st && st.idx, st && st.active]);
+  const liveRef = React.useRef({ idx: -1, t: Date.now() });
+  if (st && liveRef.current.idx !== st.idx) {
+    liveRef.current = { idx: st.idx, t: Date.now() };
+  }
   const submit = async choice => {
     if (picked !== null || !item) return;
     setPicked(choice);
@@ -1939,6 +1955,7 @@ function LiveStudent({
       id: item.i,
       choice,
       correct,
+      ms: Math.max(0, Date.now() - liveRef.current.t),
       cohort: savedCohort() || "open",
       name: st && st.guest ? name : ""
     });

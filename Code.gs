@@ -26,7 +26,8 @@ function sheet_() {
   var sh = ss.getSheetByName(SHEET_NAME);
   if (!sh) {
     sh = ss.insertSheet(SHEET_NAME);
-    sh.appendRow(['timestamp', 'run_id', 'item_id', 'correct', 'sessions', 'topics', 'timer', 'cohort', 'name']);
+    sh.appendRow(['timestamp', 'run_id', 'item_id', 'correct', 'sessions', 'topics', 'timer', 'cohort', 'name',
+                  'item_position', 'chosen_option', 'response_time_sec', 'answered_at']);
     sh.setFrozenRows(1);
   }
   // migrate sheets created before the cohort column existed
@@ -36,6 +37,11 @@ function sheet_() {
   // migrate sheets created before the guest-name column existed
   if (sh.getLastColumn() < 9) {
     sh.getRange(1, 9).setValue('name');
+  }
+  // migrate sheets created before the per-response detail columns existed.
+  // Older rows keep blanks in J..M; that is missing data, not zero.
+  if (sh.getLastColumn() < 13) {
+    sh.getRange(1, 10, 1, 4).setValues([['item_position', 'chosen_option', 'response_time_sec', 'answered_at']]);
   }
   return sh;
 }
@@ -224,8 +230,16 @@ function postPractice_(body) {
   var topics = (body.topics || []).join('|');
   var timer = body.timer || '';
   var cohort = String(body.cohort || 'open');
-  var rows = results.map(function (r) {
-    return [stamp, runId, String(r.id), Number(r.correct) ? 1 : 0, sessions, topics, timer, cohort, String(body.name || '').slice(0, 40)];
+  var rows = results.map(function (r, k) {
+    var ms = Number(r.ms);
+    return [
+      stamp, runId, String(r.id), Number(r.correct) ? 1 : 0,
+      sessions, topics, timer, cohort, String(body.name || '').slice(0, 40),
+      Number(r.pos) || (k + 1),
+      (r.choice === undefined || r.choice === null) ? '' : Number(r.choice),
+      (isNaN(ms) || ms <= 0) ? '' : Math.round(ms / 100) / 10,
+      r.at ? String(r.at) : ''
+    ];
   });
   return json_({ ok: true, written: appendRows_(rows) });
 }
@@ -297,7 +311,12 @@ function postLiveAnswer_(body) {
   if (!s.test) {
     try {
       var liveCohort = s.guest ? 'guest' : String(body.cohort || 'open');
-      appendRows_([[new Date(), s.runId, itemId, correct, '', '', 'live', liveCohort, String(body.name || '').slice(0, 40)]]);
+      var lms = Number(body.ms);
+      appendRows_([[new Date(), s.runId, itemId, correct, '', '', 'live', liveCohort,
+                    String(body.name || '').slice(0, 40),
+                    idx + 1, choice + 1,
+                    (isNaN(lms) || lms <= 0) ? '' : Math.round(lms / 100) / 10,
+                    new Date().toISOString()]]);
     } catch (err) { /* tally is already in; never fail a student's submit over this */ }
   }
 

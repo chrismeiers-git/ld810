@@ -17,6 +17,16 @@ data into visualizations that support leadership decisions.
 | `Code.gs` | Google Apps Script behind the results endpoint; writes practice runs to the results Sheet. Deploy in Apps Script, not from here. |
 | `config.example.json` | Template for `config.json` (endpoint + cohort name/label). Copy it, fill it in. |
 
+## Dataset for class analysis
+
+`data/` holds the teaching dataset built from this pool — one row per item
+response, every item attribute merged on, for students to run trend analyses on.
+`data/LD810_dataset_codebook.md` explains every column and states plainly which
+parts are real and which are simulated. The item-level file carries only items
+that were actually answered, so it joins to the response file with nothing left
+over on either side. `data/build_dataset.py` regenerates all
+of it from `bank.json` (seed 810, deterministic).
+
 ## Question tiers (`c` field on every item)
 
 | Tier | What it is | Shows a source line |
@@ -77,9 +87,23 @@ student's device.
 
 ## Results sheet
 
-Columns: `timestamp, run_id, item_id, correct, sessions, topics, timer, cohort, name`.
-The `name` column is new and back-fills as blank on existing rows; `sheet_()`
-adds it automatically on the next write.
+Columns: `timestamp, run_id, item_id, correct, sessions, topics, timer, cohort,
+name, item_position, chosen_option, response_time_sec, answered_at`.
+
+The last four are new (Sep 21, 2026). `sheet_()` adds any missing column
+automatically on the next write, so older rows simply carry blanks there —
+that is **missing data, not zero**, and any analysis has to treat it that way.
+
+- `item_position` — 1-based position of the item inside that run. Lets you test
+  whether accuracy fades as a run goes on.
+- `chosen_option` — 1-based option the student picked; `-1` means the timer ran
+  out before they answered. Lets you look at which distractor pulls.
+- `response_time_sec` — seconds on that item, to one decimal.
+- `answered_at` — ISO timestamp for that single answer. The `timestamp` column
+  is still stamped once per run, so use this one for anything time-based.
+
+Live in-class answers now fill these too, with `item_position` set from the
+question's index in the running deck.
 
 Maintenance functions live at the bottom of `Code.gs` and are **editor-only** —
 no `op` routes to them, so no deployment is needed and no student can reach them.
