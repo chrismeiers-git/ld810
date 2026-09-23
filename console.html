@@ -400,14 +400,20 @@ const emptyFilter = {
   sessions: [],
   topics: [],
   themes: [],
+  extra: false,
+  news: false,
   search: ""
 };
-const THEMES = Object.keys(BANK.themes || {});
+/* "extra" items come from textbook chapters LD 810 does not cover. They are
+   good to know and never appear on a course assessment unless announced, so
+   they stay out of the pool unless the student switches that mode on. */
+const corePool = () => BANK.items.filter(i => i.c !== "extra");
 function filterItems(f) {
-  let list = BANK.items;
+  let list = f.extra ? BANK.items.filter(i => i.c === "extra") : corePool();
+  if (f.news) list = list.filter(i => i.c === "news");
+  if (f.themes && f.themes.length) list = list.filter(i => i.c === "theme" && f.themes.includes(i.th));
   if (f.sessions.length) list = list.filter(i => i.s.some(n => f.sessions.includes(n)));
   if (f.topics.length) list = list.filter(i => f.topics.includes(i.t));
-  if (f.themes && f.themes.length) list = list.filter(i => f.themes.includes(i.th));
   if (f.search && f.search.trim()) {
     const q = f.search.toLowerCase();
     list = list.filter(i => i.q.toLowerCase().includes(q) || i.o.some(o => o.toLowerCase().includes(q)));
@@ -449,12 +455,15 @@ function Facets({
     [key]: f[key].includes(v) ? f[key].filter(x => x !== v) : [...f[key], v]
   });
   const usedTopics = useMemo(() => {
-    let pool = f.sessions.length ? BANK.items.filter(i => i.s.some(n => f.sessions.includes(n))) : BANK.items;
-    if (f.themes && f.themes.length) pool = pool.filter(i => f.themes.includes(i.th));
+    let pool = f.extra ? BANK.items.filter(i => i.c === "extra") : corePool();
+    if (f.news) pool = pool.filter(i => i.c === "news");
+    if (f.themes && f.themes.length) pool = pool.filter(i => i.c === "theme" && f.themes.includes(i.th));
+    if (f.sessions.length) pool = pool.filter(i => i.s.some(n => f.sessions.includes(n)));
     return Array.from(new Set(pool.map(i => i.t))).sort();
-  }, [f.sessions, f.themes]);
+  }, [f.sessions, f.themes, f.extra, f.news]);
   const shownTopics = openTopics ? usedTopics : usedTopics.slice(0, 8);
-  const any = f.sessions.length || f.topics.length || (f.themes || []).length || f.search;
+  const any = f.sessions.length || f.topics.length || (f.themes && f.themes.length) || f.extra || f.search;
+  const THEMES = Object.entries(BANK.themes || {});
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
@@ -466,6 +475,7 @@ function Facets({
     key: k,
     kind: "ghost",
     size: "sm",
+    title: (BANK.presets || {})[k] || label,
     onClick: () => setF({
       ...emptyFilter,
       sessions: BANK.x[k] || []
@@ -476,14 +486,84 @@ function Facets({
     onClick: () => setF({
       ...emptyFilter
     })
-  }, "Clear all") : null), /*#__PURE__*/React.createElement("div", {
+  }, "Clear all") : null), THEMES.length > 0 && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 14,
       fontWeight: 700,
       color: C.ink,
       marginBottom: 9
     }
-  }, "Sessions ", f.sessions.length ? `· ${f.sessions.length} selected` : ""), /*#__PURE__*/React.createElement("div", {
+  }, "Themed sets ", f.themes.length ? `· ${f.themes.length} selected` : ""), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6,
+      flexWrap: "wrap",
+      marginBottom: 6
+    }
+  }, THEMES.map(([k, label]) => /*#__PURE__*/React.createElement(Chip, {
+    key: k,
+    on: f.themes.includes(k),
+    onClick: () => setF({
+      ...f,
+      extra: false,
+      themes: f.themes.includes(k) ? f.themes.filter(x => x !== k) : [...f.themes, k]
+    }),
+    title: `${BANK.items.filter(i => i.th === k).length} questions`
+  }, label)), /*#__PURE__*/React.createElement(Chip, {
+    key: "news",
+    on: !!f.news,
+    onClick: () => setF({
+      ...emptyFilter,
+      news: !f.news
+    }),
+    title: `${BANK.items.filter(i => i.c === "news").length} questions built from reported figures`
+  }, "In the news")), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13.5,
+      color: C.ink3,
+      margin: "0 0 20px",
+      maxWidth: "62ch"
+    }
+  }, "These are meant to be fun — and they are still real practice. Every themed question is keyed to a session and tests exactly what the rest of the bank tests, just with different scenery. Leave them all unselected to mix everything together.")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 22
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setF({
+      ...emptyFilter,
+      extra: !f.extra
+    }),
+    style: {
+      fontFamily: FONT,
+      fontSize: 13.5,
+      padding: "6px 11px",
+      borderRadius: 2,
+      cursor: "pointer",
+      border: `1px solid ${f.extra ? C.gold : C.line}`,
+      background: f.extra ? "#FBF3E0" : "#fff",
+      color: f.extra ? "#6B4E00" : C.ink2,
+      fontWeight: f.extra ? 600 : 400
+    }
+  }, f.extra ? "Good to know · on" : "Good to know · off"), f.extra && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 10,
+      padding: "12px 14px",
+      background: "#FBF3E0",
+      border: "1px solid " + C.gold,
+      borderRadius: 2,
+      fontSize: 14,
+      lineHeight: 1.55,
+      color: "#4A3600",
+      maxWidth: "62ch"
+    }
+  }, /*#__PURE__*/React.createElement("strong", null, "Good to know — not on any course assessment."), " These questions come from textbook chapters LD 810 does not cover (chi-square, non-parametric tests, qualitative methods, meta-analysis, machine learning). They are here because knowing them is good for you, not because they will be tested. They will not appear on a quiz or exam unless I announce otherwise. Turn this off to return to the course pool.")), !f.extra && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      fontWeight: 700,
+      color: C.ink,
+      marginBottom: 9
+    }
+  }, "Sessions ", f.sessions.length ? `· ${f.sessions.length} selected` : ""), !f.extra && /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 6,
@@ -495,34 +575,7 @@ function Facets({
     on: f.sessions.includes(n),
     onClick: () => tog("sessions", n),
     title: BANK.m[n]
-  }, n, ". ", BANK.m[n]))), THEMES.length > 0 && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 14,
-      fontWeight: 700,
-      color: C.ink,
-      marginBottom: 9
-    }
-  }, "Themed sets ", (f.themes || []).length ? `· ${f.themes.length} selected` : ""), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 6,
-      flexWrap: "wrap",
-      marginBottom: 6
-    }
-  }, THEMES.map(k => /*#__PURE__*/React.createElement(Chip, {
-    key: k,
-    on: (f.themes || []).includes(k),
-    onClick: () => tog("themes", k),
-    title: BANK.themes[k]
-  }, BANK.themes[k]))), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 13.5,
-      color: C.ink3,
-      lineHeight: 1.5,
-      margin: "0 0 22px",
-      maxWidth: "60ch"
-    }
-  }, "Pick a themed set and the pool narrows to it \u2014 the statistics are real, the scenery is not. Combines with sessions and topics, so \"Sporting KC\" plus \"ANOVA\" gives you exactly those.")), /*#__PURE__*/React.createElement("div", {
+  }, n, ". ", BANK.m[n]))), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 14,
       fontWeight: 700,
