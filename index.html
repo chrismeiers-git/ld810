@@ -141,8 +141,8 @@ const CLASS_MODE = (() => {
 })();
 
 /* class=direct is the same class link, but skips the home page entirely —
-   straight to the email box (or straight into practice if this device is
-   already unlocked). Used by the /quizapp short link. */
+   straight into class practice (no email or password; the link is the
+   access). Used by the /quizapp short link. */
 const SKIP_HOME = (() => {
   try {
     const p = new URLSearchParams(window.location.search);
@@ -2678,11 +2678,14 @@ function ClassResults({
 /* ---------- shell ---------- */
 
 function App() {
+  /* The class link itself is the access: anyone arriving on ?class=1 (or the
+     /quizapp direct link) is in the LD 810 pool, no email or password asked. */
+  if (CLASS_MODE && savedCohort() !== COHORT_NAME) rememberCohort(COHORT_NAME);
   const [view, setView] = useState(() => {
     if (!SKIP_HOME) return "home";
-    return savedCohort() === COHORT_NAME ? "practice810" : "gate";
+    return "practice810";
   });
-  const [cohort, setCohort] = useState(savedCohort());
+  const [cohort, setCohort] = useState(CLASS_MODE ? COHORT_NAME : savedCohort());
   const inClass = cohort === COHORT_NAME;
   const [linkCopied, setLinkCopied] = useState(false);
   const openLink = `${window.location.origin}${window.location.pathname}`;
@@ -2810,7 +2813,7 @@ function App() {
       border: `1px solid ${C.line}`
     }
   }, CLASS_MODE && /*#__PURE__*/React.createElement("button", {
-    onClick: () => setView(inClass ? "practice810" : "gate"),
+    onClick: () => setView(CLASS_MODE || inClass ? "practice810" : "gate"),
     style: {
       textAlign: "left",
       fontFamily: FONT,
